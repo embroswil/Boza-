@@ -6,16 +6,17 @@ import { heroSlides } from "@/lib/hero-slides";
 
 export function HeroCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const directionRef = useRef<1 | -1>(1);
   const isProgrammatic = useRef(false);
   const [index, setIndex] = useState(0);
 
-  // Applique l'index courant au scroll réel (source de vérité unique : `index`)
+  // Cible directement l'élément de la slide (fiable, pas de calcul de pixels)
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+    const slide = slideRefs.current[index];
+    if (!slide) return;
     isProgrammatic.current = true;
-    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+    slide.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     const t = window.setTimeout(() => {
       isProgrammatic.current = false;
     }, 700);
@@ -42,13 +43,25 @@ export function HeroCarousel() {
     return () => window.clearInterval(timer);
   }, []);
 
-  // Suivi du swipe manuel de l'utilisateur (ignore les scrolls déclenchés par le code)
+  // Suivi du swipe manuel : trouve la slide la plus proche de la position de scroll réelle
   const handleScroll = () => {
     if (isProgrammatic.current) return;
-    const el = containerRef.current;
-    if (!el) return;
-    const i = Math.round(el.scrollLeft / el.clientWidth);
-    if (i !== index) setIndex(i);
+    const container = containerRef.current;
+    if (!container) return;
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+
+    let closest = 0;
+    let closestDist = Infinity;
+    slideRefs.current.forEach((slide, i) => {
+      if (!slide) return;
+      const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
+      const dist = Math.abs(slideCenter - containerCenter);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closest = i;
+      }
+    });
+    if (closest !== index) setIndex(closest);
   };
 
   return (
@@ -58,9 +71,12 @@ export function HeroCarousel() {
         onScroll={handleScroll}
         className="mb-3 flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
-        {heroSlides.map((slide) => (
+        {heroSlides.map((slide, i) => (
           <div
             key={slide.key}
+            ref={(el) => {
+              slideRefs.current[i] = el;
+            }}
             className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 min-w-[calc(100%-2.5rem)] snap-center"
           >
             <span className="relative inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
