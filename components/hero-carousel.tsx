@@ -77,20 +77,22 @@ export function HeroCarousel() {
             ref={(el) => {
               slideRefs.current[i] = el;
             }}
-            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 min-w-[calc(100%-2.5rem)] snap-center"
+            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 min-w-[calc(100%-2.5rem)] h-[430px] flex flex-col snap-center"
           >
-            <span className="relative inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
-              {slide.badge}
-            </span>
+            <div>
+              <span className="relative inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+                {slide.badge}
+              </span>
 
-            <h1 className="relative text-[26px] font-extrabold text-slate-900 leading-tight mt-3">
-              {slide.line1}
-              <br />
-              <span className="text-blue-600">{slide.highlight}</span>
-            </h1>
-            <p className="relative text-slate-500 text-[13px] mt-3 max-w-[62%] leading-relaxed">
-              {slide.desc}
-            </p>
+              <h1 className="relative text-[26px] font-extrabold text-slate-900 leading-tight mt-3">
+                {slide.line1}
+                <br />
+                <span className="text-blue-600">{slide.highlight}</span>
+              </h1>
+              <p className="relative text-slate-500 text-[13px] mt-3 max-w-[62%] leading-relaxed">
+                {slide.desc}
+              </p>
+            </div>
 
             <img
               src={slide.img}
@@ -98,7 +100,7 @@ export function HeroCarousel() {
               className="absolute right-0 bottom-0 w-40 h-52 object-cover object-top rounded-tl-3xl"
             />
 
-            <div className="relative grid grid-cols-3 gap-2 mt-32">
+            <div className="relative grid grid-cols-3 gap-2 mt-auto">
               {slide.pills.map((pill) => {
                 const PillIcon = pill.icon;
                 return (
