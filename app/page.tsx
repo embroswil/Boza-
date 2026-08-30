@@ -128,11 +128,6 @@ export default async function Home() {
               >
                 <Icon className={`w-6 h-6 ${c.color}`} strokeWidth={1.8} />
                 <span className="text-[10.5px] font-semibold text-slate-800">{c.label}</span>
-                {c.badge && (
-                  <span className="text-[8px] font-bold text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded-full absolute -bottom-2">
-                    {c.badge}
-                  </span>
-                )}
               </div>
             );
           })}
