@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { ChevronRight } from "lucide-react";
 import { heroSlides } from "@/lib/hero-slides";
 
@@ -15,6 +15,20 @@ export function HeroCarousel() {
     const index = Math.round(el.scrollLeft / slideWidth);
     setActiveIndex(index);
   };
+
+  const scrollToIndex = useCallback((index: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const nextIndex = (activeIndex + 1) % heroSlides.length;
+      scrollToIndex(nextIndex);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [activeIndex, scrollToIndex]);
 
   return (
     <>
