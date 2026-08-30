@@ -20,6 +20,7 @@ import {
   Plane,
 } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 
 const categories = [
   { icon: GraduationCap, label: "Étudiant", active: true, badge: "NOUVEAU", color: "text-blue-600" },
@@ -27,46 +28,6 @@ const categories = [
   { icon: Briefcase, label: "Travail", color: "text-orange-500" },
   { icon: Building2, label: "Affaires", color: "text-violet-500" },
   { icon: Plane, label: "Immigration", color: "text-blue-600" },
-];
-
-const destinations = [
-  { name: "Allemagne", flag: "🇩🇪", intake: "JANVIER", img: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=400&auto=format&fit=crop" },
-  { name: "Canada", flag: "🇨🇦", intake: "JANVIER", img: "https://images.unsplash.com/photo-1517090504586-fde19ea6066f?q=80&w=400&auto=format&fit=crop" },
-  { name: "Pologne", flag: "🇵🇱", intake: "FÉVRIER", img: "https://images.unsplash.com/photo-1607427293702-036933bbf746?q=80&w=400&auto=format&fit=crop" },
-  { name: "France", flag: "🇫🇷", intake: "JANVIER", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop" },
-];
-
-const programs = [
-  {
-    logo: "TUM",
-    logoBg: "bg-white border border-slate-200",
-    logoColor: "text-blue-700",
-    title: "MSc in Computer Science",
-    university: "Technical University of Munich",
-    duration: "18 mois",
-    language: "Anglais",
-    price: "15 000 €",
-  },
-  {
-    logo: "TORONTO",
-    logoBg: "bg-red-800",
-    logoColor: "text-white",
-    title: "MSc in Data Science",
-    university: "University of Toronto",
-    duration: "16 mois",
-    language: "Anglais",
-    price: "24 000 CAD",
-  },
-  {
-    logo: "S",
-    logoBg: "bg-blue-950",
-    logoColor: "text-white",
-    title: "MSc in Artificial Intelligence",
-    university: "Sorbonne Université",
-    duration: "18 mois",
-    language: "Anglais",
-    price: "9 900 €",
-  },
 ];
 
 const navItems = [
@@ -77,7 +38,37 @@ const navItems = [
   { icon: User, label: "Profil", href: "/auth/login" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+
+  const { data: countries } = await supabase
+    .from("countries")
+    .select("id, name, flag_url")
+    .order("created_at", { ascending: true })
+    .limit(4);
+
+  const { data: programsData } = await supabase
+    .from("study_programs")
+    .select(
+      "id, name, level, duration_months, tuition_fee, currency, language, universities(name)"
+    )
+    .order("created_at", { ascending: true })
+    .limit(3);
+
+  const destinations = (countries ?? []).map((c) => ({
+    name: c.name,
+    flag: c.flag_url ?? "🌍",
+    intake: "À confirmer",
+  }));
+
+  const programs = (programsData ?? []).map((p) => ({
+    title: p.name,
+    university: (p.universities as unknown as { name: string } | null)?.name ?? "",
+    duration: p.duration_months ? `${p.duration_months} mois` : "",
+    language: p.language ?? "",
+    price: p.tuition_fee ? `${p.tuition_fee} ${p.currency ?? ""}` : "",
+    logo: (p.universities as unknown as { name: string } | null)?.name?.slice(0, 3).toUpperCase() ?? "",
+  }));
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
       <div className="w-full max-w-sm bg-slate-50 relative">
@@ -206,19 +197,21 @@ export default function Home() {
           </button>
         </div>
         <div className="px-5 grid grid-cols-2 gap-3 mb-6">
+          {destinations.length === 0 && (
+            <div className="col-span-2 bg-white rounded-xl p-5 text-center text-sm text-slate-400 shadow-sm">
+              Aucun pays pour l&apos;instant — ajoute-les dans Supabase.
+            </div>
+          )}
           {destinations.map((d) => (
-            <div key={d.name} className="rounded-xl overflow-hidden bg-white shadow-sm">
-              <img src={d.img} alt={d.name} className="w-full h-24 object-cover" />
-              <div className="px-2.5 py-2">
-                <div className="flex items-center gap-1 text-[13px] font-semibold text-slate-800">
-                  <span>{d.flag}</span> {d.name}
-                </div>
-                <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-400">
-                  Rentrée hiver{" "}
-                  <span className="bg-blue-50 text-blue-600 font-semibold px-1.5 py-0.5 rounded">
-                    {d.intake}
-                  </span>
-                </div>
+            <div key={d.name} className="rounded-xl overflow-hidden bg-white shadow-sm p-3">
+              <div className="flex items-center gap-1.5 text-[13px] font-semibold text-slate-800">
+                <span>{d.flag}</span> {d.name}
+              </div>
+              <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-400">
+                Rentrée hiver{" "}
+                <span className="bg-blue-50 text-blue-600 font-semibold px-1.5 py-0.5 rounded">
+                  {d.intake}
+                </span>
               </div>
             </div>
           ))}
@@ -235,10 +228,15 @@ export default function Home() {
         </div>
         <div className="px-5 mb-4">
           <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            {programs.length === 0 && (
+              <div className="p-5 text-center text-sm text-slate-400">
+                Aucun programme pour l&apos;instant — ajoute-les dans Supabase.
+              </div>
+            )}
             {programs.map((p) => (
               <div key={p.title} className="flex items-start gap-3 px-4 py-3.5">
-                <div className={`w-11 h-11 rounded-lg ${p.logoBg} flex items-center justify-center shrink-0`}>
-                  <span className={`text-[9px] font-extrabold ${p.logoColor}`}>{p.logo}</span>
+                <div className="w-11 h-11 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0">
+                  <span className="text-[9px] font-extrabold text-blue-700">{p.logo}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[13.5px] font-semibold text-slate-900 leading-tight">
