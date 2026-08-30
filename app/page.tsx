@@ -22,6 +22,8 @@ import {
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 const categories = [
   { icon: GraduationCap, label: "Étudiant", active: true, badge: "NOUVEAU", color: "text-blue-600" },
   { icon: Briefcase, label: "Tourisme", color: "text-emerald-500" },
