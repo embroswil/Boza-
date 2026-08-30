@@ -7,6 +7,7 @@ import { heroSlides } from "@/lib/hero-slides";
 export function HeroCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
 
   const handleScroll = () => {
     const el = containerRef.current;
@@ -24,11 +25,22 @@ export function HeroCarousel() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % heroSlides.length;
+      let nextDir = direction;
+      let nextIndex = activeIndex + direction;
+
+      if (nextIndex >= heroSlides.length) {
+        nextDir = -1;
+        nextIndex = heroSlides.length - 2;
+      } else if (nextIndex < 0) {
+        nextDir = 1;
+        nextIndex = 1;
+      }
+
+      setDirection(nextDir);
       scrollToIndex(nextIndex);
     }, 5000);
     return () => clearInterval(timer);
-  }, [activeIndex, scrollToIndex]);
+  }, [activeIndex, direction, scrollToIndex]);
 
   return (
     <>

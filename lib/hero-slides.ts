@@ -9,7 +9,7 @@ import {
 export const heroSlides = [
   {
     key: "etudiant",
-    badge: "🎓 PROCÉDURE ÉTUDIANT",
+    badge: "🎓 VISA ÉTUDIANT",
     line1: "Étudiez à l'étranger,",
     highlight: "construisez votre avenir",
     desc: "Trouvez les meilleures universités et programmes avec rentrée d'hiver et réalisez votre projet d'études en toute simplicité.",
@@ -55,7 +55,7 @@ export const heroSlides = [
     line1: "Travaillez à l'étranger,",
     highlight: "concrétisez votre carrière",
     desc: "Trouvez les opportunités et le visa de travail adaptés à votre projet professionnel.",
-    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=500&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=500&auto=format&fit=crop",
     pills: [
       { icon: Briefcase, label: "Offres d'emploi" },
       { icon: FileCheck2, label: "Dossier complet" },
