@@ -23,7 +23,7 @@ import { HeroCarousel } from "@/components/hero-carousel";
 export const dynamic = "force-dynamic";
 
 const categories = [
-  { icon: GraduationCap, label: "Étudiant", active: true, badge: "NOUVEAU", color: "text-blue-600" },
+  { icon: GraduationCap, label: "Étudiant", active: true, color: "text-blue-600" },
   { icon: Briefcase, label: "Tourisme", color: "text-emerald-500" },
   { icon: Briefcase, label: "Travail", color: "text-orange-500" },
   { icon: Building2, label: "Affaires", color: "text-violet-500" },

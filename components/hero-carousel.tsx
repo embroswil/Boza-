@@ -1,32 +1,42 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { heroSlides } from "@/lib/hero-slides";
 
 export function HeroCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const indexRef = useRef(0);
+  const directionRef = useRef<1 | -1>(1);
+  const isAutoScrolling = useRef(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState<1 | -1>(1);
+
+  const scrollToIndex = (index: number) => {
+    const el = containerRef.current;
+    if (!el) return;
+    isAutoScrolling.current = true;
+    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+    indexRef.current = index;
+    setActiveIndex(index);
+    window.setTimeout(() => {
+      isAutoScrolling.current = false;
+    }, 600);
+  };
 
   const handleScroll = () => {
+    if (isAutoScrolling.current) return;
     const el = containerRef.current;
     if (!el) return;
     const slideWidth = el.clientWidth;
     const index = Math.round(el.scrollLeft / slideWidth);
+    indexRef.current = index;
     setActiveIndex(index);
   };
 
-  const scrollToIndex = useCallback((index: number) => {
-    const el = containerRef.current;
-    if (!el) return;
-    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
-  }, []);
-
   useEffect(() => {
     const timer = setInterval(() => {
-      let nextDir = direction;
-      let nextIndex = activeIndex + direction;
+      let nextDir = directionRef.current;
+      let nextIndex = indexRef.current + directionRef.current;
 
       if (nextIndex >= heroSlides.length) {
         nextDir = -1;
@@ -36,11 +46,11 @@ export function HeroCarousel() {
         nextIndex = 1;
       }
 
-      setDirection(nextDir);
+      directionRef.current = nextDir;
       scrollToIndex(nextIndex);
     }, 5000);
     return () => clearInterval(timer);
-  }, [activeIndex, direction, scrollToIndex]);
+  }, []);
 
   return (
     <>
