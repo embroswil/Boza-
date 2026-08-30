@@ -5,7 +5,7 @@ import {
   Briefcase,
   Building2,
   ChevronRight,
-  Home,
+  Home as HomeIcon,
   ClipboardList,
   FileText,
   User,
@@ -70,7 +70,7 @@ const programs = [
 ];
 
 const navItems = [
-  { icon: Home, label: "Accueil", active: true, href: "/" },
+  { icon: HomeIcon, label: "Accueil", active: true, href: "/" },
   { icon: ClipboardList, label: "Mes demandes", href: "/protected" },
   { icon: Plus, label: "Démarrer", isCenter: true, href: "/protected" },
   { icon: FileText, label: "Documents", href: "/protected" },
