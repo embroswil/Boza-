@@ -6,51 +6,50 @@ import { heroSlides } from "@/lib/hero-slides";
 
 export function HeroCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const indexRef = useRef(0);
   const directionRef = useRef<1 | -1>(1);
-  const isAutoScrolling = useRef(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const isProgrammatic = useRef(false);
+  const [index, setIndex] = useState(0);
 
-  const scrollToIndex = (index: number) => {
-    const el = containerRef.current;
-    if (!el) return;
-    isAutoScrolling.current = true;
-    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
-    indexRef.current = index;
-    setActiveIndex(index);
-    window.setTimeout(() => {
-      isAutoScrolling.current = false;
-    }, 600);
-  };
-
-  const handleScroll = () => {
-    if (isAutoScrolling.current) return;
-    const el = containerRef.current;
-    if (!el) return;
-    const slideWidth = el.clientWidth;
-    const index = Math.round(el.scrollLeft / slideWidth);
-    indexRef.current = index;
-    setActiveIndex(index);
-  };
-
+  // Applique l'index courant au scroll réel (source de vérité unique : `index`)
   useEffect(() => {
-    const timer = setInterval(() => {
-      let nextDir = directionRef.current;
-      let nextIndex = indexRef.current + directionRef.current;
+    const el = containerRef.current;
+    if (!el) return;
+    isProgrammatic.current = true;
+    el.scrollTo({ left: index * el.clientWidth, behavior: "smooth" });
+    const t = window.setTimeout(() => {
+      isProgrammatic.current = false;
+    }, 700);
+    return () => window.clearTimeout(t);
+  }, [index]);
 
-      if (nextIndex >= heroSlides.length) {
-        nextDir = -1;
-        nextIndex = heroSlides.length - 2;
-      } else if (nextIndex < 0) {
-        nextDir = 1;
-        nextIndex = 1;
-      }
-
-      directionRef.current = nextDir;
-      scrollToIndex(nextIndex);
+  // Défilement automatique en va-et-vient, infini
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setIndex((prev) => {
+        let dir = directionRef.current;
+        let next = prev + dir;
+        if (next >= heroSlides.length) {
+          dir = -1;
+          next = heroSlides.length - 2;
+        } else if (next < 0) {
+          dir = 1;
+          next = 1;
+        }
+        directionRef.current = dir;
+        return next;
+      });
     }, 5000);
-    return () => clearInterval(timer);
+    return () => window.clearInterval(timer);
   }, []);
+
+  // Suivi du swipe manuel de l'utilisateur (ignore les scrolls déclenchés par le code)
+  const handleScroll = () => {
+    if (isProgrammatic.current) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const i = Math.round(el.scrollLeft / el.clientWidth);
+    if (i !== index) setIndex(i);
+  };
 
   return (
     <>
@@ -111,7 +110,7 @@ export function HeroCarousel() {
           <span
             key={slide.key}
             className={`h-1.5 rounded-full transition-all ${
-              i === activeIndex ? "w-4 bg-blue-600" : "w-1.5 bg-slate-200"
+              i === index ? "w-4 bg-blue-600" : "w-1.5 bg-slate-200"
             }`}
           />
         ))}
