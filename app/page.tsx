@@ -17,7 +17,6 @@ import {
   FileCheck2,
   Globe,
   Heart,
-  Plane,
 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -29,7 +28,65 @@ const categories = [
   { icon: Briefcase, label: "Tourisme", color: "text-emerald-500" },
   { icon: Briefcase, label: "Travail", color: "text-orange-500" },
   { icon: Building2, label: "Affaires", color: "text-violet-500" },
-  { icon: Plane, label: "Immigration", color: "text-blue-600" },
+];
+
+const heroSlides = [
+  {
+    key: "etudiant",
+    badge: "🎓 PROCÉDURE ÉTUDIANT",
+    line1: "Étudiez à l'étranger,",
+    highlight: "construisez votre avenir",
+    desc: "Trouvez les meilleures universités et programmes avec rentrée d'hiver et réalisez votre projet d'études en toute simplicité.",
+    img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=500&auto=format&fit=crop",
+    pills: [
+      { icon: BookOpen, label: "Universités partenaires" },
+      { icon: Calendar, label: "Rentrées d'hiver" },
+      { icon: FileCheck2, label: "Accompagnement complet" },
+    ],
+    cta: "Explorer les programmes d'études",
+  },
+  {
+    key: "tourisme",
+    badge: "✈️ VISA TOURISTIQUE",
+    line1: "Voyagez librement,",
+    highlight: "explorez le monde",
+    desc: "Obtenez votre visa touristique rapidement et voyagez l'esprit tranquille, où que vous alliez.",
+    img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=500&auto=format&fit=crop",
+    pills: [
+      { icon: Globe, label: "100+ destinations" },
+      { icon: FileCheck2, label: "Dossier simplifié" },
+      { icon: Calendar, label: "Traitement rapide" },
+    ],
+    cta: "Explorer les visas touristiques",
+  },
+  {
+    key: "affaires",
+    badge: "💼 VISA AFFAIRES",
+    line1: "Développez votre activité,",
+    highlight: "à l'international",
+    desc: "Simplifiez vos déplacements professionnels et développez votre entreprise à l'étranger.",
+    img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=500&auto=format&fit=crop",
+    pills: [
+      { icon: Briefcase, label: "Visa express" },
+      { icon: FileCheck2, label: "Support entreprise" },
+      { icon: Globe, label: "Réseau international" },
+    ],
+    cta: "Explorer les visas affaires",
+  },
+  {
+    key: "travail",
+    badge: "🧳 VISA TRAVAIL",
+    line1: "Travaillez à l'étranger,",
+    highlight: "concrétisez votre carrière",
+    desc: "Trouvez les opportunités et le visa de travail adaptés à votre projet professionnel.",
+    img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=500&auto=format&fit=crop",
+    pills: [
+      { icon: Briefcase, label: "Offres d'emploi" },
+      { icon: FileCheck2, label: "Dossier complet" },
+      { icon: Calendar, label: "Suivi de dossier" },
+    ],
+    cta: "Explorer les visas travail",
+  },
 ];
 
 const navItems = [
@@ -104,68 +161,75 @@ export default async function Home() {
 
         {/* Search */}
         <div className="px-5 pb-4">
-          <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-4 border border-slate-200">
-            <Search className="w-5 h-5 text-slate-400" strokeWidth={2} />
-            <span className="text-[15px] text-slate-400 flex-1">
+          <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-2.5 border border-slate-200">
+            <Search className="w-4 h-4 text-slate-400" strokeWidth={2} />
+            <span className="text-[13.5px] text-slate-400 flex-1">
               Rechercher un pays, un visa ou un programme...
             </span>
             <SlidersHorizontal className="w-4 h-4 text-slate-400" />
           </div>
         </div>
 
-        {/* Hero étudiant */}
-        <div className="mx-5 mb-3 relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5">
-          <span className="relative inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
-            🎓 PRIORITÉ ÉTUDIANT
-          </span>
-
-          <h1 className="relative text-[26px] font-extrabold text-slate-900 leading-tight mt-3">
-            Étudiez à l&apos;étranger,
-            <br />
-            construisez <span className="text-blue-600">votre avenir</span>
-          </h1>
-          <p className="relative text-slate-500 text-[13px] mt-3 max-w-[62%] leading-relaxed">
-            Trouvez les meilleures universités et programmes avec rentrée
-            d&apos;hiver et réalisez votre projet d&apos;études en toute simplicité.
-          </p>
-
-          <img
-            src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=500&auto=format&fit=crop"
-            alt="étudiant"
-            className="absolute right-0 bottom-0 w-40 h-52 object-cover object-top rounded-tl-3xl"
-          />
-
-          <div className="relative grid grid-cols-3 gap-2 mt-32">
-            <div className="bg-white rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5 shadow-sm">
-              <BookOpen className="w-4 h-4 text-blue-600" />
-              <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
-                Universités partenaires
+        {/* Hero carrousel */}
+        <div className="mb-3 flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          {heroSlides.map((slide) => (
+            <div
+              key={slide.key}
+              className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 min-w-[calc(100%-2.5rem)] snap-center"
+            >
+              <span className="relative inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+                {slide.badge}
               </span>
+
+              <h1 className="relative text-[26px] font-extrabold text-slate-900 leading-tight mt-3">
+                {slide.line1}
+                <br />
+                <span className="text-blue-600">{slide.highlight}</span>
+              </h1>
+              <p className="relative text-slate-500 text-[13px] mt-3 max-w-[62%] leading-relaxed">
+                {slide.desc}
+              </p>
+
+              <img
+                src={slide.img}
+                alt={slide.key}
+                className="absolute right-0 bottom-0 w-40 h-52 object-cover object-top rounded-tl-3xl"
+              />
+
+              <div className="relative grid grid-cols-3 gap-2 mt-32">
+                {slide.pills.map((pill) => {
+                  const PillIcon = pill.icon;
+                  return (
+                    <div
+                      key={pill.label}
+                      className="bg-white rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5 shadow-sm"
+                    >
+                      <PillIcon className="w-4 h-4 text-blue-600" />
+                      <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
+                        {pill.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <button className="relative w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
+                {slide.cta} <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
-            <div className="bg-white rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5 shadow-sm">
-              <Calendar className="w-4 h-4 text-blue-600" />
-              <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
-                Rentrées d&apos;hiver
-              </span>
-            </div>
-            <div className="bg-white rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5 shadow-sm">
-              <FileCheck2 className="w-4 h-4 text-blue-600" />
-              <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
-                Accompagnement complet
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
-
-        {/* CTA */}
-        <div className="px-5 mb-6">
-          <button className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-4 flex items-center justify-center gap-2">
-            Explorer les programmes d&apos;études <ChevronRight className="w-4 h-4" />
-          </button>
+        <div className="flex justify-center gap-1.5 mb-6">
+          {heroSlides.map((slide, i) => (
+            <span
+              key={slide.key}
+              className={`h-1.5 rounded-full ${i === 0 ? "w-4 bg-blue-600" : "w-1.5 bg-slate-200"}`}
+            />
+          ))}
         </div>
 
         {/* Categories */}
-        <div className="px-5 grid grid-cols-5 gap-2 mb-6">
+        <div className="px-5 grid grid-cols-4 gap-2 mb-6">
           {categories.map((c) => {
             const Icon = c.icon;
             return (
