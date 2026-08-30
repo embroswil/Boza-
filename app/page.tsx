@@ -47,9 +47,9 @@ export default async function Home() {
     .limit(4);
 
   const { data: programsData } = await supabase
-    .from("study_programs")
+    .from("programs")
     .select(
-      "id, name, level, duration_months, tuition_fee, currency, language, universities(name)"
+      "id, name, level, duration_months, tuition_fee, currency, teaching_language, universities(name)"
     )
     .order("created_at", { ascending: true })
     .limit(3);
@@ -64,7 +64,7 @@ export default async function Home() {
     title: p.name,
     university: (p.universities as unknown as { name: string } | null)?.name ?? "",
     duration: p.duration_months ? `${p.duration_months} mois` : "",
-    language: p.language ?? "",
+    language: p.teaching_language ?? "",
     price: p.tuition_fee ? `${p.tuition_fee} ${p.currency ?? ""}` : "",
     logo: (p.universities as unknown as { name: string } | null)?.name?.slice(0, 3).toUpperCase() ?? "",
   }));
