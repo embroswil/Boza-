@@ -33,7 +33,7 @@ const navItems = [
   { icon: HomeIcon, label: "Accueil", active: true, href: "/" },
   { icon: ClipboardList, label: "Mes demandes", href: "/protected" },
   { icon: Plus, label: "Démarrer", isCenter: true, href: "/protected" },
-  { icon: FileText, label: "Documents", href: "/protected" },
+  { icon: FileText, label: "Documents", href: "/documents" },
   { icon: User, label: "Profil", href: "/auth/login" },
 ];
 
