@@ -29,16 +29,22 @@ const categories = [
   { icon: Building2, label: "Affaires", color: "text-violet-500" },
 ];
 
-const navItems = [
+const buildNavItems = (isLoggedIn: boolean) => [
   { icon: HomeIcon, label: "Accueil", active: true, href: "/" },
-  { icon: ClipboardList, label: "Mes demandes", href: "/protected" },
-  { icon: Plus, label: "Démarrer", isCenter: true, href: "/protected" },
-  { icon: FileText, label: "Documents", href: "/documents" },
-  { icon: User, label: "Profil", href: "/auth/login" },
+  { icon: ClipboardList, label: "Mes demandes", href: isLoggedIn ? "/protected" : "/auth/login" },
+  { icon: Plus, label: "Démarrer", isCenter: true, href: isLoggedIn ? "/protected" : "/auth/login" },
+  { icon: FileText, label: "Documents", href: isLoggedIn ? "/documents" : "/auth/login" },
+  { icon: User, label: "Profil", href: isLoggedIn ? "/profile" : "/auth/login" },
 ];
 
 export default async function Home() {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isLoggedIn = !!user;
+  const navItems = buildNavItems(isLoggedIn);
 
   const { data: countries } = await supabase
     .from("countries")
@@ -91,7 +97,7 @@ export default async function Home() {
               <Bell className="w-6 h-6 text-slate-700" />
               <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white" />
             </div>
-            <Link href="/auth/login">
+            <Link href={isLoggedIn ? "/profile" : "/auth/login"}>
               <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center">
                 <User className="w-5 h-5 text-slate-500" />
               </div>
