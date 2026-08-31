@@ -61,6 +61,7 @@ export default async function Home() {
     .limit(3);
 
   const destinations = (countries ?? []).map((c) => ({
+    id: c.id,
     name: c.name,
     flag: c.flag_url ?? "🌍",
     intake: "À confirmer",
@@ -144,9 +145,9 @@ export default async function Home() {
           <h2 className="font-bold text-slate-900 text-base">
             Destinations études populaires
           </h2>
-          <button className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
+          <Link href="/countries" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
             Voir tout <ChevronRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
         <div className="px-5 grid grid-cols-2 gap-3 mb-6">
           {destinations.length === 0 && (
@@ -155,7 +156,11 @@ export default async function Home() {
             </div>
           )}
           {destinations.map((d) => (
-            <div key={d.name} className="rounded-xl overflow-hidden bg-white shadow-sm p-3">
+            <Link
+              key={d.id}
+              href={`/countries/${d.id}`}
+              className="rounded-xl overflow-hidden bg-white shadow-sm p-3"
+            >
               <div className="flex items-center gap-1.5 text-[13px] font-semibold text-slate-800">
                 <span>{d.flag}</span> {d.name}
               </div>
@@ -165,7 +170,7 @@ export default async function Home() {
                   {d.intake}
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
