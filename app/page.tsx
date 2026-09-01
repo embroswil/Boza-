@@ -30,8 +30,8 @@ const categories = [
 
 const buildNavItems = (isLoggedIn: boolean) => [
   { icon: HomeIcon, label: "Accueil", active: true, href: "/" },
-  { icon: ClipboardList, label: "Mes demandes", href: isLoggedIn ? "/protected" : "/auth/login" },
-  { icon: Plus, label: "Démarrer", isCenter: true, href: isLoggedIn ? "/protected" : "/auth/login" },
+  { icon: ClipboardList, label: "Mes demandes", href: isLoggedIn ? "/demandes" : "/auth/login" },
+  { icon: Plus, label: "Démarrer", isCenter: true, href: isLoggedIn ? "/demandes/nouvelle" : "/auth/login" },
   { icon: FileText, label: "Documents", href: isLoggedIn ? "/documents" : "/auth/login" },
   { icon: User, label: "Profil", href: isLoggedIn ? "/profile" : "/auth/login" },
 ];
