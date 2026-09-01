@@ -9,7 +9,29 @@ export function HeroCarousel() {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const directionRef = useRef<1 | -1>(1);
   const isProgrammatic = useRef(false);
+  const isTyping = useRef(false);
   const [index, setIndex] = useState(0);
+
+  // Met en pause le défilement auto tant qu'un champ de saisie est actif sur la page
+  useEffect(() => {
+    const isFormField = (el: EventTarget | null) =>
+      el instanceof HTMLElement &&
+      (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+
+    const onFocusIn = (e: FocusEvent) => {
+      if (isFormField(e.target)) isTyping.current = true;
+    };
+    const onFocusOut = (e: FocusEvent) => {
+      if (isFormField(e.target)) isTyping.current = false;
+    };
+
+    document.addEventListener("focusin", onFocusIn);
+    document.addEventListener("focusout", onFocusOut);
+    return () => {
+      document.removeEventListener("focusin", onFocusIn);
+      document.removeEventListener("focusout", onFocusOut);
+    };
+  }, []);
 
   // Cible directement l'élément de la slide (fiable, pas de calcul de pixels)
   useEffect(() => {
@@ -23,9 +45,10 @@ export function HeroCarousel() {
     return () => window.clearTimeout(t);
   }, [index]);
 
-  // Défilement automatique en va-et-vient, infini
+  // Défilement automatique en va-et-vient, infini (en pause si l'utilisateur saisit du texte)
   useEffect(() => {
     const timer = window.setInterval(() => {
+      if (isTyping.current) return;
       setIndex((prev) => {
         let dir = directionRef.current;
         let next = prev + dir;
