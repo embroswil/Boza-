@@ -41,6 +41,16 @@ export default async function Home() {
   const isLoggedIn = !!user;
   const navItems = buildNavItems(isLoggedIn);
 
+  let hasUnreadNotifications = false;
+  if (isLoggedIn) {
+    const { count } = await supabase
+      .from("notifications")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("is_read", false);
+    hasUnreadNotifications = (count ?? 0) > 0;
+  }
+
   const { data: countries } = await supabase
     .from("countries")
     .select("id, name, flag_url")
@@ -92,7 +102,9 @@ export default async function Home() {
           <div className="flex items-center gap-3">
             <div className="relative">
               <Bell className="w-6 h-6 text-slate-700" />
-              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white" />
+              {hasUnreadNotifications && (
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white" />
+              )}
             </div>
             <Link href={isLoggedIn ? "/profile" : "/auth/login"}>
               <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center">
@@ -143,21 +155,34 @@ export default async function Home() {
               Aucun pays pour l&apos;instant — ajoute-les dans Supabase.
             </div>
           )}
-          {destinations.map((d) => (
-            <Link
-              key={d.id}
-              href={`/countries/${d.id}`}
-              className="aspect-square rounded-2xl bg-white shadow-sm flex flex-col items-center justify-center gap-1.5 p-2"
-            >
-              <span className="text-3xl">{d.flag}</span>
-              <span className="text-[12px] font-semibold text-slate-800 text-center leading-tight">
-                {d.name}
-              </span>
-              <span className="text-[9px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">
-                {d.intake}
-              </span>
-            </Link>
-          ))}
+          {destinations.map((d, i) => {
+            const themes = [
+              "from-blue-600 to-blue-800",
+              "from-emerald-500 to-emerald-700",
+              "from-amber-500 to-orange-600",
+              "from-violet-500 to-violet-700",
+            ];
+            const theme = themes[i % themes.length];
+            return (
+              <Link
+                key={d.id}
+                href={`/countries/${d.id}`}
+                className={`relative aspect-square rounded-2xl bg-gradient-to-br ${theme} flex flex-col items-center justify-center gap-2 p-3 overflow-hidden shadow-md`}
+              >
+                <div className="absolute -right-4 -top-4 w-16 h-16 rounded-full bg-white/10" />
+                <div className="absolute -left-6 -bottom-6 w-20 h-20 rounded-full bg-white/10" />
+                <span className="relative w-12 h-12 rounded-full bg-white/95 flex items-center justify-center text-2xl shadow-sm">
+                  {d.flag}
+                </span>
+                <span className="relative text-[13px] font-bold text-white text-center leading-tight">
+                  {d.name}
+                </span>
+                <span className="relative text-[9px] text-white font-semibold bg-white/20 backdrop-blur px-2 py-0.5 rounded-full">
+                  {d.intake}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
         {/* Programmes d'études */}
