@@ -1,5 +1,4 @@
 import {
-  Search,
   Bell,
   GraduationCap,
   Briefcase,
@@ -10,7 +9,6 @@ import {
   FileText,
   User,
   Plus,
-  SlidersHorizontal,
   Calendar,
   Globe,
   Heart,
@@ -18,6 +16,7 @@ import {
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { HeroCarousel } from "@/components/hero-carousel";
+import { SearchBar } from "@/components/search-bar";
 
 export const dynamic = "force-dynamic";
 
@@ -107,15 +106,7 @@ export default async function Home() {
         </div>
 
         {/* Search */}
-        <div className="px-5 pb-4">
-          <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2 border border-slate-200">
-            <Search className="w-4 h-4 text-slate-400" strokeWidth={2} />
-            <span className="text-[13px] text-slate-400 flex-1">
-              Rechercher un pays, un visa ou un programme...
-            </span>
-            <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-          </div>
-        </div>
+        <SearchBar />
 
         {/* Hero carrousel */}
         <HeroCarousel />
