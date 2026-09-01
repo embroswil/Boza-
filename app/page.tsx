@@ -10,7 +10,6 @@ import {
   FileText,
   User,
   Plus,
-  Send,
   SlidersHorizontal,
   Calendar,
   Globe,
@@ -31,8 +30,8 @@ const categories = [
 
 const buildNavItems = (isLoggedIn: boolean) => [
   { icon: HomeIcon, label: "Accueil", active: true, href: "/" },
-  { icon: ClipboardList, label: "Mes demandes", href: isLoggedIn ? "/demandes" : "/auth/login" },
-  { icon: Plus, label: "Démarrer", isCenter: true, href: isLoggedIn ? "/demandes/nouvelle" : "/auth/login" },
+  { icon: ClipboardList, label: "Mes demandes", href: isLoggedIn ? "/protected" : "/auth/login" },
+  { icon: Plus, label: "Démarrer", isCenter: true, href: isLoggedIn ? "/protected" : "/auth/login" },
   { icon: FileText, label: "Documents", href: isLoggedIn ? "/documents" : "/auth/login" },
   { icon: User, label: "Profil", href: isLoggedIn ? "/profile" : "/auth/login" },
 ];
@@ -82,7 +81,8 @@ export default async function Home() {
         <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-slate-50">
           <div className="flex items-center gap-2">
             <div className="relative w-10 h-10 flex items-center justify-center">
-              <Send className="w-9 h-9 text-blue-600 -rotate-45" fill="currentColor" strokeWidth={0} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
             </div>
             <div>
               <div className="font-extrabold text-slate-900 text-xl leading-none tracking-tight">

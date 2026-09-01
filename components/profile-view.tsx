@@ -15,6 +15,7 @@ import {
   Check,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { cfaCountries } from "@/lib/cfa-countries";
 
 export function ProfileView({
   userId,
@@ -215,12 +216,18 @@ export function ProfileView({
                 <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
                   Nationalité
                 </label>
-                <input
-                  type="text"
+                <select
                   value={nationalityValue}
                   onChange={(e) => setNationalityValue(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
+                >
+                  <option value="">Sélectionne ton pays</option>
+                  {cfaCountries.map((c) => (
+                    <option key={c.name} value={c.name}>
+                      {c.flag} {c.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="flex gap-2 mt-1">

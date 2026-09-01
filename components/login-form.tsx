@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Send, Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -47,7 +47,8 @@ export function LoginForm() {
       <div className="w-full max-w-sm mx-auto">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <Send className="w-10 h-10 text-blue-600 -rotate-45 mb-2" fill="currentColor" strokeWidth={0} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.jpg" alt="Boza" className="w-14 h-14 rounded-2xl mb-2 object-cover" />
           <div className="font-extrabold text-slate-900 text-xl tracking-tight">BOZA</div>
           <div className="text-[11px] text-slate-400">Votre passeport pour le monde</div>
         </div>
