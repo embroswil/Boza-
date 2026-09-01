@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ArrowLeft,
   Globe2,
@@ -173,7 +174,11 @@ export function CountryDetail({
             </div>
             <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
               {visas.map((v) => (
-                <div key={v.id} className="flex items-center gap-3 px-4 py-3.5">
+                <Link
+                  key={v.id}
+                  href={`/visas/${v.id}`}
+                  className="flex items-center gap-3 px-4 py-3.5"
+                >
                   <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
                     <FileCheck2 className="w-4 h-4 text-blue-600" />
                   </div>
@@ -190,7 +195,7 @@ export function CountryDetail({
                       {v.official_fee} {v.currency}
                     </span>
                   )}
-                </div>
+                </Link>
               ))}
             </div>
           </div>
