@@ -20,8 +20,8 @@ import { SearchBar } from "@/components/search-bar";
 export const dynamic = "force-dynamic";
 
 const categories = [
-  { icon: GraduationCap, label: "Étudiant", active: true, color: "text-blue-600" },
-  { icon: Briefcase, label: "Tourisme", color: "text-emerald-500" },
+  { icon: GraduationCap, label: "Étudiant", active: true, color: "text-blue-600", href: "/programs" },
+  { icon: Briefcase, label: "Tourisme", color: "text-emerald-500", href: "/visas?type=tourisme" },
 ];
 
 const buildNavItems = (isLoggedIn: boolean) => [
@@ -125,8 +125,9 @@ export default async function Home() {
           {categories.map((c) => {
             const Icon = c.icon;
             return (
-              <div
+              <Link
                 key={c.label}
+                href={c.href}
                 className={`relative rounded-2xl py-3 flex flex-col items-center gap-1.5 ${
                   c.active
                     ? "bg-blue-50 border-2 border-blue-600"
@@ -135,7 +136,7 @@ export default async function Home() {
               >
                 <Icon className={`w-6 h-6 ${c.color}`} strokeWidth={1.8} />
                 <span className="text-[10.5px] font-semibold text-slate-800">{c.label}</span>
-              </div>
+              </Link>
             );
           })}
         </div>
@@ -190,9 +191,9 @@ export default async function Home() {
           <h2 className="font-bold text-slate-900 text-base">
             Programmes d&apos;études (hiver)
           </h2>
-          <button className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
+          <Link href="/programs" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
             Voir tout <ChevronRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
         <div className="px-5 mb-4">
           <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
@@ -233,13 +234,16 @@ export default async function Home() {
 
         {/* Bannière footer */}
         <div className="px-5 mb-24">
-          <button className="w-full bg-blue-50 rounded-2xl px-4 py-3.5 flex items-center gap-2 text-blue-600 text-sm font-semibold">
+          <Link
+            href="/programs"
+            className="w-full bg-blue-50 rounded-2xl px-4 py-3.5 flex items-center gap-2 text-blue-600 text-sm font-semibold"
+          >
             <GraduationCap className="w-4 h-4" />
             <span className="flex-1 text-left">
               Voir plus de programmes avec rentrée d&apos;hiver
             </span>
             <ChevronRight className="w-4 h-4" />
-          </button>
+          </Link>
         </div>
 
         {/* Bottom nav */}
