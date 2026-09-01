@@ -7,7 +7,10 @@ import { useState } from "react";
 import { Send, Loader2, Eye, EyeOff } from "lucide-react";
 
 export function SignUpForm() {
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -28,12 +31,18 @@ export function SignUpForm() {
       return;
     }
 
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+
     try {
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { full_name: fullName },
+          data: {
+            full_name: fullName,
+            nationality: nationality.trim(),
+            phone: phone.trim(),
+          },
           emailRedirectTo: `${window.location.origin}/`,
         },
       });
@@ -50,6 +59,10 @@ export function SignUpForm() {
       setIsLoading(false);
     }
   };
+
+  const inputClass =
+    "w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600";
+  const labelClass = "text-[13px] font-medium text-slate-700 mb-1.5 block";
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center px-6 py-10">
@@ -68,38 +81,70 @@ export function SignUpForm() {
           </p>
 
           <form onSubmit={handleSignUp} className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelClass}>Prénom</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Prénom"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Nom</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Nom"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
-                Nom complet
-              </label>
+              <label className={labelClass}>Nationalité</label>
               <input
                 type="text"
                 required
-                placeholder="Ton nom et prénom"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                placeholder="Ex : Camerounaise"
+                value={nationality}
+                onChange={(e) => setNationality(e.target.value)}
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
-                Email
+              <label className={labelClass}>
+                Téléphone <span className="text-slate-400 font-normal">(facultatif)</span>
               </label>
+              <input
+                type="tel"
+                placeholder="+237 6XX XXX XXX"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label className={labelClass}>Email</label>
               <input
                 type="email"
                 required
                 placeholder="toi@exemple.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className={inputClass}
               />
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
-                Mot de passe
-              </label>
+              <label className={labelClass}>Mot de passe</label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -108,7 +153,7 @@ export function SignUpForm() {
                   placeholder="6 caractères minimum"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 pr-11 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className={`${inputClass} pr-11`}
                 />
                 <button
                   type="button"
@@ -125,9 +170,7 @@ export function SignUpForm() {
             </div>
 
             <div>
-              <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
-                Confirmer le mot de passe
-              </label>
+              <label className={labelClass}>Confirmer le mot de passe</label>
               <input
                 type={showPassword ? "text" : "password"}
                 required
@@ -135,7 +178,7 @@ export function SignUpForm() {
                 placeholder="Retape ton mot de passe"
                 value={repeatPassword}
                 onChange={(e) => setRepeatPassword(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                className={inputClass}
               />
             </div>
 

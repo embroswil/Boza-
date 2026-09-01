@@ -16,16 +16,18 @@ export default async function ProfilePage() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("full_name, email, phone, nationality")
+    .select("full_name, email, phone, nationality, avatar_url")
     .eq("id", user.id)
     .single();
 
   return (
     <ProfileView
+      userId={user.id}
       fullName={profile?.full_name || ""}
       email={profile?.email || user.email || ""}
       phone={profile?.phone || ""}
       nationality={profile?.nationality || ""}
+      avatarUrl={profile?.avatar_url || ""}
     />
   );
 }
