@@ -33,12 +33,14 @@ export function HeroCarousel() {
     };
   }, []);
 
-  // Cible directement l'élément de la slide (fiable, pas de calcul de pixels)
+  // Défile uniquement le carrousel horizontal, jamais la page verticale
   useEffect(() => {
     const slide = slideRefs.current[index];
-    if (!slide) return;
+    const container = containerRef.current;
+    if (!slide || !container) return;
     isProgrammatic.current = true;
-    slide.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    const targetLeft = slide.offsetLeft - container.offsetLeft;
+    container.scrollTo({ left: targetLeft, behavior: "smooth" });
     const t = window.setTimeout(() => {
       isProgrammatic.current = false;
     }, 700);
