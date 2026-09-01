@@ -18,8 +18,6 @@ type Visa = {
 const VISA_TYPE_LABELS: Record<string, string> = {
   tourisme: "Tourisme",
   etudes: "Études",
-  travail: "Travail",
-  business: "Affaires",
   immigration: "Immigration",
 };
 
@@ -47,6 +45,7 @@ export function NewApplicationForm({
       .from("visas")
       .select("id, name, type, official_fee, currency, processing_days")
       .eq("country_id", selectedCountry.id)
+      .not("type", "in", '("travail","business")')
       .then(({ data, error }) => {
         if (error) setError("Impossible de charger les visas de ce pays.");
         setVisas(data ?? []);

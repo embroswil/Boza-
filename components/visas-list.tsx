@@ -18,8 +18,6 @@ type Visa = {
 const TYPE_LABELS: Record<string, string> = {
   tourisme: "Tourisme",
   etudes: "Études",
-  travail: "Travail",
-  business: "Affaires",
   immigration: "Immigration",
 };
 

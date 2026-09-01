@@ -2,7 +2,6 @@ import {
   Bell,
   GraduationCap,
   Briefcase,
-  Building2,
   ChevronRight,
   Home as HomeIcon,
   ClipboardList,
@@ -23,8 +22,6 @@ export const dynamic = "force-dynamic";
 const categories = [
   { icon: GraduationCap, label: "Étudiant", active: true, color: "text-blue-600" },
   { icon: Briefcase, label: "Tourisme", color: "text-emerald-500" },
-  { icon: Briefcase, label: "Travail", color: "text-orange-500" },
-  { icon: Building2, label: "Affaires", color: "text-violet-500" },
 ];
 
 const buildNavItems = (isLoggedIn: boolean) => [
@@ -112,7 +109,7 @@ export default async function Home() {
         <HeroCarousel />
 
         {/* Categories */}
-        <div className="px-5 grid grid-cols-4 gap-2 mb-6">
+        <div className="px-5 grid grid-cols-2 gap-2 mb-6">
           {categories.map((c) => {
             const Icon = c.icon;
             return (
@@ -140,9 +137,9 @@ export default async function Home() {
             Voir tout <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="px-5 grid grid-cols-3 gap-3 mb-6">
+        <div className="px-5 grid grid-cols-2 gap-3 mb-6">
           {destinations.length === 0 && (
-            <div className="col-span-3 bg-white rounded-xl p-5 text-center text-sm text-slate-400 shadow-sm">
+            <div className="col-span-2 bg-white rounded-xl p-5 text-center text-sm text-slate-400 shadow-sm">
               Aucun pays pour l&apos;instant — ajoute-les dans Supabase.
             </div>
           )}
