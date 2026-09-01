@@ -140,9 +140,9 @@ export default async function Home() {
             Voir tout <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="px-5 grid grid-cols-2 gap-3 mb-6">
+        <div className="px-5 grid grid-cols-3 gap-3 mb-6">
           {destinations.length === 0 && (
-            <div className="col-span-2 bg-white rounded-xl p-5 text-center text-sm text-slate-400 shadow-sm">
+            <div className="col-span-3 bg-white rounded-xl p-5 text-center text-sm text-slate-400 shadow-sm">
               Aucun pays pour l&apos;instant — ajoute-les dans Supabase.
             </div>
           )}
@@ -150,17 +150,15 @@ export default async function Home() {
             <Link
               key={d.id}
               href={`/countries/${d.id}`}
-              className="rounded-xl overflow-hidden bg-white shadow-sm p-3"
+              className="aspect-square rounded-2xl bg-white shadow-sm flex flex-col items-center justify-center gap-1.5 p-2"
             >
-              <div className="flex items-center gap-1.5 text-[13px] font-semibold text-slate-800">
-                <span>{d.flag}</span> {d.name}
-              </div>
-              <div className="flex items-center gap-1 mt-1 text-[10px] text-slate-400">
-                Rentrée hiver{" "}
-                <span className="bg-blue-50 text-blue-600 font-semibold px-1.5 py-0.5 rounded">
-                  {d.intake}
-                </span>
-              </div>
+              <span className="text-3xl">{d.flag}</span>
+              <span className="text-[12px] font-semibold text-slate-800 text-center leading-tight">
+                {d.name}
+              </span>
+              <span className="text-[9px] text-blue-600 font-semibold bg-blue-50 px-1.5 py-0.5 rounded">
+                {d.intake}
+              </span>
             </Link>
           ))}
         </div>

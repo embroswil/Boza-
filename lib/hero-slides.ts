@@ -3,7 +3,6 @@ import {
   Calendar,
   FileCheck2,
   Globe,
-  Briefcase,
 } from "lucide-react";
 
 export const heroSlides = [
@@ -34,33 +33,5 @@ export const heroSlides = [
       { icon: Calendar, label: "Traitement rapide" },
     ],
     cta: "Explorer les visas touristiques",
-  },
-  {
-    key: "affaires",
-    badge: "💼 VISA AFFAIRES",
-    line1: "Développez votre activité,",
-    highlight: "à l'international",
-    desc: "Simplifiez vos déplacements professionnels et développez votre entreprise à l'étranger.",
-    img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=500&auto=format&fit=crop",
-    pills: [
-      { icon: Briefcase, label: "Visa express" },
-      { icon: FileCheck2, label: "Support entreprise" },
-      { icon: Globe, label: "Réseau international" },
-    ],
-    cta: "Explorer les visas affaires",
-  },
-  {
-    key: "travail",
-    badge: "🧳 VISA TRAVAIL",
-    line1: "Travaillez à l'étranger,",
-    highlight: "concrétisez votre carrière",
-    desc: "Trouvez les opportunités et le visa de travail adaptés à votre projet professionnel.",
-    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=500&auto=format&fit=crop",
-    pills: [
-      { icon: Briefcase, label: "Offres d'emploi" },
-      { icon: FileCheck2, label: "Dossier complet" },
-      { icon: Calendar, label: "Suivi de dossier" },
-    ],
-    cta: "Explorer les visas travail",
   },
 ];

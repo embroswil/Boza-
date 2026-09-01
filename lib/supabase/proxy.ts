@@ -47,12 +47,14 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  if (
-    request.nextUrl.pathname !== "/" &&
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/auth")
-  ) {
+  // Seules ces sections nécessitent une connexion — tout le reste (accueil,
+  // recherche, pays, visas, programmes...) reste public.
+  const protectedPrefixes = ["/documents", "/demandes", "/profile", "/protected"];
+  const isProtectedRoute = protectedPrefixes.some((p) =>
+    request.nextUrl.pathname.startsWith(p)
+  );
+
+  if (isProtectedRoute && !user) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = "/auth/login";
