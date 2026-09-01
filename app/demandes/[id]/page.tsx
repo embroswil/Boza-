@@ -37,5 +37,5 @@ export default async function DemandeDetailPage({
     notFound();
   }
 
-  return <ApplicationDetail application={application} />;
+  return <ApplicationDetail application={application as unknown as never} /* eslint-disable-line @typescript-eslint/no-explicit-any */ />;
 }

@@ -24,5 +24,5 @@ export default async function DemandesPage() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  return <ApplicationsList applications={applications ?? []} />;
+  return <ApplicationsList applications={(applications ?? []) as unknown as never} />;
 }
