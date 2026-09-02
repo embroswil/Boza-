@@ -14,6 +14,10 @@ import {
   Phone,
   Mail,
   ChevronRight,
+  Coins,
+  Languages,
+  Clock,
+  TrendingUp,
 } from "lucide-react";
 
 type Country = {
@@ -88,11 +92,11 @@ export function CountryDetail({
   const router = useRouter();
 
   const infoRows = [
-    { label: "Capitale", value: country.capital },
-    { label: "Devise", value: country.currency },
-    { label: "Langue(s)", value: country.official_languages },
-    { label: "Fuseau horaire", value: country.timezone },
-    { label: "Coût de la vie", value: country.cost_of_living_level },
+    { label: "Capitale", value: country.capital, icon: Landmark, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Devise", value: country.currency, icon: Coins, color: "text-amber-600", bg: "bg-amber-50" },
+    { label: "Langue(s)", value: country.official_languages, icon: Languages, color: "text-violet-600", bg: "bg-violet-50" },
+    { label: "Fuseau horaire", value: country.timezone, icon: Clock, color: "text-emerald-600", bg: "bg-emerald-50" },
+    { label: "Coût de la vie", value: country.cost_of_living_level, icon: TrendingUp, color: "text-rose-600", bg: "bg-rose-50" },
   ].filter((r) => r.value);
 
   return (
@@ -136,18 +140,26 @@ export function CountryDetail({
             <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">
               Informations générales
             </h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-              {infoRows.map((r) => (
-                <div
-                  key={r.label}
-                  className="flex items-center justify-between px-4 py-3"
-                >
-                  <span className="text-[12.5px] text-slate-400">{r.label}</span>
-                  <span className="text-[13px] font-medium text-slate-900">
-                    {r.value}
-                  </span>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-2.5">
+              {infoRows.map((r) => {
+                const Icon = r.icon;
+                return (
+                  <div
+                    key={r.label}
+                    className="bg-white rounded-2xl shadow-sm p-3.5 flex flex-col gap-2"
+                  >
+                    <div className={`w-8 h-8 rounded-lg ${r.bg} flex items-center justify-center`}>
+                      <Icon className={`w-4 h-4 ${r.color}`} />
+                    </div>
+                    <div>
+                      <div className="text-[10.5px] text-slate-400">{r.label}</div>
+                      <div className="text-[13px] font-bold text-slate-900 leading-tight mt-0.5">
+                        {r.value}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

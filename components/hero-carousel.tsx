@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { heroSlides } from "@/lib/hero-slides";
 
 export function HeroCarousel() {
@@ -97,8 +98,9 @@ export function HeroCarousel() {
         className="mb-3 flex gap-3 overflow-x-auto snap-x snap-mandatory px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
         {heroSlides.map((slide, i) => (
-          <div
+          <Link
             key={slide.key}
+            href={slide.href}
             ref={(el) => {
               slideRefs.current[i] = el;
             }}
@@ -142,10 +144,10 @@ export function HeroCarousel() {
               })}
             </div>
 
-            <button className="relative w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
+            <span className="relative w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
               {slide.cta} <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
+            </span>
+          </Link>
         ))}
       </div>
       <div className="flex justify-center gap-1.5 mb-6">

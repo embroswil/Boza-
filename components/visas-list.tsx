@@ -20,6 +20,13 @@ const TYPE_LABELS: Record<string, string> = {
   etudes: "Études",
 };
 
+const TYPE_STYLES: Record<string, { bg: string; text: string }> = {
+  tourisme: { bg: "bg-emerald-50", text: "text-emerald-600" },
+  etudes: { bg: "bg-blue-50", text: "text-blue-600" },
+};
+
+const formatPrice = (n: number) => n.toLocaleString("fr-FR");
+
 export function VisasList({
   visas,
   activeType,
@@ -66,8 +73,8 @@ export function VisasList({
         <div className="px-5 mb-5 flex gap-2 overflow-x-auto no-scrollbar">
           <Link
             href="/visas"
-            className={`shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full ${
-              !activeType ? "bg-blue-600 text-white" : "bg-white text-slate-500 border border-slate-200"
+            className={`shrink-0 text-[12.5px] font-semibold px-4 py-2 rounded-full ${
+              !activeType ? "bg-blue-600 text-white shadow-sm" : "bg-white text-slate-500 border border-slate-200"
             }`}
           >
             Tous
@@ -76,9 +83,9 @@ export function VisasList({
             <Link
               key={value}
               href={`/visas?type=${value}`}
-              className={`shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full ${
+              className={`shrink-0 text-[12.5px] font-semibold px-4 py-2 rounded-full ${
                 activeType === value
-                  ? "bg-blue-600 text-white"
+                  ? "bg-blue-600 text-white shadow-sm"
                   : "bg-white text-slate-500 border border-slate-200"
               }`}
             >
@@ -96,34 +103,49 @@ export function VisasList({
                 : "Aucun résultat pour cette recherche."}
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-              {filtered.map((v) => (
-                <Link
-                  key={v.id}
-                  href={`/visas/${v.id}`}
-                  className="flex items-center gap-3 px-4 py-3.5"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-lg">
-                    {v.countries?.flag_url ?? <FileCheck2 className="w-5 h-5 text-blue-600" />}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13.5px] font-semibold text-slate-900 truncate">
-                      {v.name}
+            <div className="flex flex-col gap-2.5">
+              {filtered.map((v) => {
+                const style = TYPE_STYLES[v.type] ?? { bg: "bg-slate-50", text: "text-slate-500" };
+                return (
+                  <Link
+                    key={v.id}
+                    href={`/visas/${v.id}`}
+                    className="flex items-center gap-3 bg-white rounded-2xl shadow-sm px-4 py-3.5"
+                  >
+                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-2xl border border-slate-100">
+                      {v.countries?.flag_url ?? <FileCheck2 className="w-5 h-5 text-blue-600" />}
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate flex items-center gap-1">
-                      {v.countries?.name ?? <Globe2 className="w-3 h-3" />}
-                      {" · "}
-                      {TYPE_LABELS[v.type] ?? v.type}
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[13.5px] font-semibold text-slate-900 truncate">
+                        {v.name}
+                      </div>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span className="text-[11px] text-slate-400 truncate flex items-center gap-1">
+                          {v.countries?.name ?? <Globe2 className="w-3 h-3" />}
+                        </span>
+                        <span
+                          className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded-full ${style.bg} ${style.text}`}
+                        >
+                          {TYPE_LABELS[v.type] ?? v.type}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  {v.official_fee != null && (
-                    <span className="text-[12.5px] font-bold text-slate-900 whitespace-nowrap">
-                      {v.official_fee} {v.currency}
-                    </span>
-                  )}
-                  <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
-                </Link>
-              ))}
+                    <div className="flex flex-col items-end gap-0.5 shrink-0">
+                      {v.official_fee != null && (
+                        <span className="text-[13px] font-bold text-slate-900 whitespace-nowrap">
+                          {formatPrice(v.official_fee)} {v.currency}
+                        </span>
+                      )}
+                      {v.processing_days != null && (
+                        <span className="text-[10px] text-slate-400">
+                          {v.processing_days} jours
+                        </span>
+                      )}
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>
