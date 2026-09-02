@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Search, ChevronRight, GraduationCap } from "lucide-react";
+import { ArrowLeft, Search, Calendar, Globe, Heart } from "lucide-react";
+import { getProgramImage } from "@/lib/program-images";
 
 type Program = {
   id: string;
   name: string;
   level: string | null;
+  field?: string | null;
   duration_months: number | null;
   tuition_fee: number | null;
   currency: string | null;
@@ -49,7 +51,7 @@ export function ProgramsList({ programs }: { programs: Program[] }) {
         </div>
 
         {/* Search */}
-        <div className="px-5 mb-5">
+        <div className="px-5 mb-2">
           <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2.5 border border-slate-200">
             <Search className="w-4 h-4 text-slate-400" />
             <input
@@ -61,7 +63,11 @@ export function ProgramsList({ programs }: { programs: Program[] }) {
           </div>
         </div>
 
-        {/* List */}
+        <div className="px-5 mb-3 text-[12px] text-slate-400">
+          {filtered.length} programme{filtered.length > 1 ? "s" : ""}
+        </div>
+
+        {/* Grid */}
         <div className="px-5">
           {filtered.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
@@ -70,35 +76,59 @@ export function ProgramsList({ programs }: { programs: Program[] }) {
                 : "Aucun résultat pour cette recherche."}
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-              {filtered.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/programs/${p.id}`}
-                  className="flex items-center gap-3 px-4 py-3.5"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 text-lg">
-                    {p.universities?.countries?.flag_url ?? (
-                      <GraduationCap className="w-5 h-5 text-emerald-600" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13.5px] font-semibold text-slate-900 truncate">
-                      {p.name}
+            <div className="grid grid-cols-2 gap-3">
+              {filtered.map((p) => {
+                const country = p.universities?.countries;
+                return (
+                  <Link
+                    key={p.id}
+                    href={`/programs/${p.id}`}
+                    className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col"
+                  >
+                    <div className="relative w-full aspect-[4/3]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={getProgramImage({ id: p.id, field: p.field, name: p.name })}
+                        alt={p.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      {p.level && (
+                        <span className="absolute top-2 left-2 text-[9.5px] font-bold px-2 py-1 rounded-full bg-white/90 text-blue-700 backdrop-blur">
+                          {LEVEL_LABELS[p.level] ?? p.level}
+                        </span>
+                      )}
+                      <Heart className="absolute top-2 right-2 w-4 h-4 text-white drop-shadow" />
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate">
-                      {p.universities?.name}
-                      {p.level ? ` · ${LEVEL_LABELS[p.level] ?? p.level}` : ""}
+                    <div className="p-3 flex flex-col gap-1.5 flex-1">
+                      <div className="text-[12.5px] font-semibold text-slate-900 leading-tight line-clamp-2">
+                        {p.name}
+                      </div>
+                      <div className="text-[11px] text-slate-400 truncate flex items-center gap-1">
+                        {country?.flag_url && <span>{country.flag_url}</span>}
+                        {p.universities?.name}
+                        {country?.name ? ` · ${country.name}` : ""}
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-auto pt-1">
+                        {p.duration_months != null && (
+                          <span className="flex items-center gap-0.5">
+                            <Calendar className="w-3 h-3" /> {p.duration_months} mois
+                          </span>
+                        )}
+                        {p.teaching_language && (
+                          <span className="flex items-center gap-0.5 truncate">
+                            <Globe className="w-3 h-3" /> {p.teaching_language}
+                          </span>
+                        )}
+                      </div>
+                      {p.tuition_fee != null && (
+                        <div className="text-[12.5px] font-bold text-slate-900 pt-0.5">
+                          {p.tuition_fee} {p.currency}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  {p.tuition_fee != null && (
-                    <span className="text-[12.5px] font-bold text-slate-900 whitespace-nowrap">
-                      {p.tuition_fee} {p.currency}
-                    </span>
-                  )}
-                  <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>

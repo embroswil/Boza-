@@ -9,7 +9,7 @@ export default async function ProgramsPage() {
   const { data: programs } = await supabase
     .from("programs")
     .select(
-      "id, name, level, duration_months, tuition_fee, currency, teaching_language, universities(name, countries(name, flag_url))"
+      "id, name, level, field, duration_months, tuition_fee, currency, teaching_language, universities(name, countries(name, flag_url))"
     )
     .order("created_at", { ascending: true });
 

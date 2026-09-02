@@ -16,8 +16,17 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SearchBar } from "@/components/search-bar";
+import { getProgramImage } from "@/lib/program-images";
 
 export const dynamic = "force-dynamic";
+
+const LEVEL_LABELS: Record<string, string> = {
+  licence: "Licence",
+  master: "Master",
+  doctorat: "Doctorat",
+  certificat: "Certificat",
+  autre: "Autre",
+};
 
 const categories = [
   { icon: GraduationCap, label: "Étudiant", active: true, color: "text-blue-600", href: "/programs" },
@@ -60,10 +69,10 @@ export default async function Home() {
   const { data: programsData } = await supabase
     .from("programs")
     .select(
-      "id, name, level, duration_months, tuition_fee, currency, teaching_language, universities(name)"
+      "id, name, level, field, duration_months, tuition_fee, currency, teaching_language, universities(name, countries(name, flag_url))"
     )
     .order("created_at", { ascending: true })
-    .limit(3);
+    .limit(12);
 
   const destinations = (countries ?? []).map((c) => ({
     id: c.id,
@@ -72,14 +81,24 @@ export default async function Home() {
     intake: "À confirmer",
   }));
 
-  const programs = (programsData ?? []).map((p) => ({
-    title: p.name,
-    university: (p.universities as unknown as { name: string } | null)?.name ?? "",
-    duration: p.duration_months ? `${p.duration_months} mois` : "",
-    language: p.teaching_language ?? "",
-    price: p.tuition_fee ? `${p.tuition_fee} ${p.currency ?? ""}` : "",
-    logo: (p.universities as unknown as { name: string } | null)?.name?.slice(0, 3).toUpperCase() ?? "",
-  }));
+  const programs = (programsData ?? []).map((p) => {
+    const university = p.universities as unknown as {
+      name: string;
+      countries: { name: string; flag_url: string | null } | null;
+    } | null;
+    return {
+      id: p.id,
+      title: p.name,
+      level: p.level ? LEVEL_LABELS[p.level] ?? p.level : "",
+      university: university?.name ?? "",
+      country: university?.countries?.name ?? "",
+      flag: university?.countries?.flag_url ?? "🎓",
+      duration: p.duration_months ? `${p.duration_months} mois` : "",
+      language: p.teaching_language ?? "",
+      price: p.tuition_fee ? `${p.tuition_fee} ${p.currency ?? ""}` : "",
+      image: getProgramImage({ id: p.id, field: p.field, name: p.name }),
+    };
+  });
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
       <div className="w-full max-w-sm bg-slate-50 relative">
@@ -196,40 +215,62 @@ export default async function Home() {
           </Link>
         </div>
         <div className="px-5 mb-4">
-          <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-            {programs.length === 0 && (
-              <div className="p-5 text-center text-sm text-slate-400">
-                Aucun programme pour l&apos;instant — ajoute-les dans Supabase.
-              </div>
-            )}
-            {programs.map((p) => (
-              <div key={p.title} className="flex items-start gap-3 px-4 py-3.5">
-                <div className="w-11 h-11 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0">
-                  <span className="text-[9px] font-extrabold text-blue-700">{p.logo}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-[13.5px] font-semibold text-slate-900 leading-tight">
-                    {p.title}
+          {programs.length === 0 ? (
+            <div className="bg-white rounded-2xl shadow-sm p-5 text-center text-sm text-slate-400">
+              Aucun programme pour l&apos;instant — ajoute-les dans Supabase.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {programs.map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/programs/${p.id}`}
+                  className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col"
+                >
+                  <div className="relative w-full aspect-[4/3]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    {p.level && (
+                      <span className="absolute top-2 left-2 text-[9.5px] font-bold px-2 py-1 rounded-full bg-white/90 text-blue-700 backdrop-blur">
+                        {p.level}
+                      </span>
+                    )}
+                    <Heart className="absolute top-2 right-2 w-4 h-4 text-white drop-shadow" />
                   </div>
-                  <div className="text-xs text-slate-400 mt-0.5">{p.university}</div>
-                  <div className="flex items-center gap-3 mt-1.5 text-[11px] text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" /> {p.duration}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Globe className="w-3 h-3" /> {p.language}
-                    </span>
+                  <div className="p-3 flex flex-col gap-1.5 flex-1">
+                    <div className="text-[12.5px] font-semibold text-slate-900 leading-tight line-clamp-2">
+                      {p.title}
+                    </div>
+                    <div className="text-[11px] text-slate-400 truncate">
+                      {p.university}
+                      {p.country ? ` · ${p.country}` : ""}
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-auto pt-1">
+                      {p.duration && (
+                        <span className="flex items-center gap-0.5">
+                          <Calendar className="w-3 h-3" /> {p.duration}
+                        </span>
+                      )}
+                      {p.language && (
+                        <span className="flex items-center gap-0.5 truncate">
+                          <Globe className="w-3 h-3" /> {p.language}
+                        </span>
+                      )}
+                    </div>
+                    {p.price && (
+                      <div className="text-[12.5px] font-bold text-slate-900 pt-0.5">
+                        {p.price}
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="flex flex-col items-end gap-3">
-                  <Heart className="w-4 h-4 text-slate-300" />
-                  <span className="text-[13px] font-bold text-slate-900 whitespace-nowrap">
-                    {p.price}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Bannière footer */}
