@@ -11,7 +11,6 @@ import {
   Repeat,
   ShieldCheck,
   ExternalLink,
-  FileText,
   CheckCircle2,
   Circle,
 } from "lucide-react";
@@ -184,17 +183,6 @@ export function VisaDetail({
                   </div>
                 </div>
               ))}
-            </div>
-          </div>
-        )}
-
-        {/* Notes */}
-        {visa.notes && (
-          <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">À savoir</h2>
-            <div className="bg-white rounded-2xl shadow-sm p-4 text-[13px] text-slate-600 leading-relaxed flex items-start gap-2">
-              <FileText className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
-              {visa.notes}
             </div>
           </div>
         )}
