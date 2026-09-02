@@ -18,7 +18,6 @@ type Visa = {
 const TYPE_LABELS: Record<string, string> = {
   tourisme: "Tourisme",
   etudes: "Études",
-  immigration: "Immigration",
 };
 
 export function VisasList({

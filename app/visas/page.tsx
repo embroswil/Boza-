@@ -6,7 +6,6 @@ export const dynamic = "force-dynamic";
 const typeLabels: Record<string, string> = {
   tourisme: "Tourisme",
   etudes: "Études",
-  immigration: "Immigration",
 };
 
 export default async function VisasPage({
@@ -20,7 +19,7 @@ export default async function VisasPage({
   let query = supabase
     .from("visas")
     .select("id, name, type, official_fee, currency, processing_days, countries(name, flag_url)")
-    .not("type", "in", '("travail","business")')
+    .not("type", "in", '("travail","business","immigration")')
     .order("created_at", { ascending: true });
 
   if (type) {
