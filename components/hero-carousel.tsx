@@ -7,7 +7,7 @@ import { heroSlides } from "@/lib/hero-slides";
 
 export function HeroCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const slideRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const directionRef = useRef<1 | -1>(1);
   const isProgrammatic = useRef(false);
   const isTyping = useRef(false);
