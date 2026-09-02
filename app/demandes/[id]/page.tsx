@@ -23,6 +23,7 @@ export default async function DemandeDetailPage({
     .from("applications")
     .select(
       `id, status, submitted_at, created_at,
+       passport_number, education_level, diploma_title, diploma_institution, diploma_year, applicant_notes,
        visas ( name, type, official_fee, currency, processing_days, countries ( name, flag_url ) ),
        programs ( name, universities ( name, countries ( name, flag_url ) ) ),
        application_documents ( id, document_type, status, uploaded_at ),

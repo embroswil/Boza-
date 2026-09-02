@@ -18,6 +18,12 @@ type Application = {
   status: string;
   submitted_at: string | null;
   created_at: string;
+  passport_number: string | null;
+  education_level: string | null;
+  diploma_title: string | null;
+  diploma_institution: string | null;
+  diploma_year: number | null;
+  applicant_notes: string | null;
   visas: {
     name: string;
     type: string;
@@ -144,6 +150,63 @@ export function ApplicationDetail({ application }: { application: Application })
         {error && (
           <div className="mx-5 mb-4 bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">
             {error}
+          </div>
+        )}
+
+        {/* Informations du dossier */}
+        {(application.passport_number || application.education_level) && (
+          <div className="px-5 mb-5">
+            <h2 className="text-[13px] font-bold text-slate-900 mb-2">
+              Informations du dossier
+            </h2>
+            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+              {application.passport_number && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Numéro de passeport</span>
+                  <span className="font-semibold text-slate-900">
+                    {application.passport_number}
+                  </span>
+                </div>
+              )}
+              {application.education_level && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Niveau d&apos;études</span>
+                  <span className="font-semibold text-slate-900">
+                    {application.education_level}
+                  </span>
+                </div>
+              )}
+              {application.diploma_title && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Dernier diplôme</span>
+                  <span className="font-semibold text-slate-900 text-right">
+                    {application.diploma_title}
+                  </span>
+                </div>
+              )}
+              {application.diploma_institution && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Établissement</span>
+                  <span className="font-semibold text-slate-900 text-right">
+                    {application.diploma_institution}
+                  </span>
+                </div>
+              )}
+              {application.diploma_year && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Année d&apos;obtention</span>
+                  <span className="font-semibold text-slate-900">
+                    {application.diploma_year}
+                  </span>
+                </div>
+              )}
+              {application.applicant_notes && (
+                <div className="px-4 py-3 text-[13px]">
+                  <span className="text-slate-400 block mb-1">Précisions</span>
+                  <span className="text-slate-700">{application.applicant_notes}</span>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
