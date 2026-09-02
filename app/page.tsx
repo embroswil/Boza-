@@ -17,6 +17,7 @@ import { createClient } from "@/lib/supabase/server";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SearchBar } from "@/components/search-bar";
 import { getProgramImage } from "@/lib/program-images";
+import { getDestinationImage } from "@/lib/destination-images";
 
 export const dynamic = "force-dynamic";
 
@@ -175,34 +176,32 @@ export default async function Home() {
               Aucun pays pour l&apos;instant — ajoute-les dans Supabase.
             </div>
           )}
-          {destinations.map((d, i) => {
-            const themes = [
-              "from-blue-600 to-blue-800",
-              "from-emerald-500 to-emerald-700",
-              "from-amber-500 to-orange-600",
-              "from-violet-500 to-violet-700",
-            ];
-            const theme = themes[i % themes.length];
-            return (
-              <Link
-                key={d.id}
-                href={`/countries/${d.id}`}
-                className={`relative aspect-square rounded-2xl bg-gradient-to-br ${theme} flex flex-col items-center justify-center gap-2 p-3 overflow-hidden shadow-md`}
-              >
-                <div className="absolute -right-4 -top-4 w-16 h-16 rounded-full bg-white/10" />
-                <div className="absolute -left-6 -bottom-6 w-20 h-20 rounded-full bg-white/10" />
-                <span className="relative w-12 h-12 rounded-full bg-white/95 flex items-center justify-center text-2xl shadow-sm">
+          {destinations.map((d) => (
+            <Link
+              key={d.id}
+              href={`/countries/${d.id}`}
+              className="relative aspect-square rounded-2xl overflow-hidden shadow-md"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={getDestinationImage({ id: d.id, name: d.name })}
+                alt={d.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="relative h-full flex flex-col items-center justify-center gap-2 p-3">
+                <span className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center text-2xl shadow-sm">
                   {d.flag}
                 </span>
-                <span className="relative text-[13px] font-bold text-white text-center leading-tight">
+                <span className="text-[13px] font-bold text-white text-center leading-tight">
                   {d.name}
                 </span>
-                <span className="relative text-[9px] text-white font-semibold bg-white/20 backdrop-blur px-2 py-0.5 rounded-full">
+                <span className="text-[9px] text-white font-semibold bg-white/20 backdrop-blur px-2 py-0.5 rounded-full">
                   {d.intake}
                 </span>
-              </Link>
-            );
-          })}
+              </div>
+            </Link>
+          ))}
         </div>
 
         {/* Programmes d'études */}
@@ -212,6 +211,18 @@ export default async function Home() {
           </h2>
           <Link href="/programs" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
             Voir tout <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <div className="px-5 mb-3">
+          <Link
+            href="/programs"
+            className="w-full bg-blue-50 rounded-2xl px-4 py-3.5 flex items-center gap-2 text-blue-600 text-sm font-semibold"
+          >
+            <GraduationCap className="w-4 h-4" />
+            <span className="flex-1 text-left">
+              Voir plus de programmes avec rentrée d&apos;hiver
+            </span>
+            <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
         <div className="px-5 mb-4">
@@ -276,12 +287,12 @@ export default async function Home() {
         {/* Bannière footer */}
         <div className="px-5 mb-24">
           <Link
-            href="/programs"
-            className="w-full bg-blue-50 rounded-2xl px-4 py-3.5 flex items-center gap-2 text-blue-600 text-sm font-semibold"
+            href="/countries"
+            className="w-full bg-emerald-50 rounded-2xl px-4 py-3.5 flex items-center gap-2 text-emerald-700 text-sm font-semibold"
           >
-            <GraduationCap className="w-4 h-4" />
+            <Globe className="w-4 h-4" />
             <span className="flex-1 text-left">
-              Voir plus de programmes avec rentrée d&apos;hiver
+              Voir toutes les destinations
             </span>
             <ChevronRight className="w-4 h-4" />
           </Link>

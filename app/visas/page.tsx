@@ -18,7 +18,7 @@ export default async function VisasPage({
 
   let query = supabase
     .from("visas")
-    .select("id, name, type, official_fee, currency, processing_days, countries(name, flag_url)")
+    .select("id, name, type, official_fee, currency, processing_days, countries(id, name, flag_url)")
     .not("type", "in", '("travail","business","immigration")')
     .order("created_at", { ascending: true });
 

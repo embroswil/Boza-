@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Search, ChevronRight, Globe2 } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
+import { getDestinationImage } from "@/lib/destination-images";
 
 type Country = {
   id: string;
@@ -45,7 +46,7 @@ export function CountriesList({ countries }: { countries: Country[] }) {
           </div>
         </div>
 
-        {/* List */}
+        {/* Grid */}
         <div className="px-5">
           {filtered.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
@@ -54,25 +55,33 @@ export function CountriesList({ countries }: { countries: Country[] }) {
                 : "Aucun résultat pour cette recherche."}
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="grid grid-cols-2 gap-3">
               {filtered.map((c) => (
                 <Link
                   key={c.id}
                   href={`/countries/${c.id}`}
-                  className="flex items-center gap-3 px-4 py-3.5"
+                  className="relative rounded-2xl overflow-hidden shadow-sm aspect-[4/5] group"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-lg">
-                    {c.flag_url ?? <Globe2 className="w-5 h-5 text-blue-600" />}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={getDestinationImage({ id: c.id, name: c.name })}
+                    alt={c.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-base shadow-sm">
+                    {c.flag_url ?? "🌍"}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13.5px] font-semibold text-slate-900">
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="text-[14px] font-bold text-white leading-tight">
                       {c.name}
                     </div>
                     {c.continent && (
-                      <div className="text-[11px] text-slate-400">{c.continent}</div>
+                      <div className="text-[10.5px] text-white/80 mt-0.5">
+                        {c.continent}
+                      </div>
                     )}
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
                 </Link>
               ))}
             </div>
