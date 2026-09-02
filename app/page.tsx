@@ -30,7 +30,7 @@ const LEVEL_LABELS: Record<string, string> = {
 };
 
 const categories = [
-  { icon: GraduationCap, label: "Étudiant", active: true, color: "text-blue-600", href: "/programs" },
+  { icon: GraduationCap, label: "Étudiant", color: "text-blue-600", href: "/programs" },
   { icon: Briefcase, label: "Tourisme", color: "text-emerald-500", href: "/visas?type=tourisme" },
 ];
 
@@ -73,7 +73,14 @@ export default async function Home() {
       "id, name, level, field, duration_months, tuition_fee, currency, teaching_language, universities(name, countries(name, flag_url))"
     )
     .order("created_at", { ascending: true })
-    .limit(12);
+    .limit(18);
+
+  const { data: tourismVisasData } = await supabase
+    .from("visas")
+    .select("id, name, official_fee, currency, countries(id, name, flag_url)")
+    .eq("type", "tourisme")
+    .order("created_at", { ascending: true })
+    .limit(6);
 
   const destinations = (countries ?? []).map((c) => ({
     id: c.id,
@@ -81,6 +88,21 @@ export default async function Home() {
     flag: c.flag_url ?? "🌍",
     intake: "À confirmer",
   }));
+
+  const tourismDestinations = (tourismVisasData ?? []).map((v) => {
+    const country = v.countries as unknown as {
+      id: string;
+      name: string;
+      flag_url: string | null;
+    } | null;
+    return {
+      id: v.id,
+      countryId: country?.id ?? v.id,
+      name: country?.name ?? v.name,
+      flag: country?.flag_url ?? "✈️",
+      price: v.official_fee ? `${v.official_fee} ${v.currency ?? ""}` : "",
+    };
+  });
 
   const programs = (programsData ?? []).map((p) => {
     const university = p.universities as unknown as {
@@ -148,11 +170,7 @@ export default async function Home() {
               <Link
                 key={c.label}
                 href={c.href}
-                className={`relative rounded-2xl py-3 flex flex-col items-center gap-1.5 ${
-                  c.active
-                    ? "bg-blue-50 border-2 border-blue-600"
-                    : "bg-white border border-slate-100 shadow-sm"
-                }`}
+                className="relative rounded-2xl py-3 flex flex-col items-center gap-1.5 bg-white border border-slate-100 shadow-sm"
               >
                 <Icon className={`w-6 h-6 ${c.color}`} strokeWidth={1.8} />
                 <span className="text-[10.5px] font-semibold text-slate-800">{c.label}</span>
@@ -199,6 +217,54 @@ export default async function Home() {
                 <span className="text-[9px] text-white font-semibold bg-white/20 backdrop-blur px-2 py-0.5 rounded-full">
                   {d.intake}
                 </span>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Destinations touristiques populaires */}
+        <div className="px-5 mb-3 flex items-center justify-between">
+          <h2 className="font-bold text-slate-900 text-base">
+            Destinations touristiques populaires
+          </h2>
+          <Link
+            href="/visas?type=tourisme"
+            className="text-blue-600 text-sm font-medium flex items-center gap-0.5"
+          >
+            Voir tout <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <div className="px-5 grid grid-cols-2 gap-3 mb-6">
+          {tourismDestinations.length === 0 && (
+            <div className="col-span-2 bg-white rounded-xl p-5 text-center text-sm text-slate-400 shadow-sm">
+              Aucun visa tourisme pour l&apos;instant — ajoute-les dans Supabase.
+            </div>
+          )}
+          {tourismDestinations.map((d) => (
+            <Link
+              key={d.id}
+              href={`/visas/${d.id}`}
+              className="relative aspect-square rounded-2xl overflow-hidden shadow-md"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={getDestinationImage({ id: d.countryId, name: d.name })}
+                alt={d.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <div className="relative h-full flex flex-col items-center justify-center gap-2 p-3">
+                <span className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center text-2xl shadow-sm">
+                  {d.flag}
+                </span>
+                <span className="text-[13px] font-bold text-white text-center leading-tight">
+                  {d.name}
+                </span>
+                {d.price && (
+                  <span className="text-[9px] text-white font-semibold bg-white/20 backdrop-blur px-2 py-0.5 rounded-full">
+                    {d.price}
+                  </span>
+                )}
               </div>
             </Link>
           ))}

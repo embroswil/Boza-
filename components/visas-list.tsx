@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Search, ChevronRight, FileCheck2, Globe2, Clock } from "lucide-react";
+import { ArrowLeft, Search, ChevronRight, Clock } from "lucide-react";
 import { getDestinationImage } from "@/lib/destination-images";
 
 type Visa = {
@@ -22,8 +22,8 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_STYLES: Record<string, { bg: string; text: string }> = {
-  tourisme: { bg: "bg-emerald-50", text: "text-emerald-600" },
-  etudes: { bg: "bg-blue-50", text: "text-blue-600" },
+  tourisme: { bg: "bg-emerald-50", text: "text-emerald-700" },
+  etudes: { bg: "bg-blue-50", text: "text-blue-700" },
 };
 
 const formatPrice = (n: number) => n.toLocaleString("fr-FR");
@@ -40,8 +40,8 @@ export function VisasList({
   const router = useRouter();
   const [query, setQuery] = useState("");
 
-  // La page "Visas Tourisme" propose une expérience dédiée : pas de barre
-  // de recherche, pas d'onglets (Tous/Études), uniquement des cartes visuelles.
+  // La page "Visas Tourisme" propose une expérience dédiée, sans recherche
+  // ni onglets, puisqu'elle est déjà filtrée sur une seule catégorie.
   const isTourismOnly = activeType === "tourisme";
 
   const filtered = visas.filter(
@@ -110,7 +110,7 @@ export function VisasList({
           </div>
         )}
 
-        {/* List */}
+        {/* Grid — même traitement visuel (photos) pour toutes les vues */}
         <div className="px-5">
           {filtered.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
@@ -118,89 +118,60 @@ export function VisasList({
                 ? "Aucun visa pour l'instant."
                 : "Aucun résultat pour cette recherche."}
             </div>
-          ) : isTourismOnly ? (
-            <div className="grid grid-cols-2 gap-3">
-              {filtered.map((v) => (
-                <Link
-                  key={v.id}
-                  href={`/visas/${v.id}`}
-                  className="relative rounded-2xl overflow-hidden shadow-sm flex flex-col bg-white"
-                >
-                  <div className="relative w-full aspect-[4/3]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={getDestinationImage({
-                        id: v.countries?.id ?? v.id,
-                        name: v.countries?.name,
-                      })}
-                      alt={v.countries?.name ?? v.name}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                    <span className="absolute top-2 left-2 text-[9.5px] font-bold px-2 py-1 rounded-full bg-white/90 text-emerald-700 backdrop-blur flex items-center gap-1">
-                      {v.countries?.flag_url && <span>{v.countries.flag_url}</span>}
-                      {v.countries?.name ?? "Voyage"}
-                    </span>
-                  </div>
-                  <div className="p-3 flex flex-col gap-1.5 flex-1">
-                    <div className="text-[12.5px] font-semibold text-slate-900 leading-tight line-clamp-2">
-                      {v.name}
-                    </div>
-                    {v.processing_days != null && (
-                      <div className="flex items-center gap-1 text-[10px] text-slate-500">
-                        <Clock className="w-3 h-3" /> {v.processing_days} jours de traitement
-                      </div>
-                    )}
-                    <div className="flex items-end justify-between mt-auto pt-1.5">
-                      {v.official_fee != null ? (
-                        <div>
-                          <div className="text-[12.5px] font-bold text-slate-900 leading-tight">
-                            {formatPrice(v.official_fee)}
-                          </div>
-                          <div className="text-[9px] text-slate-400">{v.currency}</div>
-                        </div>
-                      ) : (
-                        <span />
-                      )}
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {filtered.map((v) => {
-                const style = TYPE_STYLES[v.type] ?? { bg: "bg-slate-50", text: "text-slate-500" };
+                const style = TYPE_STYLES[v.type] ?? { bg: "bg-slate-50", text: "text-slate-600" };
                 return (
                   <Link
                     key={v.id}
                     href={`/visas/${v.id}`}
-                    className="flex flex-col bg-white rounded-2xl shadow-sm p-3.5"
+                    className="relative rounded-2xl overflow-hidden shadow-sm flex flex-col bg-white"
                   >
-                    <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center text-xl border border-slate-100 mb-2.5">
-                      {v.countries?.flag_url ?? <FileCheck2 className="w-5 h-5 text-blue-600" />}
+                    <div className="relative w-full aspect-[4/3]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={getDestinationImage({
+                          id: v.countries?.id ?? v.id,
+                          name: v.countries?.name,
+                        })}
+                        alt={v.countries?.name ?? v.name}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <span
+                        className={`absolute top-2 left-2 text-[9.5px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur flex items-center gap-1 ${style.text}`}
+                      >
+                        {v.countries?.flag_url && <span>{v.countries.flag_url}</span>}
+                        {v.countries?.name ?? TYPE_LABELS[v.type] ?? v.type}
+                      </span>
                     </div>
-                    <div className="text-[13px] font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[32px]">
-                      {v.name}
-                    </div>
-                    <span className="text-[11px] text-slate-400 truncate mt-1 flex items-center gap-1">
-                      {v.countries?.name ?? <Globe2 className="w-3 h-3" />}
-                    </span>
-                    <span
-                      className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded-full self-start mt-2 ${style.bg} ${style.text}`}
-                    >
-                      {TYPE_LABELS[v.type] ?? v.type}
-                    </span>
-                    <div className="flex items-end justify-between mt-3 pt-2.5 border-t border-slate-100">
-                      <div>
-                        {v.official_fee != null && (
-                          <div className="text-[12.5px] font-bold text-slate-900 leading-tight">
-                            {formatPrice(v.official_fee)}
-                          </div>
-                        )}
-                        <div className="text-[9px] text-slate-400">{v.currency}</div>
+                    <div className="p-3 flex flex-col gap-1.5 flex-1">
+                      <div className="text-[12.5px] font-semibold text-slate-900 leading-tight line-clamp-2">
+                        {v.name}
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                      <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                        <span className={`font-semibold px-1.5 py-0.5 rounded-full ${style.bg} ${style.text}`}>
+                          {TYPE_LABELS[v.type] ?? v.type}
+                        </span>
+                        {v.processing_days != null && (
+                          <span className="flex items-center gap-0.5">
+                            <Clock className="w-3 h-3" /> {v.processing_days}j
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-end justify-between mt-auto pt-1.5">
+                        {v.official_fee != null ? (
+                          <div>
+                            <div className="text-[12.5px] font-bold text-slate-900 leading-tight">
+                              {formatPrice(v.official_fee)}
+                            </div>
+                            <div className="text-[9px] text-slate-400">{v.currency}</div>
+                          </div>
+                        ) : (
+                          <span />
+                        )}
+                        <ChevronRight className="w-4 h-4 text-slate-300" />
+                      </div>
                     </div>
                   </Link>
                 );
