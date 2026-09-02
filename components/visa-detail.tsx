@@ -216,7 +216,7 @@ export function VisaDetail({
         {/* CTA */}
         <div className="px-5">
           <Link
-            href="/demandes/nouvelle"
+            href={`/demandes/nouvelle?visaId=${visa.id}`}
             className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center"
           >
             Démarrer une demande

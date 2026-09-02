@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ArrowLeft,
   Globe2,
@@ -100,6 +101,7 @@ export function ApplicationDetail({ application }: { application: Application })
   const subtitle =
     application.programs?.universities?.name ?? country?.name ?? "";
   const statusInfo = STATUS_STYLES[status] ?? STATUS_STYLES.brouillon;
+  const pendingPayment = application.payments.find((p) => p.status === "en_attente");
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -310,8 +312,22 @@ export function ApplicationDetail({ application }: { application: Application })
           )}
         </div>
 
-        {/* Submit button */}
-        {status === "brouillon" && (
+        {/* Payer */}
+        {pendingPayment && (
+          <div className="px-5 mb-3">
+            <Link
+              href={`/demandes/${application.id}/payer`}
+              className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2"
+            >
+              <CreditCard className="w-4 h-4" />
+              Payer {pendingPayment.amount.toLocaleString("fr-FR")}{" "}
+              {pendingPayment.currency ?? ""}
+            </Link>
+          </div>
+        )}
+
+        {/* Submit button (anciennes demandes sans paiement associé) */}
+        {status === "brouillon" && application.payments.length === 0 && (
           <div className="px-5">
             <button
               onClick={handleSubmit}
