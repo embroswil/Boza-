@@ -19,6 +19,7 @@ export const heroSlides = [
       { icon: FileCheck2, label: "Accompagnement complet" },
     ],
     cta: "Explorer les programmes d'études",
+    href: "/programs",
   },
   {
     key: "tourisme",
@@ -33,5 +34,6 @@ export const heroSlides = [
       { icon: Calendar, label: "Traitement rapide" },
     ],
     cta: "Explorer les visas touristiques",
+    href: "/visas?type=tourisme",
   },
 ];

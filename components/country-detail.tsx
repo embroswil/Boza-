@@ -184,27 +184,25 @@ export function CountryDetail({
                 Visas disponibles
               </h2>
             </div>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="grid grid-cols-2 gap-2.5">
               {visas.map((v) => (
                 <Link
                   key={v.id}
                   href={`/visas/${v.id}`}
-                  className="flex items-center gap-3 px-4 py-3.5"
+                  className="flex flex-col bg-white rounded-2xl shadow-sm p-3.5"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 mb-2">
                     <FileCheck2 className="w-4 h-4 text-blue-600" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-semibold text-slate-900">
-                      {v.name}
-                    </div>
-                    <div className="text-[11px] text-slate-400">
-                      {v.processing_days ? `${v.processing_days} jours` : ""}
-                    </div>
+                  <div className="text-[12.5px] font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[30px]">
+                    {v.name}
+                  </div>
+                  <div className="text-[10.5px] text-slate-400 mt-1">
+                    {v.processing_days ? `${v.processing_days} jours` : ""}
                   </div>
                   {v.official_fee && (
-                    <span className="text-[12.5px] font-bold text-slate-900">
-                      {v.official_fee} {v.currency}
+                    <span className="text-[12px] font-bold text-slate-900 mt-2 pt-2 border-t border-slate-100">
+                      {v.official_fee.toLocaleString("fr-FR")} {v.currency}
                     </span>
                   )}
                 </Link>

@@ -103,46 +103,40 @@ export function VisasList({
                 : "Aucun résultat pour cette recherche."}
             </div>
           ) : (
-            <div className="flex flex-col gap-2.5">
+            <div className="grid grid-cols-2 gap-3">
               {filtered.map((v) => {
                 const style = TYPE_STYLES[v.type] ?? { bg: "bg-slate-50", text: "text-slate-500" };
                 return (
                   <Link
                     key={v.id}
                     href={`/visas/${v.id}`}
-                    className="flex items-center gap-3 bg-white rounded-2xl shadow-sm px-4 py-3.5"
+                    className="flex flex-col bg-white rounded-2xl shadow-sm p-3.5"
                   >
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-2xl border border-slate-100">
+                    <div className="w-11 h-11 rounded-2xl bg-slate-50 flex items-center justify-center text-xl border border-slate-100 mb-2.5">
                       {v.countries?.flag_url ?? <FileCheck2 className="w-5 h-5 text-blue-600" />}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-[13.5px] font-semibold text-slate-900 truncate">
-                        {v.name}
-                      </div>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <span className="text-[11px] text-slate-400 truncate flex items-center gap-1">
-                          {v.countries?.name ?? <Globe2 className="w-3 h-3" />}
-                        </span>
-                        <span
-                          className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded-full ${style.bg} ${style.text}`}
-                        >
-                          {TYPE_LABELS[v.type] ?? v.type}
-                        </span>
-                      </div>
+                    <div className="text-[13px] font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[32px]">
+                      {v.name}
                     </div>
-                    <div className="flex flex-col items-end gap-0.5 shrink-0">
-                      {v.official_fee != null && (
-                        <span className="text-[13px] font-bold text-slate-900 whitespace-nowrap">
-                          {formatPrice(v.official_fee)} {v.currency}
-                        </span>
-                      )}
-                      {v.processing_days != null && (
-                        <span className="text-[10px] text-slate-400">
-                          {v.processing_days} jours
-                        </span>
-                      )}
+                    <span className="text-[11px] text-slate-400 truncate mt-1 flex items-center gap-1">
+                      {v.countries?.name ?? <Globe2 className="w-3 h-3" />}
+                    </span>
+                    <span
+                      className={`text-[9.5px] font-semibold px-1.5 py-0.5 rounded-full self-start mt-2 ${style.bg} ${style.text}`}
+                    >
+                      {TYPE_LABELS[v.type] ?? v.type}
+                    </span>
+                    <div className="flex items-end justify-between mt-3 pt-2.5 border-t border-slate-100">
+                      <div>
+                        {v.official_fee != null && (
+                          <div className="text-[12.5px] font-bold text-slate-900 leading-tight">
+                            {formatPrice(v.official_fee)}
+                          </div>
+                        )}
+                        <div className="text-[9px] text-slate-400">{v.currency}</div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300" />
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
                   </Link>
                 );
               })}
