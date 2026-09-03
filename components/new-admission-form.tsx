@@ -79,7 +79,7 @@ export function NewAdmissionForm({
 
   const missingRequiredDocs = REQUIRED_DOCS.filter((d) => d.required && !docFiles[d.id]);
   const applicationFee = program.universities?.application_fee ?? 0;
-  const currency = program.currency ?? "XAF";
+  const currency = "XAF";
 
   const handleSubmit = async () => {
     if (!dateOfBirth || !gender || !educationLevel || !motivationLetter.trim()) {
