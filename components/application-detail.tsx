@@ -25,6 +25,13 @@ type Application = {
   diploma_institution: string | null;
   diploma_year: number | null;
   applicant_notes: string | null;
+  date_of_birth: string | null;
+  gender: string | null;
+  language_proficiency: string | null;
+  motivation_letter: string | null;
+  financial_support: string | null;
+  intended_start_date: string | null;
+  health_conditions: string | null;
   visas: {
     name: string;
     type: string;
@@ -200,6 +207,36 @@ export function ApplicationDetail({ application }: { application: Application })
                   <span className="font-semibold text-slate-900">
                     {application.diploma_year}
                   </span>
+                </div>
+              )}
+              {application.date_of_birth && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Date de naissance</span>
+                  <span className="font-semibold text-slate-900">
+                    {application.date_of_birth}
+                  </span>
+                </div>
+              )}
+              {application.language_proficiency && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Niveau de langue</span>
+                  <span className="font-semibold text-slate-900">
+                    {application.language_proficiency}
+                  </span>
+                </div>
+              )}
+              {application.intended_start_date && (
+                <div className="flex items-center justify-between px-4 py-3 text-[13px]">
+                  <span className="text-slate-400">Début souhaité</span>
+                  <span className="font-semibold text-slate-900">
+                    {application.intended_start_date}
+                  </span>
+                </div>
+              )}
+              {application.motivation_letter && (
+                <div className="px-4 py-3 text-[13px]">
+                  <span className="text-slate-400 block mb-1">Lettre de motivation</span>
+                  <span className="text-slate-700">{application.motivation_letter}</span>
                 </div>
               )}
               {application.applicant_notes && (
