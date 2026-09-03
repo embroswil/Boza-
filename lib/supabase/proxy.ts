@@ -44,8 +44,14 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: If you remove getClaims() and you use server-side rendering
   // with the Supabase client, your users may be randomly logged out.
-  const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
+  // IMPORTANT: getClaims() nécessite des clés JWT asymétriques activées sur
+  // le projet Supabase ; sur ce projet (clés symétriques classiques), elle
+  // ne reconnaît jamais la session, ce qui renvoyait TOUJOURS vers /auth/login
+  // même connecté. getUser() est la méthode compatible utilisée partout
+  // ailleurs dans l'app (server components), on l'aligne ici.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // Seules ces sections nécessitent une connexion — tout le reste (accueil,
   // recherche, pays, visas, programmes...) reste public.
