@@ -18,10 +18,11 @@ export default async function DemandesPage() {
     .from("applications")
     .select(
       `id, status, submitted_at, created_at,
-       visas ( name, type, countries ( name, flag_url ) ),
-       programs ( name, universities ( name, countries ( name, flag_url ) ) )`
+       visas ( name, type, countries ( id, name, flag_url ) ),
+       programs ( name, universities ( name, countries ( id, name, flag_url ) ) )`
     )
     .eq("user_id", user.id)
+    .neq("status", "brouillon")
     .order("created_at", { ascending: false });
 
   return <ApplicationsList applications={(applications ?? []) as unknown as never} />;

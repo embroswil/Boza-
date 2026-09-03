@@ -2,13 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Plus,
-  ChevronRight,
-  FileQuestion,
-  Globe2,
-} from "lucide-react";
+import { ArrowLeft, Plus, ChevronRight, FileQuestion, Globe2 } from "lucide-react";
+import { getDestinationImage } from "@/lib/destination-images";
 
 type Application = {
   id: string;
@@ -18,13 +13,13 @@ type Application = {
   visas: {
     name: string;
     type: string;
-    countries: { name: string; flag_url: string | null } | null;
+    countries: { id?: string; name: string; flag_url: string | null } | null;
   } | null;
   programs: {
     name: string;
     universities: {
       name: string;
-      countries: { name: string; flag_url: string | null } | null;
+      countries: { id?: string; name: string; flag_url: string | null } | null;
     } | null;
   } | null;
 };
@@ -64,13 +59,13 @@ export function ApplicationsList({ applications }: { applications: Application[]
           </Link>
         </div>
 
-        {/* List */}
-        <div className="px-5">
+        {/* Grille (une seule colonne) */}
+        <div className="px-5 flex flex-col gap-3.5">
           {applications.length === 0 ? (
             <div className="bg-white rounded-2xl p-6 text-center shadow-sm flex flex-col items-center gap-3">
               <FileQuestion className="w-8 h-8 text-slate-300" />
               <p className="text-sm text-slate-400">
-                Tu n&apos;as encore aucune demande en cours.
+                Tu n&apos;as encore aucune demande soumise.
               </p>
               <Link
                 href="/demandes/nouvelle"
@@ -80,41 +75,51 @@ export function ApplicationsList({ applications }: { applications: Application[]
               </Link>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-              {applications.map((a) => {
-                const country =
-                  a.visas?.countries ?? a.programs?.universities?.countries ?? null;
-                const title =
-                  a.visas?.name ?? a.programs?.name ?? "Demande";
-                const subtitle = a.programs?.universities?.name ?? country?.name ?? "";
-                const status =
-                  STATUS_STYLES[a.status] ?? STATUS_STYLES.brouillon;
+            applications.map((a) => {
+              const country =
+                a.visas?.countries ?? a.programs?.universities?.countries ?? null;
+              const title = a.visas?.name ?? a.programs?.name ?? "Demande";
+              const subtitle = a.programs?.universities?.name ?? country?.name ?? "";
+              const status = STATUS_STYLES[a.status] ?? STATUS_STYLES.brouillon;
 
-                return (
-                  <Link
-                    key={a.id}
-                    href={`/demandes/${a.id}`}
-                    className="flex items-center gap-3 px-4 py-3.5"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-lg">
-                      {country?.flag_url ?? <Globe2 className="w-5 h-5 text-blue-600" />}
-                    </div>
+              return (
+                <Link
+                  key={a.id}
+                  href={`/demandes/${a.id}`}
+                  className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col"
+                >
+                  <div className="relative w-full aspect-[16/9]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={getDestinationImage({
+                        id: country?.id ?? a.id,
+                        name: country?.name,
+                      })}
+                      alt={country?.name ?? title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+                    <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-base shadow-sm">
+                      {country?.flag_url ?? <Globe2 className="w-4 h-4 text-blue-600" />}
+                    </span>
+                    <span
+                      className={`absolute top-2.5 right-2.5 text-[10px] font-semibold px-2.5 py-1 rounded-full ${status.className}`}
+                    >
+                      {status.label}
+                    </span>
+                  </div>
+                  <div className="px-4 py-3.5 flex items-center gap-3">
                     <div className="flex-1 min-w-0">
-                      <div className="text-[13.5px] font-semibold text-slate-900 truncate">
+                      <div className="text-[14px] font-semibold text-slate-900 truncate">
                         {title}
                       </div>
-                      <div className="text-[11px] text-slate-400 truncate">{subtitle}</div>
-                      <span
-                        className={`inline-block mt-1 text-[10px] font-semibold px-2 py-0.5 rounded-full ${status.className}`}
-                      >
-                        {status.label}
-                      </span>
+                      <div className="text-[11.5px] text-slate-400 truncate">{subtitle}</div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
-                  </Link>
-                );
-              })}
-            </div>
+                  </div>
+                </Link>
+              );
+            })
           )}
         </div>
       </div>
