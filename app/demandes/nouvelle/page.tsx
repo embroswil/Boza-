@@ -1,15 +1,16 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { NewApplicationForm } from "@/components/new-application-form";
+import { NewAdmissionForm } from "@/components/new-admission-form";
 
 export const dynamic = "force-dynamic";
 
 export default async function NouvelleDemandePage({
   searchParams,
 }: {
-  searchParams: Promise<{ programId?: string; visaId?: string }>;
+  searchParams: Promise<{ programId?: string; visaId?: string; kind?: string }>;
 }) {
-  const { programId, visaId } = await searchParams;
+  const { programId, visaId, kind } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -17,6 +18,25 @@ export default async function NouvelleDemandePage({
 
   if (!user) {
     redirect("/auth/login");
+  }
+
+  // Demande d'admission à un programme universitaire : formulaire dédié
+  // (date de naissance, lettre de motivation, etc.), séparé de la demande
+  // de visa qui se fait dans un second temps une fois l'admission acquise.
+  if (kind === "admission") {
+    if (!programId) notFound();
+
+    const { data: program } = await supabase
+      .from("programs")
+      .select("id, name, level, universities ( name, countries ( name, flag_url ) )")
+      .eq("id", programId)
+      .single();
+
+    if (!program) notFound();
+
+    return (
+      <NewAdmissionForm program={program as unknown as never} userId={user.id} />
+    );
   }
 
   const { data: countries } = await supabase

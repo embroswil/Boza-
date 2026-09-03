@@ -185,7 +185,7 @@ export function ProgramDetail({ program }: { program: Program }) {
         {/* CTA */}
         <div className="px-5">
           <Link
-            href={`/demandes/nouvelle?programId=${program.id}`}
+            href={`/demandes/nouvelle?kind=admission&programId=${program.id}`}
             className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center"
           >
             Démarrer une demande
