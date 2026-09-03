@@ -28,7 +28,9 @@ export default async function NouvelleDemandePage({
 
     const { data: program } = await supabase
       .from("programs")
-      .select("id, name, level, universities ( name, countries ( name, flag_url ) )")
+      .select(
+        "id, name, level, currency, required_documents, universities ( name, application_fee, countries ( name, flag_url ) )"
+      )
       .eq("id", programId)
       .single();
 
