@@ -3,11 +3,7 @@ import {
   GraduationCap,
   Briefcase,
   ChevronRight,
-  Home as HomeIcon,
-  ClipboardList,
-  FileText,
   User,
-  Plus,
   Calendar,
   Globe,
   Heart,
@@ -34,14 +30,6 @@ const categories = [
   { icon: Briefcase, label: "Tourisme", color: "text-emerald-500", href: "/visas?type=tourisme" },
 ];
 
-const buildNavItems = (isLoggedIn: boolean) => [
-  { icon: HomeIcon, label: "Accueil", active: true, href: "/" },
-  { icon: ClipboardList, label: "Mes demandes", href: isLoggedIn ? "/demandes" : "/auth/login" },
-  { icon: Plus, label: "Démarrer", isCenter: true, href: isLoggedIn ? "/demandes/nouvelle" : "/auth/login" },
-  { icon: FileText, label: "Documents", href: isLoggedIn ? "/documents" : "/auth/login" },
-  { icon: User, label: "Profil", href: isLoggedIn ? "/profile" : "/auth/login" },
-];
-
 export default async function Home() {
   const supabase = await createClient();
 
@@ -49,7 +37,6 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
-  const navItems = buildNavItems(isLoggedIn);
 
   let hasUnreadNotifications = false;
   if (isLoggedIn) {
@@ -362,30 +349,6 @@ export default async function Home() {
             </span>
             <ChevronRight className="w-4 h-4" />
           </Link>
-        </div>
-
-        {/* Bottom nav */}
-        <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-slate-100 px-4 py-3 flex items-center justify-between">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            if (item.isCenter) {
-              return (
-                <Link href={item.href} key={item.label}>
-                  <button className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center -mt-6 shadow-lg shadow-blue-600/30">
-                    <Icon className="w-6 h-6 text-white" />
-                  </button>
-                </Link>
-              );
-            }
-            return (
-              <Link href={item.href} key={item.label} className="flex flex-col items-center gap-1">
-                <Icon className={`w-5 h-5 ${item.active ? "text-blue-600" : "text-slate-400"}`} />
-                <span className={`text-[9.5px] ${item.active ? "text-blue-600 font-semibold" : "text-slate-400"}`}>
-                  {item.label}
-                </span>
-              </Link>
-            );
-          })}
         </div>
       </div>
     </div>

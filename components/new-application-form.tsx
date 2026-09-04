@@ -256,7 +256,7 @@ export function NewApplicationForm({
 
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-10">
+      <div className="w-full max-w-sm bg-slate-50 pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button
