@@ -219,7 +219,11 @@ export function CountryDetail({
             </h2>
             <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
               {universities.map((u) => (
-                <div key={u.id} className="flex items-center gap-3 px-4 py-3.5">
+                <Link
+                  key={u.id}
+                  href={`/universities/${u.id}`}
+                  className="flex items-center gap-3 px-4 py-3.5"
+                >
                   <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
                     <GraduationCap className="w-4 h-4 text-emerald-600" />
                   </div>
@@ -232,7 +236,7 @@ export function CountryDetail({
                     )}
                   </div>
                   <ChevronRight className="w-4 h-4 text-slate-300" />
-                </div>
+                </Link>
               ))}
             </div>
           </div>

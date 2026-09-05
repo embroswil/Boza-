@@ -162,7 +162,11 @@ export function SearchResults({
                 </h2>
                 <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
                   {universities.map((u) => (
-                    <div key={u.id} className="flex items-center gap-3 px-4 py-3">
+                    <Link
+                      key={u.id}
+                      href={`/universities/${u.id}`}
+                      className="flex items-center gap-3 px-4 py-3"
+                    >
                       <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                         <Building2 className="w-4 h-4 text-amber-600" />
                       </div>
@@ -174,7 +178,7 @@ export function SearchResults({
                           <div className="text-[11px] text-slate-400">{u.city}</div>
                         )}
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>
