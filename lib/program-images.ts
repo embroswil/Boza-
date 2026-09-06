@@ -14,8 +14,8 @@ const THEMES: { match: RegExp; images: string[] }[] = [
   {
     match: /ingénieur|ingénierie|génie|mécanique|électrique|industriel/i,
     images: [
-      "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1581091012184-7add54fdd7a4?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600&auto=format&fit=crop",
     ],
   },
   {
@@ -63,8 +63,8 @@ const THEMES: { match: RegExp; images: string[] }[] = [
   {
     match: /archéolog|histoire|patrimoine/i,
     images: [
-      "https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1554757387-a56e73b3a2ce?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=600&auto=format&fit=crop",
     ],
   },
 ];

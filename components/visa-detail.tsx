@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Circle,
 } from "lucide-react";
+import { getDestinationImage } from "@/lib/destination-images";
 
 type Visa = {
   id: string;
@@ -70,6 +71,19 @@ export function VisaDetail({
             <ArrowLeft className="w-5 h-5 text-slate-700" />
           </button>
           <h1 className="text-lg font-bold text-slate-900 truncate">{visa.name}</h1>
+        </div>
+
+        {/* Bannière photo */}
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getDestinationImage({
+              id: visa.countries?.id ?? visa.id,
+              name: visa.countries?.name,
+            })}
+            alt={visa.countries?.name ?? visa.name}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Hero */}

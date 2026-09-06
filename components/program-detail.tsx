@@ -14,6 +14,7 @@ import {
   ExternalLink,
   MapPin,
 } from "lucide-react";
+import { getProgramImage } from "@/lib/program-images";
 
 type Program = {
   id: string;
@@ -72,6 +73,20 @@ export function ProgramDetail({ program }: { program: Program }) {
             <ArrowLeft className="w-5 h-5 text-slate-700" />
           </button>
           <h1 className="text-lg font-bold text-slate-900 truncate">{program.name}</h1>
+        </div>
+
+        {/* Bannière photo */}
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getProgramImage({
+              id: program.id,
+              field: program.field,
+              name: program.name,
+            })}
+            alt={program.name}
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Hero */}
