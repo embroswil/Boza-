@@ -195,8 +195,13 @@ export default async function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="relative h-full flex flex-col items-center justify-center gap-2 p-3">
-                <span className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center text-2xl shadow-sm">
-                  {d.flag}
+                <span className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                  {d.flag.startsWith("http") ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={d.flag} alt={d.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-2xl">{d.flag}</span>
+                  )}
                 </span>
                 <span className="text-[13px] font-bold text-white text-center leading-tight">
                   {d.name}
@@ -241,8 +246,13 @@ export default async function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="relative h-full flex flex-col items-center justify-center gap-2 p-3">
-                <span className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center text-2xl shadow-sm">
-                  {d.flag}
+                <span className="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                  {d.flag.startsWith("http") ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={d.flag} alt={d.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-2xl">{d.flag}</span>
+                  )}
                 </span>
                 <span className="text-[13px] font-bold text-white text-center leading-tight">
                   {d.name}

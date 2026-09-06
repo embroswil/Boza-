@@ -110,7 +110,15 @@ export function ProgramsList({ programs }: { programs: Program[] }) {
           grouped.map((group) => (
             <div key={group.countryName} className="mb-6">
               <div className="px-5 flex items-center gap-2 mb-3">
-                <span className="text-xl">{group.flag ?? "🌍"}</span>
+                {group.flag ? (
+                  <img
+                    src={group.flag}
+                    alt={group.countryName}
+                    className="w-5 h-5 rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xl">🌍</span>
+                )}
                 <h2 className="font-bold text-slate-900 text-[15px]">
                   {group.countryName}
                 </h2>

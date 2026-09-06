@@ -60,6 +60,13 @@ const THEMES: { match: RegExp; images: string[] }[] = [
       "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=600&auto=format&fit=crop",
     ],
   },
+  {
+    match: /archéolog|histoire|patrimoine/i,
+    images: [
+      "https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1554757387-a56e73b3a2ce?q=80&w=600&auto=format&fit=crop",
+    ],
+  },
 ];
 
 // Pool générique (campus / bibliothèque / étudiants) utilisé quand aucune

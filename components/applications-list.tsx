@@ -99,8 +99,17 @@ export function ApplicationsList({ applications }: { applications: Application[]
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
-                    <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-base shadow-sm">
-                      {country?.flag_url ?? <Globe2 className="w-4 h-4 text-blue-600" />}
+                    <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                      {country?.flag_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={country.flag_url}
+                          alt={country.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Globe2 className="w-4 h-4 text-blue-600" />
+                      )}
                     </span>
                     <span
                       className={`absolute top-2.5 right-2.5 text-[10px] font-semibold px-2.5 py-1 rounded-full ${status.className}`}

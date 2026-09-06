@@ -69,8 +69,17 @@ export function CountriesList({ countries }: { countries: Country[] }) {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center text-base shadow-sm">
-                    {c.flag_url ?? "🌍"}
+                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                    {c.flag_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={c.flag_url}
+                        alt={c.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-base">🌍</span>
+                    )}
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     <div className="text-[14px] font-bold text-white leading-tight">

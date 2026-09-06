@@ -280,8 +280,15 @@ export function NewApplicationForm({
                 : "Finalise ta demande"}
             </h1>
             {step >= 2 && selectedCountry && (
-              <p className="text-[11px] text-slate-400">
-                {selectedCountry.flag_url} {selectedCountry.name}
+              <p className="text-[11px] text-slate-400 flex items-center gap-1">
+                {selectedCountry.flag_url && (
+                  <img
+                    src={selectedCountry.flag_url}
+                    alt={selectedCountry.name}
+                    className="w-3 h-3 rounded-full object-cover inline-block"
+                  />
+                )}
+                {selectedCountry.name}
                 {initialProgram ? ` · ${initialProgram.name}` : ""}
                 {step === 3 && selectedVisa ? ` · ${selectedVisa.name}` : ""}
               </p>
@@ -321,8 +328,17 @@ export function NewApplicationForm({
                     onClick={() => handleChooseCountry(c)}
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-left"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-lg">
-                      {c.flag_url ?? <Globe2 className="w-5 h-5 text-blue-600" />}
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+                      {c.flag_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={c.flag_url}
+                          alt={c.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Globe2 className="w-5 h-5 text-blue-600" />
+                      )}
                     </div>
                     <div className="flex-1 text-[13.5px] font-semibold text-slate-900">
                       {c.name}

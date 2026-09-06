@@ -176,8 +176,15 @@ export function NewAdmissionForm({
           </button>
           <div>
             <h1 className="text-lg font-bold text-slate-900">Demande d&apos;admission</h1>
-            <p className="text-[11px] text-slate-400">
-              {program.universities?.countries?.flag_url} {program.name}
+            <p className="text-[11px] text-slate-400 flex items-center gap-1">
+              {program.universities?.countries?.flag_url && (
+                <img
+                  src={program.universities.countries.flag_url}
+                  alt=""
+                  className="w-3 h-3 rounded-full object-cover inline-block"
+                />
+              )}
+              {program.name}
             </p>
           </div>
         </div>

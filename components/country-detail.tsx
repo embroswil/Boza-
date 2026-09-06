@@ -115,8 +115,17 @@ export function CountryDetail({
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl shrink-0">
-              {country.flag_url ?? <Globe2 className="w-7 h-7 text-blue-600" />}
+            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+              {country.flag_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={country.flag_url}
+                  alt={country.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Globe2 className="w-7 h-7 text-blue-600" />
+              )}
             </div>
             <div>
               <div className="text-xl font-extrabold text-slate-900">

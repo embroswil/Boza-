@@ -141,7 +141,13 @@ export function VisasList({
                       <span
                         className={`absolute top-2 left-2 text-[9.5px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur flex items-center gap-1 ${style.text}`}
                       >
-                        {v.countries?.flag_url && <span>{v.countries.flag_url}</span>}
+                        {v.countries?.flag_url && (
+                          <img
+                            src={v.countries.flag_url}
+                            alt={v.countries.name}
+                            className="w-3 h-3 rounded-full object-cover"
+                          />
+                        )}
                         {v.countries?.name ?? TYPE_LABELS[v.type] ?? v.type}
                       </span>
                     </div>

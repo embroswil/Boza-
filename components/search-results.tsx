@@ -92,8 +92,17 @@ export function SearchResults({
                       href={`/countries/${c.id}`}
                       className="flex items-center gap-3 px-4 py-3"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center text-lg shrink-0">
-                        {c.flag_url ?? <Globe2 className="w-4 h-4 text-blue-600" />}
+                      <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+                        {c.flag_url ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={c.flag_url}
+                            alt={c.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <Globe2 className="w-4 h-4 text-blue-600" />
+                        )}
                       </div>
                       <span className="flex-1 text-[13.5px] font-medium text-slate-900">
                         {c.name}

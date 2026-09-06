@@ -10,6 +10,7 @@ import {
   Star,
 } from "lucide-react";
 import { getProgramImage } from "@/lib/program-images";
+import { getUniversityImage } from "@/lib/university-images";
 
 type Program = {
   id: string;
@@ -64,11 +65,32 @@ export function UniversityDetail({
           </h1>
         </div>
 
+        {/* Bannière photo */}
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getUniversityImage({
+              id: university.id,
+              country: country?.name,
+              city: university.city,
+            })}
+            alt={university.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl shrink-0">
-              {country?.flag_url ?? (
+            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+              {country?.flag_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={country.flag_url}
+                  alt={country.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
                 <GraduationCap className="w-7 h-7 text-emerald-600" />
               )}
             </div>

@@ -141,8 +141,17 @@ export function ApplicationDetail({ application }: { application: Application })
         {/* Summary card */}
         <div className="px-5 mb-5">
           <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-xl">
-              {country?.flag_url ?? <Globe2 className="w-6 h-6 text-blue-600" />}
+            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+              {country?.flag_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={country.flag_url}
+                  alt={country.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Globe2 className="w-6 h-6 text-blue-600" />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-[14px] font-bold text-slate-900 truncate">{title}</div>
