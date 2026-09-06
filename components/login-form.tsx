@@ -43,16 +43,18 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center px-6 py-10">
-      <div className="w-full max-w-sm mx-auto">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.jpg" alt="Boza" className="w-14 h-14 rounded-2xl mb-2 object-cover" />
-          <div className="font-extrabold text-slate-900 text-xl tracking-tight">BOZA</div>
-          <div className="text-[11px] text-slate-400">Votre passeport pour le monde</div>
-        </div>
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      {/* Header */}
+      <div className="px-5 pt-5 pb-3 flex items-center justify-between max-w-sm w-full mx-auto">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+        <Link href="/auth/sign-up" className="text-[13px] font-semibold text-blue-600">
+          Créer un compte
+        </Link>
+      </div>
 
+      <div className="flex-1 flex flex-col justify-center px-6 pb-10">
+      <div className="w-full max-w-sm mx-auto">
         <div className="bg-white rounded-3xl shadow-sm p-6">
           <h1 className="text-xl font-bold text-slate-900">Se connecter</h1>
           <p className="text-sm text-slate-400 mt-1 mb-6">
@@ -137,6 +139,7 @@ export function LoginForm() {
             </Link>
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

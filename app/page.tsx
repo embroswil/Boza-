@@ -117,35 +117,53 @@ export default async function Home() {
     <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
       <div className="w-full max-w-sm bg-slate-50 relative">
         {/* Header */}
-        <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-slate-50">
-          <div className="flex items-center gap-2">
-            <div className="relative w-10 h-10 flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+        {isLoggedIn ? (
+          <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-slate-50">
+            <div className="flex items-center gap-2">
+              <div className="relative w-10 h-10 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+              </div>
+              <div>
+                <div className="font-extrabold text-slate-900 text-xl leading-none tracking-tight">
+                  BOZA
+                </div>
+                <div className="text-[11px] text-slate-400 mt-0.5">
+                  Votre passeport pour le monde
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="font-extrabold text-slate-900 text-xl leading-none tracking-tight">
-                BOZA
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Bell className="w-6 h-6 text-slate-700" />
+                {hasUnreadNotifications && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white" />
+                )}
               </div>
-              <div className="text-[11px] text-slate-400 mt-0.5">
-                Votre passeport pour le monde
-              </div>
+              <Link href="/profile">
+                <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center">
+                  <User className="w-5 h-5 text-slate-500" />
+                </div>
+              </Link>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Bell className="w-6 h-6 text-slate-700" />
-              {hasUnreadNotifications && (
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white" />
-              )}
+        ) : (
+          <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-slate-50">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+            <div className="flex items-center gap-4">
+              <Link href="/auth/login" className="text-[13px] font-semibold text-blue-600">
+                Se connecter
+              </Link>
+              <Link
+                href="/auth/sign-up"
+                className="bg-blue-600 text-white text-[13px] font-semibold rounded-xl px-4 py-2"
+              >
+                Créer un compte
+              </Link>
             </div>
-            <Link href={isLoggedIn ? "/profile" : "/auth/login"}>
-              <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center">
-                <User className="w-5 h-5 text-slate-500" />
-              </div>
-            </Link>
           </div>
-        </div>
+        )}
 
         {/* Search */}
         <SearchBar />

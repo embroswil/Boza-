@@ -24,6 +24,10 @@ export function BottomNav() {
   // Pas de barre de navigation sur les écrans d'authentification.
   if (pathname?.startsWith("/auth")) return null;
 
+  // Pas de barre de navigation pour les visiteurs non connectés — tout y
+  // renvoie de toute façon vers la connexion.
+  if (!isLoggedIn) return null;
+
   const navItems = [
     { icon: HomeIcon, label: "Accueil", href: "/" },
     {
