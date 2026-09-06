@@ -7,9 +7,9 @@ import {
   GraduationCap,
   Globe2,
   MapPin,
-  ChevronRight,
   Star,
 } from "lucide-react";
+import { getProgramImage } from "@/lib/program-images";
 
 type Program = {
   id: string;
@@ -19,6 +19,8 @@ type Program = {
   tuition_fee: number | null;
   currency: string | null;
   teaching_language: string | null;
+  field?: string | null;
+  image_url?: string | null;
 };
 
 type University = {
@@ -126,21 +128,35 @@ export function UniversityDetail({
               Aucun programme référencé pour l&apos;instant.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="grid grid-cols-1 gap-3">
               {programs.map((p) => (
                 <Link
                   key={p.id}
                   href={`/programs/${p.id}`}
-                  className="flex items-center gap-3 px-4 py-3.5"
+                  className="relative rounded-2xl overflow-hidden shadow-sm aspect-[16/10] group"
                 >
-                  <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
-                    <GraduationCap className="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-semibold text-slate-900 truncate">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={getProgramImage({
+                      id: p.id,
+                      image_url: p.image_url,
+                      field: p.field,
+                      name: p.name,
+                    })}
+                    alt={p.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                  {p.tuition_fee != null && (
+                    <div className="absolute top-2.5 right-2.5 bg-white/95 rounded-full px-2.5 py-1 text-[11px] font-bold text-slate-900">
+                      {p.tuition_fee.toLocaleString("fr-FR")} {p.currency}
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-3.5">
+                    <div className="text-[14.5px] font-bold text-white leading-tight truncate">
                       {p.name}
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <div className="text-[11px] text-white/80 mt-1">
                       {[
                         p.level ? LEVEL_LABELS[p.level] ?? p.level : null,
                         p.duration_months ? `${p.duration_months} mois` : null,
@@ -150,12 +166,6 @@ export function UniversityDetail({
                         .join(" · ")}
                     </div>
                   </div>
-                  {p.tuition_fee != null && (
-                    <span className="text-[12px] font-bold text-slate-900 shrink-0">
-                      {p.tuition_fee.toLocaleString("fr-FR")} {p.currency}
-                    </span>
-                  )}
-                  <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
                 </Link>
               ))}
             </div>

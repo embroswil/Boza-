@@ -25,7 +25,7 @@ export default async function UniversityPage({
   const { data: programs } = await supabase
     .from("programs")
     .select(
-      "id, name, level, duration_months, tuition_fee, currency, teaching_language"
+      "id, name, level, duration_months, tuition_fee, currency, teaching_language, field, image_url"
     )
     .eq("university_id", id);
 
