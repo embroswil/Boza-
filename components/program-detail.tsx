@@ -11,11 +11,8 @@ import {
   Languages,
   CalendarDays,
   FileText,
-  ExternalLink,
   MapPin,
 } from "lucide-react";
-import { getProgramImage } from "@/lib/program-images";
-import { formatXAF } from "@/lib/currency";
 
 type Program = {
   id: string;
@@ -76,34 +73,11 @@ export function ProgramDetail({ program }: { program: Program }) {
           <h1 className="text-lg font-bold text-slate-900 truncate">{program.name}</h1>
         </div>
 
-        {/* Bannière photo */}
-        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={getProgramImage({
-              id: program.id,
-              field: program.field,
-              name: program.name,
-            })}
-            alt={program.name}
-            className="w-full h-full object-cover"
-          />
-        </div>
-
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
-              {country?.flag_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={country.flag_url}
-                  alt={country.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <GraduationCap className="w-7 h-7 text-emerald-600" />
-              )}
+            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl shrink-0">
+              {country?.flag_url ?? <GraduationCap className="w-7 h-7 text-emerald-600" />}
             </div>
             <div className="min-w-0">
               <div className="text-xl font-extrabold text-slate-900">{program.name}</div>
@@ -146,7 +120,7 @@ export function ProgramDetail({ program }: { program: Program }) {
                 <Wallet className="w-4 h-4 text-amber-600" />
               </div>
               <div className="text-lg font-extrabold text-slate-900">
-                {formatXAF(program.tuition_fee, program.currency)}
+                {program.tuition_fee} {program.currency}
                 <span className="text-[12px] font-medium text-slate-400"> /an</span>
               </div>
             </div>
@@ -190,20 +164,6 @@ export function ProgramDetail({ program }: { program: Program }) {
               <FileText className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
               {program.required_documents}
             </div>
-          </div>
-        )}
-
-        {/* Lien officiel */}
-        {program.program_url && (
-          <div className="px-5 mb-6">
-            <a
-              href={program.program_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-white border border-slate-200 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-700"
-            >
-              Page du programme <ExternalLink className="w-3.5 h-3.5" />
-            </a>
           </div>
         )}
 
