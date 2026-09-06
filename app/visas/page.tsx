@@ -1,7 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { VisasList } from "@/components/visas-list";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // cache 5 min, contenu public peu changeant
 
 const typeLabels: Record<string, string> = {
   tourisme: "Tourisme",
@@ -14,7 +14,7 @@ export default async function VisasPage({
   searchParams: Promise<{ type?: string }>;
 }) {
   const { type } = await searchParams;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   let query = supabase
     .from("visas")

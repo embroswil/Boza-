@@ -16,7 +16,7 @@ import { getProgramImage } from "@/lib/program-images";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatXAF } from "@/lib/currency";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // cache 5 min, contenu public peu changeant
 
 const LEVEL_LABELS: Record<string, string> = {
   licence: "Licence",
@@ -49,26 +49,30 @@ export default async function Home() {
     hasUnreadNotifications = (count ?? 0) > 0;
   }
 
-  const { data: countries } = await supabase
-    .from("countries")
-    .select("id, name, flag_url")
-    .order("created_at", { ascending: true })
-    .limit(4);
-
-  const { data: programsData } = await supabase
-    .from("programs")
-    .select(
-      "id, name, level, field, duration_months, tuition_fee, currency, teaching_language, universities(name, countries(name, flag_url))"
-    )
-    .order("created_at", { ascending: true })
-    .limit(18);
-
-  const { data: tourismVisasData } = await supabase
-    .from("visas")
-    .select("id, name, official_fee, currency, countries(id, name, flag_url)")
-    .eq("type", "tourisme")
-    .order("created_at", { ascending: true })
-    .limit(6);
+  const [
+    { data: countries },
+    { data: programsData },
+    { data: tourismVisasData },
+  ] = await Promise.all([
+    supabase
+      .from("countries")
+      .select("id, name, flag_url")
+      .order("created_at", { ascending: true })
+      .limit(4),
+    supabase
+      .from("programs")
+      .select(
+        "id, name, level, field, duration_months, tuition_fee, currency, teaching_language, universities(name, countries(name, flag_url))"
+      )
+      .order("created_at", { ascending: true })
+      .limit(18),
+    supabase
+      .from("visas")
+      .select("id, name, official_fee, currency, countries(id, name, flag_url)")
+      .eq("type", "tourisme")
+      .order("created_at", { ascending: true })
+      .limit(6),
+  ]);
 
   const destinations = (countries ?? []).map((c) => ({
     id: c.id,

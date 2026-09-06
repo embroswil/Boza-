@@ -1,10 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { ProgramsList } from "@/components/programs-list";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // cache 5 min, contenu public peu changeant
 
 export default async function ProgramsPage() {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: programs } = await supabase
     .from("programs")

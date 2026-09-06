@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import { CountryDetail } from "@/components/country-detail";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // cache 5 min, contenu public peu changeant
 
 export default async function CountryPage({
   params,
@@ -10,7 +10,7 @@ export default async function CountryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data: country } = await supabase
     .from("countries")
