@@ -12,6 +12,7 @@ import {
   Globe2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { formatXAF } from "@/lib/currency";
 
 type Method = "carte" | "mobile_money";
 
@@ -135,7 +136,7 @@ export function PaymentForm({
               )}
             </div>
             <div className="text-[15px] font-extrabold text-slate-900 whitespace-nowrap">
-              {amount.toLocaleString("fr-FR")} {currency}
+              {formatXAF(amount, currency)}
             </div>
           </div>
         </div>
@@ -254,7 +255,7 @@ export function PaymentForm({
                 <Loader2 className="w-4 h-4 animate-spin" /> Traitement...
               </>
             ) : (
-              `Payer ${amount.toLocaleString("fr-FR")} ${currency}`
+              `Payer ${formatXAF(amount, currency)}`
             )}
           </button>
         </div>

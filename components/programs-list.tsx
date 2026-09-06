@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Search, ChevronRight, GraduationCap } from "lucide-react";
+import { formatXAF } from "@/lib/currency";
 
 type Program = {
   id: string;
@@ -156,7 +157,7 @@ export function ProgramsList({ programs }: { programs: Program[] }) {
                         <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-100">
                           {p.tuition_fee != null ? (
                             <span className="text-[12.5px] font-bold text-slate-900">
-                              {p.tuition_fee.toLocaleString("fr-FR")} {p.currency}
+                              {formatXAF(p.tuition_fee, p.currency)}
                             </span>
                           ) : (
                             <span />

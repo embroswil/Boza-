@@ -14,6 +14,7 @@ import { HeroCarousel } from "@/components/hero-carousel";
 import { SearchBar } from "@/components/search-bar";
 import { getProgramImage } from "@/lib/program-images";
 import { getDestinationImage } from "@/lib/destination-images";
+import { formatXAF } from "@/lib/currency";
 
 export const dynamic = "force-dynamic";
 
@@ -73,7 +74,6 @@ export default async function Home() {
     id: c.id,
     name: c.name,
     flag: c.flag_url ?? "🌍",
-    intake: "À confirmer",
   }));
 
   const tourismDestinations = (tourismVisasData ?? []).map((v) => {
@@ -87,7 +87,7 @@ export default async function Home() {
       countryId: country?.id ?? v.id,
       name: country?.name ?? v.name,
       flag: country?.flag_url ?? "✈️",
-      price: v.official_fee ? `${v.official_fee} ${v.currency ?? ""}` : "",
+      price: v.official_fee ? formatXAF(v.official_fee, v.currency) : "",
     };
   });
 
@@ -105,7 +105,7 @@ export default async function Home() {
       flag: university?.countries?.flag_url ?? "🎓",
       duration: p.duration_months ? `${p.duration_months} mois` : "",
       language: p.teaching_language ?? "",
-      price: p.tuition_fee ? `${p.tuition_fee} ${p.currency ?? ""}` : "",
+      price: p.tuition_fee ? formatXAF(p.tuition_fee, p.currency) : "",
       image: getProgramImage({ id: p.id, field: p.field, name: p.name }),
     };
   });
@@ -205,9 +205,6 @@ export default async function Home() {
                 </span>
                 <span className="text-[13px] font-bold text-white text-center leading-tight">
                   {d.name}
-                </span>
-                <span className="text-[9px] text-white font-semibold bg-white/20 backdrop-blur px-2 py-0.5 rounded-full">
-                  {d.intake}
                 </span>
               </div>
             </Link>

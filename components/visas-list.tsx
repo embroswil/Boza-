@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Search, ChevronRight, Clock } from "lucide-react";
 import { getDestinationImage } from "@/lib/destination-images";
+import { formatXAF } from "@/lib/currency";
 
 type Visa = {
   id: string;
@@ -26,7 +27,6 @@ const TYPE_STYLES: Record<string, { bg: string; text: string }> = {
   etudes: { bg: "bg-blue-50", text: "text-blue-700" },
 };
 
-const formatPrice = (n: number) => n.toLocaleString("fr-FR");
 
 export function VisasList({
   visas,
@@ -169,9 +169,8 @@ export function VisasList({
                         {v.official_fee != null ? (
                           <div>
                             <div className="text-[12.5px] font-bold text-slate-900 leading-tight">
-                              {formatPrice(v.official_fee)}
+                              {formatXAF(v.official_fee, v.currency)}
                             </div>
-                            <div className="text-[9px] text-slate-400">{v.currency}</div>
                           </div>
                         ) : (
                           <span />

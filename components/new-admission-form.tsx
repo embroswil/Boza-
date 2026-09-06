@@ -14,6 +14,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { formatXAF } from "@/lib/currency";
 
 type Program = {
   id: string;
@@ -450,7 +451,7 @@ export function NewAdmissionForm({
               Frais de dossier
             </span>
             <span className="text-[15px] font-extrabold text-blue-800">
-              {applicationFee.toLocaleString("fr-FR")} {currency}
+              {formatXAF(applicationFee, currency)}
             </span>
           </div>
 

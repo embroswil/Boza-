@@ -13,6 +13,7 @@ import {
   Send,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { formatXAF } from "@/lib/currency";
 
 type Application = {
   id: string;
@@ -267,7 +268,7 @@ export function ApplicationDetail({ application }: { application: Application })
                 <span className="text-slate-400">Frais officiels</span>
                 <span className="font-semibold text-slate-900">
                   {application.visas.official_fee != null
-                    ? `${application.visas.official_fee} ${application.visas.currency ?? ""}`
+                    ? formatXAF(application.visas.official_fee, application.visas.currency)
                     : "—"}
                 </span>
               </div>
@@ -320,7 +321,7 @@ export function ApplicationDetail({ application }: { application: Application })
                 <div key={p.id} className="flex items-center gap-3 px-4 py-3">
                   <CreditCard className="w-4 h-4 text-blue-600 shrink-0" />
                   <span className="flex-1 text-[13px] text-slate-900">
-                    {p.amount} {p.currency ?? ""}
+                    {formatXAF(p.amount, p.currency)}
                   </span>
                   <span className="text-[11px] text-slate-400 capitalize">{p.status}</span>
                 </div>
@@ -366,8 +367,7 @@ export function ApplicationDetail({ application }: { application: Application })
               className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2"
             >
               <CreditCard className="w-4 h-4" />
-              Payer {pendingPayment.amount.toLocaleString("fr-FR")}{" "}
-              {pendingPayment.currency ?? ""}
+              Payer {formatXAF(pendingPayment.amount, pendingPayment.currency)}
             </Link>
           </div>
         )}

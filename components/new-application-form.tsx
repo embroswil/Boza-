@@ -15,6 +15,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { formatXAF } from "@/lib/currency";
 
 type Country = { id: string; name: string; flag_url: string | null };
 type Visa = {
@@ -380,7 +381,7 @@ export function NewApplicationForm({
                     </div>
                     {v.official_fee != null && (
                       <div className="text-[13px] font-bold text-slate-900 whitespace-nowrap">
-                        {v.official_fee.toLocaleString("fr-FR")} {v.currency ?? ""}
+                        {formatXAF(v.official_fee, v.currency)}
                       </div>
                     )}
                     <ChevronRight className="w-4 h-4 text-slate-300" />
@@ -587,10 +588,10 @@ export function NewApplicationForm({
                   Total à payer
                 </span>
                 <span className="text-[15px] font-extrabold text-blue-800">
-                  {(
-                    (selectedVisa.official_fee ?? 0) + (selectedVisa.service_fee ?? 0)
-                  ).toLocaleString("fr-FR")}{" "}
-                  {selectedVisa.currency ?? ""}
+                  {formatXAF(
+                    (selectedVisa.official_fee ?? 0) + (selectedVisa.service_fee ?? 0),
+                    selectedVisa.currency
+                  )}
                 </span>
               </div>
             )}

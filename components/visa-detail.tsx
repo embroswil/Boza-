@@ -15,6 +15,7 @@ import {
   Circle,
 } from "lucide-react";
 import { getDestinationImage } from "@/lib/destination-images";
+import { formatXAF } from "@/lib/currency";
 
 type Visa = {
   id: string;
@@ -132,7 +133,7 @@ export function VisaDetail({
                     <Wallet className="w-3.5 h-3.5" /> Frais officiels
                   </span>
                   <span className="text-[13px] font-bold text-slate-900">
-                    {visa.official_fee} {visa.currency}
+                    {formatXAF(visa.official_fee, visa.currency)}
                   </span>
                 </div>
               )}
@@ -142,7 +143,7 @@ export function VisaDetail({
                     <Wallet className="w-3.5 h-3.5" /> Frais de service
                   </span>
                   <span className="text-[13px] font-bold text-slate-900">
-                    {visa.service_fee} {visa.currency}
+                    {formatXAF(visa.service_fee, visa.currency)}
                   </span>
                 </div>
               )}

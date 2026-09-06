@@ -15,6 +15,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { getProgramImage } from "@/lib/program-images";
+import { formatXAF } from "@/lib/currency";
 
 type Program = {
   id: string;
@@ -145,7 +146,7 @@ export function ProgramDetail({ program }: { program: Program }) {
                 <Wallet className="w-4 h-4 text-amber-600" />
               </div>
               <div className="text-lg font-extrabold text-slate-900">
-                {program.tuition_fee} {program.currency}
+                {formatXAF(program.tuition_fee, program.currency)}
                 <span className="text-[12px] font-medium text-slate-400"> /an</span>
               </div>
             </div>

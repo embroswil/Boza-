@@ -19,6 +19,7 @@ import {
   Clock,
   TrendingUp,
 } from "lucide-react";
+import { formatXAF } from "@/lib/currency";
 
 type Country = {
   id: string;
@@ -211,7 +212,7 @@ export function CountryDetail({
                   </div>
                   {v.official_fee && (
                     <span className="text-[12px] font-bold text-slate-900 mt-2 pt-2 border-t border-slate-100">
-                      {v.official_fee.toLocaleString("fr-FR")} {v.currency}
+                      {formatXAF(v.official_fee, v.currency)}
                     </span>
                   )}
                 </Link>
@@ -263,7 +264,7 @@ export function CountryDetail({
               </div>
               <div>
                 <div className="text-lg font-extrabold text-slate-900">
-                  {costOfLiving.estimated_total_monthly} {costOfLiving.currency}
+                  {formatXAF(costOfLiving.estimated_total_monthly, costOfLiving.currency)}
                   <span className="text-[12px] font-medium text-slate-400"> /mois</span>
                 </div>
               </div>

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { getProgramImage } from "@/lib/program-images";
 import { getUniversityImage } from "@/lib/university-images";
+import { formatXAF } from "@/lib/currency";
 
 type Program = {
   id: string;
@@ -171,7 +172,7 @@ export function UniversityDetail({
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   {p.tuition_fee != null && (
                     <div className="absolute top-2.5 right-2.5 bg-white/95 rounded-full px-2.5 py-1 text-[11px] font-bold text-slate-900">
-                      {p.tuition_fee.toLocaleString("fr-FR")} {p.currency}
+                      {formatXAF(p.tuition_fee, p.currency)}
                     </div>
                   )}
                   <div className="absolute bottom-0 left-0 right-0 p-3.5">
