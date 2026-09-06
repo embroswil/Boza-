@@ -5,12 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2, Eye, EyeOff } from "lucide-react";
-import { cfaCountries } from "@/lib/cfa-countries";
 
 export function SignUpForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [nationality, setNationality] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -41,7 +39,6 @@ export function SignUpForm() {
         options: {
           data: {
             full_name: fullName,
-            nationality: nationality.trim(),
             phone: phone.trim(),
           },
           emailRedirectTo: `${window.location.origin}/`,
@@ -66,16 +63,20 @@ export function SignUpForm() {
   const labelClass = "text-[13px] font-medium text-slate-700 mb-1.5 block";
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center px-6 py-10">
-      <div className="w-full max-w-sm mx-auto">
-        {/* Logo */}
-        <div className="flex flex-col items-center mb-8">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      {/* Header */}
+      <div className="px-5 pt-5 pb-3 flex items-center justify-between max-w-sm w-full mx-auto">
+        <Link href="/">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.jpg" alt="Boza" className="w-14 h-14 rounded-2xl mb-2 object-cover" />
-          <div className="font-extrabold text-slate-900 text-xl tracking-tight">BOZA</div>
-          <div className="text-[11px] text-slate-400">Votre passeport pour le monde</div>
-        </div>
+          <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+        </Link>
+        <Link href="/auth/login" className="text-[13px] font-semibold text-blue-600">
+          J&apos;ai déjà un compte
+        </Link>
+      </div>
 
+      <div className="px-6 pt-2 pb-10">
+      <div className="w-full max-w-sm mx-auto">
         <div className="bg-white rounded-3xl shadow-sm p-6">
           <h1 className="text-xl font-bold text-slate-900">Créer un compte</h1>
           <p className="text-sm text-slate-400 mt-1 mb-6">
@@ -106,23 +107,6 @@ export function SignUpForm() {
                   className={inputClass}
                 />
               </div>
-            </div>
-
-            <div>
-              <label className={labelClass}>Nationalité</label>
-              <select
-                required
-                value={nationality}
-                onChange={(e) => setNationality(e.target.value)}
-                className={inputClass}
-              >
-                <option value="">Sélectionne ton pays</option>
-                {cfaCountries.map((c) => (
-                  <option key={c.name} value={c.name}>
-                    {c.flag} {c.name}
-                  </option>
-                ))}
-              </select>
             </div>
 
             <div>
@@ -217,6 +201,7 @@ export function SignUpForm() {
             </Link>
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

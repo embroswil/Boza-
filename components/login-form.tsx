@@ -46,14 +46,16 @@ export function LoginForm() {
     <div className="min-h-screen bg-slate-50 flex flex-col">
       {/* Header */}
       <div className="px-5 pt-5 pb-3 flex items-center justify-between max-w-sm w-full mx-auto">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+        <Link href="/">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+        </Link>
         <Link href="/auth/sign-up" className="text-[13px] font-semibold text-blue-600">
           Créer un compte
         </Link>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center px-6 pb-10">
+      <div className="px-6 pt-2 pb-10">
       <div className="w-full max-w-sm mx-auto">
         <div className="bg-white rounded-3xl shadow-sm p-6">
           <h1 className="text-xl font-bold text-slate-900">Se connecter</h1>
