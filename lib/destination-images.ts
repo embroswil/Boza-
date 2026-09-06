@@ -52,6 +52,20 @@ const COUNTRY_IMAGES: Record<string, string> = {
     "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=600&auto=format&fit=crop",
   tunisie:
     "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=600&auto=format&fit=crop",
+  singapour:
+    "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=600&auto=format&fit=crop",
+  "emirats arabes unis":
+    "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=600&auto=format&fit=crop",
+  qatar:
+    "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=600&auto=format&fit=crop",
+  serbie:
+    "https://images.unsplash.com/photo-1592206102459-9c6ba7a9a9b0?q=80&w=600&auto=format&fit=crop",
+  australie:
+    "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=600&auto=format&fit=crop",
+  thailande:
+    "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=600&auto=format&fit=crop",
+  "coree du sud":
+    "https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=600&auto=format&fit=crop",
 };
 
 // Pool générique (voyage / aéroport / carte du monde) utilisé quand le pays
