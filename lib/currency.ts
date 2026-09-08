@@ -17,6 +17,7 @@ const RATES_TO_XAF: Record<string, number> = {
   AUD: 399,
   QAR: 166.8,
   GBP: 780,
+  SAR: 162,
 };
 
 export function toXAF(amount: number, currency: string | null | undefined): number {

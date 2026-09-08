@@ -18,44 +18,65 @@ const SOCIAL_LINKS = [
   { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
 ];
 
-const FOOTER_LINKS = [
+const COMPANY_LINKS = [
   { label: "À propos", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Conditions d'utilisation", href: "/terms" },
   { label: "Confidentialité", href: "/privacy" },
 ];
 
-export function SiteFooter() {
+export function SiteFooter({
+  destinations = [],
+}: {
+  destinations?: { id: string; name: string }[];
+}) {
   return (
-    <div className="px-5 mb-6 pt-6 border-t border-slate-200">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo.jpg" alt="Boza" className="w-9 h-9 rounded-lg object-cover mb-4" />
-
-      <div className="flex items-center gap-3 mb-5">
-        {SOCIAL_LINKS.map((s) => (
-          <Link
-            key={s.label}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={s.label}
-            className="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-600"
-          >
-            <s.icon className="w-4.5 h-4.5" />
-          </Link>
-        ))}
+    <div className="mt-2 mb-6 bg-slate-900 rounded-3xl mx-5 px-5 py-6">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <h4 className="text-white font-bold text-[13px] mb-3">Destinations populaires</h4>
+          <div className="flex flex-col gap-2.5">
+            {destinations.slice(0, 4).map((d) => (
+              <Link
+                key={d.id}
+                href={`/countries/${d.id}`}
+                className="text-slate-400 text-[12px]"
+              >
+                {d.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h4 className="text-white font-bold text-[13px] mb-3">Boza</h4>
+          <div className="flex flex-col gap-2.5">
+            {COMPANY_LINKS.map((l) => (
+              <Link key={l.href} href={l.href} className="text-slate-400 text-[12px]">
+                {l.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
-        {FOOTER_LINKS.map((l) => (
-          <Link key={l.href} href={l.href} className="text-[11.5px] text-slate-500 font-medium">
-            {l.label}
-          </Link>
-        ))}
-      </div>
-
-      <div className="text-[10px] text-slate-300">
-        © {new Date().getFullYear()} Boza. Tous droits réservés.
+      <div className="border-t border-slate-700 mt-6 pt-5 flex flex-col items-center gap-4">
+        <div className="text-slate-500 text-[10.5px] text-center">
+          © {new Date().getFullYear()} Boza. Tous droits réservés.
+        </div>
+        <div className="flex items-center gap-3">
+          {SOCIAL_LINKS.map((s) => (
+            <Link
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-slate-700"
+            >
+              <s.icon className="w-4 h-4" />
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );

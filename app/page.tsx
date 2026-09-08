@@ -353,7 +353,7 @@ export default async function Home() {
           </Link>
         </div>
 
-        <SiteFooter />
+        <SiteFooter destinations={destinations} />
       </div>
     </div>
   );
