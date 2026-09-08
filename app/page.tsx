@@ -1,17 +1,19 @@
 import {
   Bell,
-  ChevronRight,
   User,
+  Globe2,
+  Plane,
+  GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SearchBar } from "@/components/search-bar";
 import { SiteFooter } from "@/components/site-footer";
-import { BrowserFrame } from "@/components/browser-frame";
+import { PromoSection } from "@/components/promo-section";
 import { getProgramImage } from "@/lib/program-images";
 import { getDestinationImage } from "@/lib/destination-images";
-import { formatXAF } from "@/lib/currency";
 
 export const revalidate = 300; // cache 5 min, contenu public peu changeant
 
@@ -42,7 +44,6 @@ export default async function Home() {
 
   const [
     { data: countries },
-    { data: tourismVisasData },
     { data: featuredUniversitiesData },
   ] = await Promise.all([
     supabase
@@ -50,12 +51,6 @@ export default async function Home() {
       .select("id, name, flag_url")
       .order("created_at", { ascending: true })
       .limit(4),
-    supabase
-      .from("visas")
-      .select("id, name, official_fee, currency, countries(id, name, flag_url)")
-      .eq("type", "tourisme")
-      .order("created_at", { ascending: true })
-      .limit(6),
     supabase
       .from("universities")
       .select("id, name, city, ranking, countries(name)")
@@ -81,23 +76,8 @@ export default async function Home() {
     flag: c.flag_url ?? "🌍",
   }));
 
-  const tourismDestinations = (tourismVisasData ?? []).map((v) => {
-    const country = v.countries as unknown as {
-      id: string;
-      name: string;
-      flag_url: string | null;
-    } | null;
-    return {
-      id: v.id,
-      countryId: country?.id ?? v.id,
-      name: country?.name ?? v.name,
-      flag: country?.flag_url ?? "✈️",
-      price: v.official_fee ? formatXAF(v.official_fee, v.currency) : "",
-    };
-  });
-
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
+    <div className="min-h-screen bg-slate-50 flex justify-center pt-6 font-sans">
       <div className="w-full max-w-sm bg-slate-50 relative">
         {/* Header */}
         {isLoggedIn ? (
@@ -154,170 +134,50 @@ export default async function Home() {
         {/* Hero carrousel */}
         <HeroCarousel universities={featuredUniversities} />
 
-        {/* Aperçu produit, style bandeau teinté + capture qui déborde */}
-        <div className="w-full bg-blue-50 pt-8 pb-16 px-7 text-center mb-[-2.5rem]">
-          <span className="text-blue-600 text-[11px] font-bold uppercase tracking-wide">
-            Suivi en temps réel
-          </span>
-          <h2 className="text-[21px] font-extrabold text-slate-900 leading-tight mt-2 mb-3">
-            Vous savez où en est votre dossier.
-            <br />
-            Nous vous montrons chaque étape.
-          </h2>
-          <p className="text-slate-500 text-[12.5px] mb-5 leading-relaxed">
-            Visa, admission, documents, paiement : suivez chaque étape de votre demande en temps
-            réel, sans avoir à demander.
-          </p>
-          <Link
-            href="/demandes"
-            className="inline-block bg-blue-600 text-white text-[13px] font-semibold rounded-full px-6 py-3"
-          >
-            Découvrir le suivi de demandes
-          </Link>
-        </div>
-        <div className="px-5 mb-10">
-          <BrowserFrame>
-            <div className="bg-blue-600 h-9 flex items-center justify-between px-3.5">
-              <span className="text-white text-[11px] font-bold">Mes demandes</span>
-              <span className="text-white/70 text-[9px]">Boza</span>
-            </div>
-            <div className="bg-white p-3 flex flex-col gap-2">
-              {[
-                { name: "Master Gestion — Université de Poznań", status: "En cours", color: "bg-blue-100 text-blue-700" },
-                { name: "Visa touristique — Arabie Saoudite", status: "Approuvé", color: "bg-emerald-100 text-emerald-700" },
-                { name: "Documents — Passeport", status: "Validé", color: "bg-emerald-100 text-emerald-700" },
-              ].map((row) => (
-                <div
-                  key={row.name}
-                  className="bg-slate-50 rounded-xl px-3 py-2.5 flex items-center justify-between"
-                >
-                  <span className="text-[11.5px] font-medium text-slate-700 truncate pr-2">
-                    {row.name}
-                  </span>
-                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full shrink-0 ${row.color}`}>
-                    {row.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </BrowserFrame>
-        </div>
+        {/* Destinations d'études */}
+        <PromoSection
+          badgeIcon={<Globe2 className="w-4 h-4 text-emerald-600" />}
+          badgeText="16 pays partenaires"
+          title="Étudiez dans le pays de vos rêves"
+          image={getDestinationImage({ id: "home-etudes", name: "Destinations études" })}
+          imageAlt="Destinations d'études"
+          ctaLabel="Explorer les destinations"
+          href="/countries"
+        />
 
-        {/* Destinations (études + tourisme), version compacte */}
-        <div className="px-5 mb-3 flex items-center justify-between">
-          <h2 className="font-bold text-slate-900 text-base">Destinations d&apos;études</h2>
-          <Link href="/countries" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
-            Voir tout <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="mb-6 flex gap-3 overflow-x-auto px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {destinations.length === 0 && (
-            <div className="bg-white rounded-xl p-4 text-center text-sm text-slate-400 shadow-sm">
-              Aucun pays pour l&apos;instant — ajoute-les dans Supabase.
-            </div>
-          )}
-          {destinations.map((d) => (
-            <Link
-              key={d.id}
-              href={`/countries/${d.id}`}
-              className="relative w-24 aspect-square rounded-2xl overflow-hidden shadow-md shrink-0"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={getDestinationImage({ id: d.id, name: d.name })}
-                alt={d.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="relative h-full flex flex-col items-center justify-center gap-1.5 p-2">
-                <span className="w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
-                  {d.flag.startsWith("http") ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={d.flag} alt={d.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-base">{d.flag}</span>
-                  )}
-                </span>
-                <span className="text-[10.5px] font-bold text-white text-center leading-tight">
-                  {d.name}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {/* Destinations touristiques */}
+        <PromoSection
+          badgeIcon={<Plane className="w-4 h-4 text-emerald-600" />}
+          badgeText="Visas rapides et fiables"
+          title="Voyagez librement, explorez le monde"
+          image={getDestinationImage({ id: "home-tourisme", name: "Destinations tourisme" })}
+          imageAlt="Destinations touristiques"
+          ctaLabel="Explorer les visas touristiques"
+          href="/visas?type=tourisme"
+        />
 
-        <div className="px-5 mb-3 flex items-center justify-between">
-          <h2 className="font-bold text-slate-900 text-base">Destinations touristiques</h2>
-          <Link
-            href="/visas?type=tourisme"
-            className="text-blue-600 text-sm font-medium flex items-center gap-0.5"
-          >
-            Voir tout <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="mb-6 flex gap-3 overflow-x-auto px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {tourismDestinations.length === 0 && (
-            <div className="bg-white rounded-xl p-4 text-center text-sm text-slate-400 shadow-sm">
-              Aucun visa tourisme pour l&apos;instant — ajoute-les dans Supabase.
-            </div>
-          )}
-          {tourismDestinations.map((d) => (
-            <Link
-              key={d.id}
-              href={`/visas/${d.id}`}
-              className="relative w-24 aspect-square rounded-2xl overflow-hidden shadow-md shrink-0"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={getDestinationImage({ id: d.countryId, name: d.name })}
-                alt={d.name}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="relative h-full flex flex-col items-center justify-center gap-1.5 p-2">
-                <span className="w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
-                  {d.flag.startsWith("http") ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={d.flag} alt={d.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-base">{d.flag}</span>
-                  )}
-                </span>
-                <span className="text-[10.5px] font-bold text-white text-center leading-tight">
-                  {d.name}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {/* Programmes d'études */}
+        <PromoSection
+          badgeIcon={<GraduationCap className="w-4 h-4 text-emerald-600" />}
+          badgeText="Licence · Master · Doctorat"
+          title="Trouvez le programme qui vous correspond"
+          image={getProgramImage({ id: "home-programmes", name: "Programmes d'études" })}
+          imageAlt="Programmes d'études"
+          ctaLabel="Voir tous les programmes"
+          href="/programs"
+        />
 
-        {/* Programmes d'études par niveau, version compacte */}
-        <div className="px-5 mb-3 flex items-center justify-between">
-          <h2 className="font-bold text-slate-900 text-base">Programmes d&apos;études</h2>
-          <Link href="/programs" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
-            Voir tout <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="px-5 mb-10 grid grid-cols-3 gap-2.5">
-          {[
-            { level: "licence", title: "Licence", img: getProgramImage({ id: "home-licence", name: "Licence Gestion" }) },
-            { level: "master", title: "Master", img: getProgramImage({ id: "home-master", name: "Master Ingénierie" }) },
-            { level: "doctorat", title: "Doctorat", img: getProgramImage({ id: "home-doctorat", name: "Doctorat Recherche" }) },
-          ].map((b) => (
-            <Link
-              key={b.level}
-              href={`/programs?level=${b.level}`}
-              className="relative aspect-square rounded-2xl overflow-hidden shadow-sm"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={b.img} alt={b.title} className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <span className="relative h-full flex items-end justify-center pb-3 text-[12.5px] font-bold text-white">
-                {b.title}
-              </span>
-            </Link>
-          ))}
-        </div>
+        {/* Suivi des demandes */}
+        <PromoSection
+          badgeIcon={<ShieldCheck className="w-4 h-4 text-emerald-600" />}
+          badgeText="Suivi en temps réel"
+          title="Vous savez où en est votre dossier"
+          image={getProgramImage({ id: "home-suivi", name: "Suivi demandes" })}
+          imageAlt="Suivi des demandes"
+          ctaLabel="Découvrir le suivi de demandes"
+          href="/demandes"
+        />
+
 
         <SiteFooter destinations={destinations} />
       </div>

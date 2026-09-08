@@ -31,16 +31,16 @@ export function SiteFooter({
   destinations?: { id: string; name: string }[];
 }) {
   return (
-    <div className="mt-2 mb-6 bg-slate-900 rounded-3xl mx-5 px-5 py-6">
-      <div className="grid grid-cols-2 gap-4">
+    <div className="w-full bg-slate-900 px-6 pt-10 pb-14 mt-4">
+      <div className="grid grid-cols-2 gap-4 mb-8">
         <div>
-          <h4 className="text-white font-bold text-[13px] mb-3">Destinations populaires</h4>
-          <div className="flex flex-col gap-2.5">
+          <h4 className="text-white font-bold text-[14px] mb-4">Destinations populaires</h4>
+          <div className="flex flex-col gap-3">
             {destinations.slice(0, 4).map((d) => (
               <Link
                 key={d.id}
                 href={`/countries/${d.id}`}
-                className="text-slate-400 text-[12px]"
+                className="text-slate-400 text-[13px]"
               >
                 {d.name}
               </Link>
@@ -48,10 +48,10 @@ export function SiteFooter({
           </div>
         </div>
         <div>
-          <h4 className="text-white font-bold text-[13px] mb-3">Boza</h4>
-          <div className="flex flex-col gap-2.5">
+          <h4 className="text-white font-bold text-[14px] mb-4">Boza</h4>
+          <div className="flex flex-col gap-3">
             {COMPANY_LINKS.map((l) => (
-              <Link key={l.href} href={l.href} className="text-slate-400 text-[12px]">
+              <Link key={l.href} href={l.href} className="text-slate-400 text-[13px]">
                 {l.label}
               </Link>
             ))}
@@ -59,10 +59,7 @@ export function SiteFooter({
         </div>
       </div>
 
-      <div className="border-t border-slate-700 mt-6 pt-5 flex flex-col items-center gap-4">
-        <div className="text-slate-500 text-[10.5px] text-center">
-          © {new Date().getFullYear()} Boza. Tous droits réservés.
-        </div>
+      <div className="border-t border-slate-700 pt-7 flex flex-col items-center gap-5">
         <div className="flex items-center gap-3">
           {SOCIAL_LINKS.map((s) => (
             <Link
@@ -71,11 +68,14 @@ export function SiteFooter({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-slate-700"
+              className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-700"
             >
-              <s.icon className="w-4 h-4" />
+              <s.icon className="w-4.5 h-4.5" />
             </Link>
           ))}
+        </div>
+        <div className="text-slate-500 text-[11px] text-center">
+          © {new Date().getFullYear()} Boza. Tous droits réservés.
         </div>
       </div>
     </div>
