@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { SearchBar } from "@/components/search-bar";
 import { SiteFooter } from "@/components/site-footer";
+import { BrowserFrame } from "@/components/browser-frame";
 import { getProgramImage } from "@/lib/program-images";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatXAF } from "@/lib/currency";
@@ -153,6 +154,37 @@ export default async function Home() {
 
         {/* Hero carrousel */}
         <HeroCarousel universities={featuredUniversities} />
+
+        {/* Aperçu de l'app, style capture produit */}
+        <div className="px-5 mb-6 pt-2">
+          <h2 className="text-[19px] font-extrabold text-slate-900 leading-tight mb-1.5">
+            Toutes vos démarches, au même endroit
+          </h2>
+          <p className="text-slate-500 text-[12.5px] mb-4 leading-relaxed">
+            Visa, admission, documents, paiement : suivez chaque étape depuis l&apos;app.
+          </p>
+          <BrowserFrame>
+            <div className="p-3.5 flex flex-col gap-2.5">
+              {[
+                { name: "Master Gestion — Université de Poznań", status: "En cours", color: "bg-blue-100 text-blue-700" },
+                { name: "Visa touristique — Arabie Saoudite", status: "Approuvé", color: "bg-emerald-100 text-emerald-700" },
+                { name: "Documents — Passeport", status: "Validé", color: "bg-emerald-100 text-emerald-700" },
+              ].map((row) => (
+                <div
+                  key={row.name}
+                  className="bg-white rounded-xl px-3 py-2.5 flex items-center justify-between shadow-sm"
+                >
+                  <span className="text-[11.5px] font-medium text-slate-700 truncate pr-2">
+                    {row.name}
+                  </span>
+                  <span className={`text-[9.5px] font-bold px-2 py-0.5 rounded-full shrink-0 ${row.color}`}>
+                    {row.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </BrowserFrame>
+        </div>
 
         {/* Destinations études populaires */}
         <div className="px-5 mb-3 flex items-center justify-between">
