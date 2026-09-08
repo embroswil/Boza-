@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 
-// Lucide n'a pas d'icône TikTok officielle — SVG inline à la place.
+// Lucide n'a pas d'icône TikTok officielle — SVG inline (tracé vérifié).
 function TikTokIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M16.6 5.82c-.9-.94-1.44-2.13-1.53-3.42h-3.13v13.4c0 1.57-1.27 2.85-2.85 2.85a2.85 2.85 0 0 1-2.85-2.85 2.85 2.85 0 0 1 2.85-2.85c.28 0 .55.04.8.12v-3.18a6.02 6.02 0 0 0-.8-.05A5.98 5.98 0 0 0 3.1 15.8a5.98 5.98 0 0 0 5.98 5.98c3.3 0 5.98-2.68 5.98-5.98V8.4a8.16 8.16 0 0 0 4.76 1.52V6.79c-1.03 0-1.99-.36-2.74-.97h-.48z" />
+      <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.69 5.7c3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.32 1.38V7.3s-1.88.09-3.25-1.48z" />
     </svg>
   );
 }
@@ -18,20 +18,20 @@ const SOCIAL_LINKS = [
   { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com" },
 ];
 
+const FOOTER_LINKS = [
+  { label: "À propos", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Conditions d'utilisation", href: "/terms" },
+  { label: "Confidentialité", href: "/privacy" },
+];
+
 export function SiteFooter() {
   return (
     <div className="px-5 mb-6 pt-6 border-t border-slate-200">
-      <div className="flex items-center gap-2 mb-4">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.jpg" alt="Boza" className="w-9 h-9 rounded-lg object-cover" />
-        <div>
-          <div className="font-extrabold text-slate-900 text-[15px] leading-none">BOZA</div>
-          <div className="text-[10.5px] text-slate-400 mt-0.5">
-            Votre passeport pour le monde
-          </div>
-        </div>
-      </div>
-      <div className="flex items-center gap-3">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.jpg" alt="Boza" className="w-9 h-9 rounded-lg object-cover mb-4" />
+
+      <div className="flex items-center gap-3 mb-5">
         {SOCIAL_LINKS.map((s) => (
           <Link
             key={s.label}
@@ -45,7 +45,16 @@ export function SiteFooter() {
           </Link>
         ))}
       </div>
-      <div className="text-[10px] text-slate-300 mt-5">
+
+      <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
+        {FOOTER_LINKS.map((l) => (
+          <Link key={l.href} href={l.href} className="text-[11.5px] text-slate-500 font-medium">
+            {l.label}
+          </Link>
+        ))}
+      </div>
+
+      <div className="text-[10px] text-slate-300">
         © {new Date().getFullYear()} Boza. Tous droits réservés.
       </div>
     </div>
