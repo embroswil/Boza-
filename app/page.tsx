@@ -2,7 +2,6 @@ import {
   Bell,
   ChevronRight,
   User,
-  Globe,
 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -204,33 +203,11 @@ export default async function Home() {
           </BrowserFrame>
         </div>
 
-        {/* Destinations études populaires */}
+        {/* Destinations (études + tourisme), version compacte */}
         <div className="px-5 mb-3 flex items-center justify-between">
           <h2 className="font-bold text-slate-900 text-base">Destinations d&apos;études</h2>
           <Link href="/countries" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
             Voir tout <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="px-5 mb-3">
-          <Link
-            href="/countries"
-            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 flex flex-col"
-          >
-            <h3 className="text-[20px] font-extrabold text-slate-900 leading-tight max-w-[62%]">
-              Étudiez dans le pays de vos rêves
-            </h3>
-            <p className="text-slate-500 text-[12.5px] mt-2 max-w-[58%] leading-relaxed">
-              Découvrez les meilleures destinations pour vos études à l&apos;étranger.
-            </p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={getDestinationImage({ id: "home-etudes", name: "Destinations études" })}
-              alt="Destinations d'études"
-              className="absolute right-0 top-0 bottom-0 w-[42%] object-cover rounded-l-3xl"
-            />
-            <span className="relative w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3 mt-4 flex items-center justify-center gap-2">
-              Explorer les destinations <ChevronRight className="w-4 h-4" />
-            </span>
           </Link>
         </div>
         <div className="mb-6 flex gap-3 overflow-x-auto px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -269,7 +246,6 @@ export default async function Home() {
           ))}
         </div>
 
-        {/* Destinations touristiques */}
         <div className="px-5 mb-3 flex items-center justify-between">
           <h2 className="font-bold text-slate-900 text-base">Destinations touristiques</h2>
           <Link
@@ -277,28 +253,6 @@ export default async function Home() {
             className="text-blue-600 text-sm font-medium flex items-center gap-0.5"
           >
             Voir tout <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="px-5 mb-3">
-          <Link
-            href="/visas?type=tourisme"
-            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-5 flex flex-col"
-          >
-            <h3 className="text-[20px] font-extrabold text-slate-900 leading-tight max-w-[62%]">
-              Voyagez librement, explorez le monde
-            </h3>
-            <p className="text-slate-500 text-[12.5px] mt-2 max-w-[58%] leading-relaxed">
-              Obtenez votre visa touristique rapidement, où que vous alliez.
-            </p>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={getDestinationImage({ id: "home-tourisme", name: "Destinations tourisme" })}
-              alt="Destinations touristiques"
-              className="absolute right-0 top-0 bottom-0 w-[42%] object-cover rounded-l-3xl"
-            />
-            <span className="relative w-full bg-emerald-600 text-white text-sm font-semibold rounded-2xl py-3 mt-4 flex items-center justify-center gap-2">
-              Explorer les visas touristiques <ChevronRight className="w-4 h-4" />
-            </span>
           </Link>
         </div>
         <div className="mb-6 flex gap-3 overflow-x-auto px-5 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -337,70 +291,32 @@ export default async function Home() {
           ))}
         </div>
 
-        {/* Programmes d'études par niveau */}
+        {/* Programmes d'études par niveau, version compacte */}
         <div className="px-5 mb-3 flex items-center justify-between">
           <h2 className="font-bold text-slate-900 text-base">Programmes d&apos;études</h2>
           <Link href="/programs" className="text-blue-600 text-sm font-medium flex items-center gap-0.5">
             Voir tout <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="px-5 mb-4 flex flex-col gap-4">
+        <div className="px-5 mb-10 grid grid-cols-3 gap-2.5">
           {[
-            {
-              level: "licence",
-              title: "Programmes de licence",
-              desc: "Démarrez vos études supérieures dans l'université qui vous correspond.",
-              img: getProgramImage({ id: "home-licence", name: "Licence Gestion" }),
-            },
-            {
-              level: "master",
-              title: "Programmes de master",
-              desc: "Spécialisez-vous et approfondissez votre expertise à l'international.",
-              img: getProgramImage({ id: "home-master", name: "Master Ingénierie" }),
-            },
-            {
-              level: "doctorat",
-              title: "Programmes de doctorat",
-              desc: "Menez vos travaux de recherche au sein d'universités reconnues.",
-              img: getProgramImage({ id: "home-doctorat", name: "Doctorat Recherche" }),
-            },
+            { level: "licence", title: "Licence", img: getProgramImage({ id: "home-licence", name: "Licence Gestion" }) },
+            { level: "master", title: "Master", img: getProgramImage({ id: "home-master", name: "Master Ingénierie" }) },
+            { level: "doctorat", title: "Doctorat", img: getProgramImage({ id: "home-doctorat", name: "Doctorat Recherche" }) },
           ].map((b) => (
             <Link
               key={b.level}
               href={`/programs?level=${b.level}`}
-              className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 flex flex-col"
+              className="relative aspect-square rounded-2xl overflow-hidden shadow-sm"
             >
-              <h3 className="text-[20px] font-extrabold text-slate-900 leading-tight max-w-[62%]">
-                {b.title}
-              </h3>
-              <p className="text-slate-500 text-[12.5px] mt-2 max-w-[58%] leading-relaxed">
-                {b.desc}
-              </p>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={b.img}
-                alt={b.title}
-                className="absolute right-0 top-0 bottom-0 w-[42%] object-cover rounded-l-3xl"
-              />
-              <span className="relative w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3 mt-4 flex items-center justify-center gap-2">
-                Commencer maintenant <ChevronRight className="w-4 h-4" />
+              <img src={b.img} alt={b.title} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+              <span className="relative h-full flex items-end justify-center pb-3 text-[12.5px] font-bold text-white">
+                {b.title}
               </span>
             </Link>
           ))}
-        </div>
-
-        {/* Bannière footer */}
-        <div className="px-5 mb-24">
-          <Link
-            href="/countries"
-            className="w-full bg-emerald-50 rounded-2xl px-4 py-3.5 flex items-center gap-2 text-emerald-700 text-sm font-semibold"
-          >
-            <Globe className="w-4 h-4" />
-            <span className="flex-1 text-left">
-              Voir toutes les destinations
-            </span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
         </div>
 
         <SiteFooter destinations={destinations} />
