@@ -148,7 +148,7 @@ export function ApplicationDetail({ application }: { application: Application })
                 <img
                   src={country.flag_url}
                   alt={country.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-left"
                 />
               ) : (
                 <Globe2 className="w-6 h-6 text-blue-600" />

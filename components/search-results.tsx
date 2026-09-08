@@ -98,7 +98,7 @@ export function SearchResults({
                           <img
                             src={c.flag_url}
                             alt={c.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-left"
                           />
                         ) : (
                           <Globe2 className="w-4 h-4 text-blue-600" />

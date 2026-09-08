@@ -124,7 +124,7 @@ export function PaymentForm({
             <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
               {countryFlag ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={countryFlag} alt="" className="w-full h-full object-cover" />
+                <img src={countryFlag} alt="" className="w-full h-full object-cover object-left" />
               ) : (
                 <Globe2 className="w-5 h-5 text-blue-600" />
               )}

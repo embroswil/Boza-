@@ -182,7 +182,7 @@ export function NewAdmissionForm({
                 <img
                   src={program.universities.countries.flag_url}
                   alt=""
-                  className="w-3 h-3 rounded-full object-cover inline-block"
+                  className="w-3 h-3 rounded-full object-cover object-left inline-block"
                 />
               )}
               {program.name}

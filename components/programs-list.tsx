@@ -3,13 +3,15 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Search, ChevronRight, GraduationCap } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import { formatXAF } from "@/lib/currency";
+import { getProgramImage } from "@/lib/program-images";
 
 type Program = {
   id: string;
   name: string;
   level: string | null;
+  field?: string | null;
   duration_months: number | null;
   tuition_fee: number | null;
   currency: string | null;
@@ -133,7 +135,7 @@ export function ProgramsList({
                   <img
                     src={group.flag}
                     alt={group.countryName}
-                    className="w-5 h-5 rounded-full object-cover"
+                    className="w-5 h-5 rounded-full object-cover object-left"
                   />
                 ) : (
                   <span className="text-xl">🌍</span>
@@ -155,32 +157,27 @@ export function ProgramsList({
                       <Link
                         key={p.id}
                         href={`/programs/${p.id}`}
-                        className="flex flex-col bg-white rounded-2xl shadow-sm p-3.5"
+                        className="relative rounded-2xl overflow-hidden shadow-sm aspect-[4/5] group"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-2.5">
-                          <GraduationCap className="w-5 h-5 text-emerald-600" />
-                        </div>
-                        <div className="text-[13px] font-semibold text-slate-900 leading-tight line-clamp-2 min-h-[32px]">
-                          {p.name}
-                        </div>
-                        <div className="text-[11px] text-slate-400 truncate mt-1">
-                          {p.universities?.name}
-                        </div>
-                        <div className="flex items-center gap-2 mt-2 text-[10px] text-slate-400">
-                          {p.duration_months && <span>{p.duration_months} mois</span>}
-                          {p.teaching_language && (
-                            <span>· {p.teaching_language}</span>
-                          )}
-                        </div>
-                        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-100">
-                          {p.tuition_fee != null ? (
-                            <span className="text-[12.5px] font-bold text-slate-900">
-                              {formatXAF(p.tuition_fee, p.currency)}
-                            </span>
-                          ) : (
-                            <span />
-                          )}
-                          <ChevronRight className="w-4 h-4 text-slate-300" />
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={getProgramImage({ id: p.id, field: p.field, name: p.name })}
+                          alt={p.name}
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                        {p.tuition_fee != null && (
+                          <div className="absolute top-2 right-2 text-[10px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur text-slate-900">
+                            {formatXAF(p.tuition_fee, p.currency)}
+                          </div>
+                        )}
+                        <div className="absolute bottom-0 left-0 right-0 p-3">
+                          <div className="text-[13px] font-bold text-white leading-tight line-clamp-2">
+                            {p.name}
+                          </div>
+                          <div className="text-[10.5px] text-white/80 mt-0.5 truncate">
+                            {p.universities?.name}
+                          </div>
                         </div>
                       </Link>
                     ))}

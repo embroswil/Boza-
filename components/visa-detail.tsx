@@ -10,9 +10,12 @@ import {
   Wallet,
   Repeat,
   ShieldCheck,
+  ExternalLink,
   CheckCircle2,
   Circle,
 } from "lucide-react";
+import { getDestinationImage } from "@/lib/destination-images";
+import { formatXAF } from "@/lib/currency";
 
 type Visa = {
   id: string;
@@ -71,11 +74,33 @@ export function VisaDetail({
           <h1 className="text-lg font-bold text-slate-900 truncate">{visa.name}</h1>
         </div>
 
+        {/* Bannière photo */}
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={getDestinationImage({
+              id: visa.countries?.id ?? visa.id,
+              name: visa.countries?.name,
+            })}
+            alt={visa.countries?.name ?? visa.name}
+            className="w-full h-full object-cover object-left"
+          />
+        </div>
+
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center text-3xl shrink-0">
-              {visa.countries?.flag_url ?? <FileCheck2 className="w-7 h-7 text-blue-600" />}
+            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+              {visa.countries?.flag_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={visa.countries.flag_url}
+                  alt={visa.countries.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <FileCheck2 className="w-7 h-7 text-blue-600" />
+              )}
             </div>
             <div>
               <div className="text-xl font-extrabold text-slate-900">{visa.name}</div>
@@ -108,7 +133,7 @@ export function VisaDetail({
                     <Wallet className="w-3.5 h-3.5" /> Frais officiels
                   </span>
                   <span className="text-[13px] font-bold text-slate-900">
-                    {visa.official_fee} {visa.currency}
+                    {formatXAF(visa.official_fee, visa.currency)}
                   </span>
                 </div>
               )}
@@ -118,7 +143,7 @@ export function VisaDetail({
                     <Wallet className="w-3.5 h-3.5" /> Frais de service
                   </span>
                   <span className="text-[13px] font-bold text-slate-900">
-                    {visa.service_fee} {visa.currency}
+                    {formatXAF(visa.service_fee, visa.currency)}
                   </span>
                 </div>
               )}
@@ -183,6 +208,20 @@ export function VisaDetail({
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Lien officiel */}
+        {visa.official_url && (
+          <div className="px-5 mb-6">
+            <a
+              href={visa.official_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-white border border-slate-200 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-700"
+            >
+              Site officiel <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
         )}
 

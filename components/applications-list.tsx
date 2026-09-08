@@ -105,7 +105,7 @@ export function ApplicationsList({ applications }: { applications: Application[]
                         <img
                           src={country.flag_url}
                           alt={country.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-left"
                         />
                       ) : (
                         <Globe2 className="w-4 h-4 text-blue-600" />

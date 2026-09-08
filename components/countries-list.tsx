@@ -75,7 +75,7 @@ export function CountriesList({ countries }: { countries: Country[] }) {
                       <img
                         src={c.flag_url}
                         alt={c.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-left"
                       />
                     ) : (
                       <span className="text-base">🌍</span>

@@ -89,7 +89,7 @@ export function UniversityDetail({
                 <img
                   src={country.flag_url}
                   alt={country.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover object-left"
                 />
               ) : (
                 <GraduationCap className="w-7 h-7 text-emerald-600" />

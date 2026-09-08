@@ -286,7 +286,7 @@ export function NewApplicationForm({
                   <img
                     src={selectedCountry.flag_url}
                     alt={selectedCountry.name}
-                    className="w-3 h-3 rounded-full object-cover inline-block"
+                    className="w-3 h-3 rounded-full object-cover object-left inline-block"
                   />
                 )}
                 {selectedCountry.name}
@@ -335,7 +335,7 @@ export function NewApplicationForm({
                         <img
                           src={c.flag_url}
                           alt={c.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover object-left"
                         />
                       ) : (
                         <Globe2 className="w-5 h-5 text-blue-600" />

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Search, ChevronRight, Clock } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import { getDestinationImage } from "@/lib/destination-images";
 import { formatXAF } from "@/lib/currency";
 
@@ -20,11 +20,6 @@ type Visa = {
 const TYPE_LABELS: Record<string, string> = {
   tourisme: "Tourisme",
   etudes: "Études",
-};
-
-const TYPE_STYLES: Record<string, { bg: string; text: string }> = {
-  tourisme: { bg: "bg-emerald-50", text: "text-emerald-700" },
-  etudes: { bg: "bg-blue-50", text: "text-blue-700" },
 };
 
 
@@ -120,67 +115,52 @@ export function VisasList({
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              {filtered.map((v) => {
-                const style = TYPE_STYLES[v.type] ?? { bg: "bg-slate-50", text: "text-slate-600" };
-                return (
-                  <Link
-                    key={v.id}
-                    href={`/visas/${v.id}`}
-                    className="relative rounded-2xl overflow-hidden shadow-sm flex flex-col bg-white"
-                  >
-                    <div className="relative w-full aspect-[4/3]">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
+              {filtered.map((v) => (
+                <Link
+                  key={v.id}
+                  href={`/visas/${v.id}`}
+                  className="relative rounded-2xl overflow-hidden shadow-sm aspect-[4/5] group"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={getDestinationImage({
+                      id: v.countries?.id ?? v.id,
+                      name: v.countries?.name,
+                    })}
+                    alt={v.countries?.name ?? v.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                    {v.countries?.flag_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={getDestinationImage({
-                          id: v.countries?.id ?? v.id,
-                          name: v.countries?.name,
-                        })}
-                        alt={v.countries?.name ?? v.name}
-                        className="absolute inset-0 w-full h-full object-cover"
+                        src={v.countries.flag_url}
+                        alt={v.countries.name}
+                        className="w-full h-full object-cover object-left"
                       />
-                      <span
-                        className={`absolute top-2 left-2 text-[9.5px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur flex items-center gap-1 ${style.text}`}
-                      >
-                        {v.countries?.flag_url && (
-                          <img
-                            src={v.countries.flag_url}
-                            alt={v.countries.name}
-                            className="w-3 h-3 rounded-full object-cover"
-                          />
-                        )}
-                        {v.countries?.name ?? TYPE_LABELS[v.type] ?? v.type}
-                      </span>
+                    ) : (
+                      <span className="text-base">🌍</span>
+                    )}
+                  </div>
+                  <div className="absolute top-2 right-2 text-[9px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur text-slate-700">
+                    {TYPE_LABELS[v.type] ?? v.type}
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <div className="text-[13px] font-bold text-white leading-tight line-clamp-1">
+                      {v.countries?.name ?? v.name}
                     </div>
-                    <div className="p-3 flex flex-col gap-1.5 flex-1">
-                      <div className="text-[12.5px] font-semibold text-slate-900 leading-tight line-clamp-2">
-                        {v.name}
-                      </div>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-500">
-                        <span className={`font-semibold px-1.5 py-0.5 rounded-full ${style.bg} ${style.text}`}>
-                          {TYPE_LABELS[v.type] ?? v.type}
-                        </span>
-                        {v.processing_days != null && (
-                          <span className="flex items-center gap-0.5">
-                            <Clock className="w-3 h-3" /> {v.processing_days}j
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-end justify-between mt-auto pt-1.5">
-                        {v.official_fee != null ? (
-                          <div>
-                            <div className="text-[12.5px] font-bold text-slate-900 leading-tight">
-                              {formatXAF(v.official_fee, v.currency)}
-                            </div>
-                          </div>
-                        ) : (
-                          <span />
-                        )}
-                        <ChevronRight className="w-4 h-4 text-slate-300" />
-                      </div>
+                    <div className="text-[10.5px] text-white/80 mt-0.5 line-clamp-1">
+                      {v.name}
                     </div>
-                  </Link>
-                );
-              })}
+                    {v.official_fee != null && (
+                      <div className="text-[12px] font-bold text-white mt-1">
+                        {formatXAF(v.official_fee, v.currency)}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              ))}
             </div>
           )}
         </div>
