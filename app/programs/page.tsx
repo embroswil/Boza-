@@ -3,7 +3,12 @@ import { ProgramsList } from "@/components/programs-list";
 
 export const revalidate = 300; // cache 5 min, contenu public peu changeant
 
-export default async function ProgramsPage() {
+export default async function ProgramsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ level?: string }>;
+}) {
+  const { level } = await searchParams;
   const supabase = createPublicClient();
 
   const { data: programs } = await supabase
@@ -13,5 +18,7 @@ export default async function ProgramsPage() {
     )
     .order("created_at", { ascending: true });
 
-  return <ProgramsList programs={(programs ?? []) as unknown as never} />;
+  return (
+    <ProgramsList programs={(programs ?? []) as unknown as never} initialLevel={level ?? null} />
+  );
 }

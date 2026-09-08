@@ -1,39 +1,28 @@
-import {
-  BookOpen,
-  Calendar,
-  FileCheck2,
-  Globe,
-} from "lucide-react";
+import { MapPin, Star, Globe2 } from "lucide-react";
+import { getUniversityImage } from "@/lib/university-images";
 
-export const heroSlides = [
-  {
-    key: "etudiant",
-    badge: "🎓 VISA ÉTUDIANT",
-    line1: "Étudiez à l'étranger,",
-    highlight: "construisez votre avenir",
-    desc: "Trouvez les meilleures universités et programmes avec rentrée d'hiver et réalisez votre projet d'études en toute simplicité.",
-    img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=500&auto=format&fit=crop",
+export type HeroUniversity = {
+  id: string;
+  name: string;
+  city: string | null;
+  ranking: number | null;
+  country: string | null;
+};
+
+export function getUniversitySlides(universities: HeroUniversity[]) {
+  return universities.map((u) => ({
+    key: u.id,
+    badge: "🎓 UNIVERSITÉ",
+    line1: u.name,
+    highlight: [u.city, u.country].filter(Boolean).join(", "),
+    desc: `Découvrez les programmes proposés par ${u.name} et lancez votre projet d'études dès aujourd'hui.`,
+    img: getUniversityImage({ id: u.id, country: u.country, city: u.city }),
     pills: [
-      { icon: BookOpen, label: "Universités partenaires" },
-      { icon: Calendar, label: "Rentrées d'hiver" },
-      { icon: FileCheck2, label: "Accompagnement complet" },
+      { icon: Star, label: u.ranking ? `Classement #${u.ranking}` : "Université partenaire" },
+      { icon: MapPin, label: u.city ?? "—" },
+      { icon: Globe2, label: u.country ?? "—" },
     ],
-    cta: "Explorer les programmes d'études",
-    href: "/programs",
-  },
-  {
-    key: "tourisme",
-    badge: "✈️ VISA TOURISTIQUE",
-    line1: "Voyagez librement,",
-    highlight: "explorez le monde",
-    desc: "Obtenez votre visa touristique rapidement et voyagez l'esprit tranquille, où que vous alliez.",
-    img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=500&auto=format&fit=crop",
-    pills: [
-      { icon: Globe, label: "100+ destinations" },
-      { icon: FileCheck2, label: "Dossier simplifié" },
-      { icon: Calendar, label: "Traitement rapide" },
-    ],
-    cta: "Explorer les visas touristiques",
-    href: "/visas?type=tourisme",
-  },
-];
+    cta: "Voir les programmes",
+    href: `/universities/${u.id}`,
+  }));
+}

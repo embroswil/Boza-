@@ -30,15 +30,23 @@ const LEVEL_LABELS: Record<string, string> = {
 
 const LEVEL_ORDER = ["licence", "master", "doctorat", "certificat", "autre"];
 
-export function ProgramsList({ programs }: { programs: Program[] }) {
+export function ProgramsList({
+  programs,
+  initialLevel,
+}: {
+  programs: Program[];
+  initialLevel?: string | null;
+}) {
   const router = useRouter();
   const [query, setQuery] = useState("");
+  const [levelFilter, setLevelFilter] = useState<string | null>(initialLevel ?? null);
 
   const filtered = programs.filter(
     (p) =>
-      p.name.toLowerCase().includes(query.toLowerCase()) ||
-      p.universities?.name.toLowerCase().includes(query.toLowerCase()) ||
-      p.universities?.countries?.name.toLowerCase().includes(query.toLowerCase())
+      (!levelFilter || p.level === levelFilter) &&
+      (p.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.universities?.name.toLowerCase().includes(query.toLowerCase()) ||
+        p.universities?.countries?.name.toLowerCase().includes(query.toLowerCase()))
   );
 
   // Regroupement : pays -> niveau -> programmes
@@ -95,8 +103,18 @@ export function ProgramsList({ programs }: { programs: Program[] }) {
             />
           </div>
         </div>
-        <div className="px-5 mb-4 text-[11px] text-slate-400">
-          {filtered.length} programme{filtered.length > 1 ? "s" : ""}
+        <div className="px-5 mb-4 flex items-center gap-2 text-[11px] text-slate-400">
+          <span>
+            {filtered.length} programme{filtered.length > 1 ? "s" : ""}
+          </span>
+          {levelFilter && (
+            <button
+              onClick={() => setLevelFilter(null)}
+              className="flex items-center gap-1 bg-blue-50 text-blue-600 font-semibold px-2 py-0.5 rounded-full"
+            >
+              {LEVEL_LABELS[levelFilter] ?? levelFilter} ✕
+            </button>
+          )}
         </div>
 
         {filtered.length === 0 ? (

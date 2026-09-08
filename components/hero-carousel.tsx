@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { heroSlides } from "@/lib/hero-slides";
+import { getUniversitySlides, type HeroUniversity } from "@/lib/hero-slides";
 
-export function HeroCarousel() {
+export function HeroCarousel({ universities }: { universities: HeroUniversity[] }) {
+  const heroSlides = useMemo(() => getUniversitySlides(universities), [universities]);
   const containerRef = useRef<HTMLDivElement>(null);
   const slideRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const directionRef = useRef<1 | -1>(1);
@@ -67,7 +68,7 @@ export function HeroCarousel() {
       });
     }, 5000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   // Suivi du swipe manuel : trouve la slide la plus proche de la position de scroll réelle
   const handleScroll = () => {
@@ -92,6 +93,8 @@ export function HeroCarousel() {
 
   return (
     <>
+      {heroSlides.length === 0 ? null : (
+        <>
       <div
         ref={containerRef}
         onScroll={handleScroll}
@@ -160,6 +163,8 @@ export function HeroCarousel() {
           />
         ))}
       </div>
+        </>
+      )}
     </>
   );
 }
