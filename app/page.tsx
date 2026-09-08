@@ -155,16 +155,34 @@ export default async function Home() {
         {/* Hero carrousel */}
         <HeroCarousel universities={featuredUniversities} />
 
-        {/* Aperçu de l'app, style capture produit */}
-        <div className="px-5 mb-6 pt-2">
-          <h2 className="text-[19px] font-extrabold text-slate-900 leading-tight mb-1.5">
-            Toutes vos démarches, au même endroit
+        {/* Aperçu produit, style bandeau teinté + capture qui déborde */}
+        <div className="w-full bg-blue-50 pt-8 pb-16 px-7 text-center mb-[-2.5rem]">
+          <span className="text-blue-600 text-[11px] font-bold uppercase tracking-wide">
+            Suivi en temps réel
+          </span>
+          <h2 className="text-[21px] font-extrabold text-slate-900 leading-tight mt-2 mb-3">
+            Vous savez où en est votre dossier.
+            <br />
+            Nous vous montrons chaque étape.
           </h2>
-          <p className="text-slate-500 text-[12.5px] mb-4 leading-relaxed">
-            Visa, admission, documents, paiement : suivez chaque étape depuis l&apos;app.
+          <p className="text-slate-500 text-[12.5px] mb-5 leading-relaxed">
+            Visa, admission, documents, paiement : suivez chaque étape de votre demande en temps
+            réel, sans avoir à demander.
           </p>
+          <Link
+            href="/demandes"
+            className="inline-block bg-blue-600 text-white text-[13px] font-semibold rounded-full px-6 py-3"
+          >
+            Découvrir le suivi de demandes
+          </Link>
+        </div>
+        <div className="px-5 mb-10">
           <BrowserFrame>
-            <div className="p-3.5 flex flex-col gap-2.5">
+            <div className="bg-blue-600 h-9 flex items-center justify-between px-3.5">
+              <span className="text-white text-[11px] font-bold">Mes demandes</span>
+              <span className="text-white/70 text-[9px]">Boza</span>
+            </div>
+            <div className="bg-white p-3 flex flex-col gap-2">
               {[
                 { name: "Master Gestion — Université de Poznań", status: "En cours", color: "bg-blue-100 text-blue-700" },
                 { name: "Visa touristique — Arabie Saoudite", status: "Approuvé", color: "bg-emerald-100 text-emerald-700" },
@@ -172,7 +190,7 @@ export default async function Home() {
               ].map((row) => (
                 <div
                   key={row.name}
-                  className="bg-white rounded-xl px-3 py-2.5 flex items-center justify-between shadow-sm"
+                  className="bg-slate-50 rounded-xl px-3 py-2.5 flex items-center justify-between"
                 >
                   <span className="text-[11.5px] font-medium text-slate-700 truncate pr-2">
                     {row.name}
