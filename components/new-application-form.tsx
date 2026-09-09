@@ -381,7 +381,7 @@ export function NewApplicationForm({
                     </div>
                     {v.official_fee != null && (
                       <div className="text-[13px] font-bold text-slate-900 whitespace-nowrap">
-                        {formatXAF(v.official_fee, v.currency)}
+                        {formatXAF((v.official_fee ?? 0) + (v.service_fee ?? 0), v.currency)}
                       </div>
                     )}
                     <ChevronRight className="w-4 h-4 text-slate-300" />

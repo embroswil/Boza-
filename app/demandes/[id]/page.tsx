@@ -25,7 +25,7 @@ export default async function DemandeDetailPage({
       `id, status, submitted_at, created_at, application_kind,
        passport_number, education_level, diploma_title, diploma_institution, diploma_year, applicant_notes,
        date_of_birth, gender, language_proficiency, motivation_letter, financial_support, intended_start_date, health_conditions,
-       visas ( name, type, official_fee, currency, processing_days, countries ( name, flag_url ) ),
+       visas ( name, type, official_fee, service_fee, currency, processing_days, countries ( name, flag_url ) ),
        programs ( name, universities ( name, countries ( name, flag_url ) ) ),
        application_documents ( id, document_type, status, uploaded_at ),
        payments ( id, amount, currency, status, paid_at ),

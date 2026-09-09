@@ -50,6 +50,7 @@ type Visa = {
   type: string;
   name: string;
   official_fee: number | null;
+  service_fee: number | null;
   currency: string | null;
   processing_days: number | null;
 };
@@ -212,7 +213,7 @@ export function CountryDetail({
                   </div>
                   {v.official_fee && (
                     <span className="text-[12px] font-bold text-slate-900 mt-2 pt-2 border-t border-slate-100">
-                      {formatXAF(v.official_fee, v.currency)}
+                      {formatXAF((v.official_fee ?? 0) + (v.service_fee ?? 0), v.currency)}
                     </span>
                   )}
                 </Link>

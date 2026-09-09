@@ -37,6 +37,7 @@ type Application = {
     name: string;
     type: string;
     official_fee: number | null;
+    service_fee: number | null;
     currency: string | null;
     processing_days: number | null;
     countries: { name: string; flag_url: string | null } | null;
@@ -265,10 +266,14 @@ export function ApplicationDetail({ application }: { application: Application })
             <h2 className="text-[13px] font-bold text-slate-900 mb-2">Informations visa</h2>
             <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
               <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                <span className="text-slate-400">Frais officiels</span>
+                <span className="text-slate-400">Total</span>
                 <span className="font-semibold text-slate-900">
                   {application.visas.official_fee != null
-                    ? formatXAF(application.visas.official_fee, application.visas.currency)
+                    ? formatXAF(
+                        (application.visas.official_fee ?? 0) +
+                          (application.visas.service_fee ?? 0),
+                        application.visas.currency
+                      )
                     : "—"}
                 </span>
               </div>

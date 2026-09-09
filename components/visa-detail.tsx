@@ -126,26 +126,14 @@ export function VisaDetail({
           <div className="px-5 mb-5">
             <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Frais</h2>
             <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-              {visa.official_fee != null && (
-                <div className="flex items-center justify-between px-4 py-3">
-                  <span className="text-[12.5px] text-slate-400 flex items-center gap-2">
-                    <Wallet className="w-3.5 h-3.5" /> Frais officiels
-                  </span>
-                  <span className="text-[13px] font-bold text-slate-900">
-                    {formatXAF(visa.official_fee, visa.currency)}
-                  </span>
-                </div>
-              )}
-              {visa.service_fee != null && (
-                <div className="flex items-center justify-between px-4 py-3">
-                  <span className="text-[12.5px] text-slate-400 flex items-center gap-2">
-                    <Wallet className="w-3.5 h-3.5" /> Frais de service
-                  </span>
-                  <span className="text-[13px] font-bold text-slate-900">
-                    {formatXAF(visa.service_fee, visa.currency)}
-                  </span>
-                </div>
-              )}
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="text-[12.5px] text-slate-400 flex items-center gap-2">
+                  <Wallet className="w-3.5 h-3.5" /> Total à payer
+                </span>
+                <span className="text-[13px] font-bold text-slate-900">
+                  {formatXAF((visa.official_fee ?? 0) + (visa.service_fee ?? 0), visa.currency)}
+                </span>
+              </div>
             </div>
           </div>
         )}

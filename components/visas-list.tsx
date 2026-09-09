@@ -12,6 +12,7 @@ type Visa = {
   name: string;
   type: string;
   official_fee: number | null;
+  service_fee: number | null;
   currency: string | null;
   processing_days: number | null;
   countries: { id?: string; name: string; flag_url: string | null } | null;
@@ -155,7 +156,7 @@ export function VisasList({
                     </div>
                     {v.official_fee != null && (
                       <div className="text-[12px] font-bold text-white mt-1">
-                        {formatXAF(v.official_fee, v.currency)}
+                        {formatXAF((v.official_fee ?? 0) + (v.service_fee ?? 0), v.currency)}
                       </div>
                     )}
                   </div>
