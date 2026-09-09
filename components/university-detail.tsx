@@ -127,20 +127,6 @@ export function UniversityDetail({
           )}
         </div>
 
-        {/* Site officiel */}
-        {university.website && (
-          <div className="px-5 mb-5">
-            <a
-              href={university.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-white border border-slate-200 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-700"
-            >
-              Site officiel <Globe2 className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        )}
-
         {/* Programmes proposés */}
         <div className="px-5 mb-5">
           <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">

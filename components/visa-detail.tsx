@@ -10,7 +10,6 @@ import {
   Wallet,
   Repeat,
   ShieldCheck,
-  ExternalLink,
   CheckCircle2,
   Circle,
 } from "lucide-react";
@@ -208,20 +207,6 @@ export function VisaDetail({
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Lien officiel */}
-        {visa.official_url && (
-          <div className="px-5 mb-6">
-            <a
-              href={visa.official_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-white border border-slate-200 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-700"
-            >
-              Site officiel <ExternalLink className="w-3.5 h-3.5" />
-            </a>
           </div>
         )}
 

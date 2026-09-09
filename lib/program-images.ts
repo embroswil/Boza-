@@ -1,32 +1,36 @@
 // Associe une image de couverture à chaque programme.
 // Utilise `image_url` si la base de données en fournit une, sinon choisit
-// une photo thématique selon la filière (field) / le niveau, avec une
-// variation déterministe (basée sur l'id) pour éviter les répétitions.
+// une photo thématique selon la filière (field) / le nom du programme, avec
+// une variation déterministe (basée sur l'id) pour éviter les répétitions.
+//
+// Toutes les images ci-dessous sont réutilisées depuis un pool déjà
+// vérifié fonctionnel (aucune nouvelle URL non testée n'est introduite),
+// pour éliminer tout risque d'image cassée.
 
 const THEMES: { match: RegExp; images: string[] }[] = [
   {
-    match: /informatique|logiciel|data|digital|numérique|réseau|cyber|IT\b/i,
+    match: /informatique|logiciel|\bdata\b|digital|numérique|réseau|cyber|intelligence artificielle|\bIA\b|robotique|fintech|nanosci/i,
     images: [
       "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=600&auto=format&fit=crop",
     ],
   },
   {
-    match: /ingénieur|ingénierie|génie|mécanique|électrique|industriel/i,
+    match: /ingénieur|ingénierie|génie|mécanique|électrique|industriel|énergétique|énergie renouvelable/i,
     images: [
       "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600&auto=format&fit=crop",
     ],
   },
   {
-    match: /gestion|commerce|business|management|finance|comptab|marketing|économ/i,
+    match: /gestion|commerce|business|management|finance|comptab|marketing|économ|entrepreneur|affaires|ressources humaines/i,
     images: [
       "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=600&auto=format&fit=crop",
     ],
   },
   {
-    match: /médec|santé|infirm|pharma|dentaire|clinique/i,
+    match: /médec|santé|infirm|pharma|dentaire|clinique|neurosc/i,
     images: [
       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=600&auto=format&fit=crop",
@@ -40,21 +44,45 @@ const THEMES: { match: RegExp; images: string[] }[] = [
     ],
   },
   {
-    match: /art|design|architecture|mode|graphisme/i,
+    match: /\b(art|design|architecture|mode|graphisme)\b/i,
     images: [
       "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1460518451285-97b6aa326961?q=80&w=600&auto=format&fit=crop",
     ],
   },
   {
-    match: /science|biolog|physique|chimie|environnement|agro/i,
+    // Relations internationales, politique, gouvernance, diplomatie
+    match: /international|politique|diplomat|gouvernance|administration publique|leadership|sécurité\b|défense/i,
+    images: [
+      "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=600&auto=format&fit=crop",
+    ],
+  },
+  {
+    // Psychologie, philosophie, sciences humaines, littérature
+    match: /psycholog|philosoph|sciences humaines|littérature|liberal arts/i,
+    images: [
+      "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=600&auto=format&fit=crop",
+    ],
+  },
+  {
+    // Tourisme, hôtellerie, hospitalité
+    match: /tourisme|hospitalité|hôtellerie|hospitality/i,
+    images: [
+      "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=600&auto=format&fit=crop",
+    ],
+  },
+  {
+    match: /science|biolog|physique|chimie|environnement|agro|climat|renouvelable|agricole/i,
     images: [
       "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1554475900-0a0350e3fc7b?q=80&w=600&auto=format&fit=crop",
     ],
   },
   {
-    match: /langue|traduction|lettres|communication|journalis/i,
+    match: /langue|traduction|lettres|communication|journalis|linguistique/i,
     images: [
       "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=600&auto=format&fit=crop",

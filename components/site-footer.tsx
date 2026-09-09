@@ -1,11 +1,19 @@
 import Link from "next/link";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 
-// Lucide n'a pas d'icône TikTok officielle — SVG inline (tracé vérifié).
+// Lucide n'a pas d'icône TikTok. Les tracés SVG "officiels" trouvés en
+// mémoire se sont révélés invisibles une fois rendus — on utilise donc une
+// forme géométrique simple (note de musique stylisée), garantie de
+// s'afficher correctement quel que soit le navigateur.
 function TikTokIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-      <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.69 5.7c3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.32 1.38V7.3s-1.88.09-3.25-1.48z" />
+    <svg viewBox="0 0 24 24" className={className}>
+      <circle cx="9" cy="17" r="3.2" fill="currentColor" />
+      <rect x="10.8" y="3" width="2.4" height="14" rx="1.2" fill="currentColor" />
+      <path
+        d="M13.2 3c0 3 2.3 5.3 5.3 5.5v2.4c-2-.1-3.8-.8-5.3-2v-1.2z"
+        fill="currentColor"
+      />
     </svg>
   );
 }
@@ -32,6 +40,14 @@ export function SiteFooter({
 }) {
   return (
     <div className="w-full bg-slate-900 px-6 pt-10 pb-14 mt-4">
+      <h3 className="text-white text-[22px] font-extrabold leading-tight mb-3">
+        Votre passeport pour le monde
+      </h3>
+      <p className="text-slate-400 text-[13px] leading-relaxed mb-8">
+        Visa, admission, documents, paiement : Boza vous accompagne du premier clic jusqu&apos;à
+        votre départ, sans jamais quitter la plateforme.
+      </p>
+
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div>
           <h4 className="text-white font-bold text-[14px] mb-4">Destinations populaires</h4>
@@ -60,6 +76,9 @@ export function SiteFooter({
       </div>
 
       <div className="border-t border-slate-700 pt-7 flex flex-col items-center gap-5">
+        <div className="text-slate-500 text-[11px] text-center">
+          © {new Date().getFullYear()} Boza. Tous droits réservés.
+        </div>
         <div className="flex items-center gap-3">
           {SOCIAL_LINKS.map((s) => (
             <Link
@@ -73,9 +92,6 @@ export function SiteFooter({
               <s.icon className="w-4.5 h-4.5" />
             </Link>
           ))}
-        </div>
-        <div className="text-slate-500 text-[11px] text-center">
-          © {new Date().getFullYear()} Boza. Tous droits réservés.
         </div>
       </div>
     </div>

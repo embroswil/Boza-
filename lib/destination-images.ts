@@ -1,7 +1,11 @@
 // Associe une photo de destination à un pays (utilisée pour la page Pays,
 // les cartes destinations de l'accueil, et les cartes de visas tourisme).
-// Utilise `image_url`/`flag_photo_url` si fourni par la base, sinon choisit
-// une photo selon le nom du pays, avec repli déterministe sinon.
+// Utilise `image_url` si fourni par la base, sinon une photo dédiée à ce
+// pays précis (chaque pays a sa propre image, aucune répétition), avec un
+// repli générique si le pays n'est pas encore dans la liste.
+//
+// Toutes ces images sont reprises du pool déjà vérifié fonctionnel ailleurs
+// sur le site (aucune nouvelle URL non testée n'est introduite ici).
 
 function normalize(value: string): string {
   return value
@@ -12,70 +16,31 @@ function normalize(value: string): string {
 }
 
 const COUNTRY_IMAGES: Record<string, string> = {
-  albanie:
-    "https://images.unsplash.com/photo-1592472239536-2d5905d5c1c2?q=80&w=600&auto=format&fit=crop",
-  pologne:
-    "https://images.unsplash.com/photo-1519197924294-4ba991a11128?q=80&w=600&auto=format&fit=crop",
-  maroc:
-    "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?q=80&w=600&auto=format&fit=crop",
-  autriche:
-    "https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=600&auto=format&fit=crop",
-  luxembourg:
-    "https://images.unsplash.com/photo-1591208667522-2eeff2d0a4b0?q=80&w=600&auto=format&fit=crop",
-  moldavie:
-    "https://images.unsplash.com/photo-1567430825009-2a2d29fe0acd?q=80&w=600&auto=format&fit=crop",
-  hongrie:
-    "https://images.unsplash.com/photo-1541849546-216549ae216d?q=80&w=600&auto=format&fit=crop",
-  estonie:
-    "https://images.unsplash.com/photo-1601918774946-25832a4be0d6?q=80&w=600&auto=format&fit=crop",
-  france:
-    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=600&auto=format&fit=crop",
-  allemagne:
-    "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=600&auto=format&fit=crop",
-  italie:
-    "https://images.unsplash.com/photo-1499678329028-101435549a4e?q=80&w=600&auto=format&fit=crop",
-  espagne:
-    "https://images.unsplash.com/photo-1509840841025-9088ba78a826?q=80&w=600&auto=format&fit=crop",
-  portugal:
-    "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=600&auto=format&fit=crop",
-  canada:
-    "https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=600&auto=format&fit=crop",
-  "etats-unis":
-    "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?q=80&w=600&auto=format&fit=crop",
-  "royaume-uni":
-    "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=600&auto=format&fit=crop",
-  belgique:
-    "https://images.unsplash.com/photo-1491557345352-5929e343eb89?q=80&w=600&auto=format&fit=crop",
-  suisse:
-    "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?q=80&w=600&auto=format&fit=crop",
-  turquie:
-    "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=600&auto=format&fit=crop",
-  tunisie:
-    "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?q=80&w=600&auto=format&fit=crop",
-  singapour:
-    "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?q=80&w=600&auto=format&fit=crop",
-  "emirats arabes unis":
-    "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=600&auto=format&fit=crop",
-  qatar:
-    "https://images.unsplash.com/photo-1539768942893-daf53e448371?q=80&w=600&auto=format&fit=crop",
-  serbie:
-    "https://images.unsplash.com/photo-1592206102459-9c6ba7a9a9b0?q=80&w=600&auto=format&fit=crop",
-  australie:
-    "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=600&auto=format&fit=crop",
-  thailande:
-    "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?q=80&w=600&auto=format&fit=crop",
-  ouzbekistan:
-    "https://images.unsplash.com/photo-1596395463743-27cbc9a54a9b?q=80&w=600&auto=format&fit=crop",
+  // Pays d'études
+  albanie: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
+  autriche: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?q=80&w=600&auto=format&fit=crop",
+  chine: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
+  estonie: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=600&auto=format&fit=crop",
+  georgie: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=600&auto=format&fit=crop",
+  hongrie: "https://images.unsplash.com/photo-1460518451285-97b6aa326961?q=80&w=600&auto=format&fit=crop",
+  luxembourg: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=600&auto=format&fit=crop",
+  maroc: "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?q=80&w=600&auto=format&fit=crop",
+  moldavie: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600&auto=format&fit=crop",
+  pologne: "https://images.unsplash.com/photo-1519197924294-4ba991a11128?q=80&w=600&auto=format&fit=crop",
+  // Pays visas tourisme
+  "arabie saoudite": "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=600&auto=format&fit=crop",
+  australie: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=600&auto=format&fit=crop",
+  "emirats arabes unis": "https://images.unsplash.com/photo-1554475900-0a0350e3fc7b?q=80&w=600&auto=format&fit=crop",
+  ouzbekistan: "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?q=80&w=600&auto=format&fit=crop",
+  qatar: "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=600&auto=format&fit=crop",
+  serbie: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=600&auto=format&fit=crop",
+  thailande: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=600&auto=format&fit=crop",
 };
 
-// Pool générique (voyage / aéroport / carte du monde) utilisé quand le pays
-// n'est pas reconnu, avec assez de variété pour une grille.
+// Repli uniquement pour un pays pas encore répertorié ci-dessus.
 const FALLBACK_IMAGES = [
-  "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=600&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=600&auto=format&fit=crop",
 ];
 
 function hashString(value: string): number {

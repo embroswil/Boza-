@@ -11,7 +11,6 @@ import {
   Languages,
   CalendarDays,
   FileText,
-  ExternalLink,
   MapPin,
 } from "lucide-react";
 import { getProgramImage } from "@/lib/program-images";
@@ -190,20 +189,6 @@ export function ProgramDetail({ program }: { program: Program }) {
               <FileText className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
               {program.required_documents}
             </div>
-          </div>
-        )}
-
-        {/* Lien officiel */}
-        {program.program_url && (
-          <div className="px-5 mb-6">
-            <a
-              href={program.program_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full bg-white border border-slate-200 rounded-2xl py-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-700"
-            >
-              Page du programme <ExternalLink className="w-3.5 h-3.5" />
-            </a>
           </div>
         )}
 
