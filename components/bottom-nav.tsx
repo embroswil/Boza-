@@ -6,8 +6,6 @@ import Link from "next/link";
 import {
   Home as HomeIcon,
   ClipboardList,
-  Plus,
-  FileText,
   User,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -37,18 +35,6 @@ export function BottomNav() {
       match: "/demandes",
     },
     {
-      icon: Plus,
-      label: "Démarrer",
-      isCenter: true,
-      href: isLoggedIn ? "/demandes/nouvelle" : "/auth/login",
-    },
-    {
-      icon: FileText,
-      label: "Documents",
-      href: isLoggedIn ? "/documents" : "/auth/login",
-      match: "/documents",
-    },
-    {
       icon: User,
       label: "Profil",
       href: isLoggedIn ? "/profile" : "/auth/login",
@@ -64,15 +50,6 @@ export function BottomNav() {
           ? pathname?.startsWith(item.match)
           : pathname === "/";
 
-        if (item.isCenter) {
-          return (
-            <Link href={item.href} key={item.label}>
-              <button className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center -mt-6 shadow-lg shadow-blue-600/30">
-                <Icon className="w-6 h-6 text-white" />
-              </button>
-            </Link>
-          );
-        }
         return (
           <Link
             href={item.href}

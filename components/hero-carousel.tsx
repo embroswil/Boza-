@@ -107,49 +107,53 @@ export function HeroCarousel({ universities }: { universities: HeroUniversity[] 
             ref={(el) => {
               slideRefs.current[i] = el;
             }}
-            className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5 min-w-[calc(100%-2.5rem)] h-[430px] flex flex-col snap-center"
+            className="relative rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-sm min-w-[calc(100%-2.5rem)] flex flex-col snap-center"
           >
-            <div>
-              <span className="relative inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+            {/* Image en en-tête, propre, sans superposition */}
+            <div className="relative w-full aspect-[16/10] shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={slide.img}
+                alt={slide.key}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-transparent" />
+              <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
                 {slide.badge}
               </span>
+            </div>
 
-              <h1 className="relative text-[26px] font-extrabold text-slate-900 leading-tight mt-3">
+            <div className="p-5 flex flex-col flex-1">
+              <h1 className="text-[22px] font-extrabold text-slate-900 leading-tight">
                 {slide.line1}
                 <br />
                 <span className="text-blue-600">{slide.highlight}</span>
               </h1>
-              <p className="relative text-slate-500 text-[13px] mt-3 max-w-[62%] leading-relaxed">
+              <p className="text-slate-500 text-[13px] mt-2 leading-relaxed">
                 {slide.desc}
               </p>
+
+              <div className="grid grid-cols-3 gap-2 mt-4">
+                {slide.pills.map((pill) => {
+                  const PillIcon = pill.icon;
+                  return (
+                    <div
+                      key={pill.label}
+                      className="bg-slate-50 rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5"
+                    >
+                      <PillIcon className="w-4 h-4 text-blue-600" />
+                      <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
+                        {pill.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <span className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
+                {slide.cta} <ChevronRight className="w-4 h-4" />
+              </span>
             </div>
-
-            <img
-              src={slide.img}
-              alt={slide.key}
-              className="absolute right-0 bottom-0 w-40 h-52 object-cover object-top rounded-tl-3xl"
-            />
-
-            <div className="relative grid grid-cols-3 gap-2 mt-auto">
-              {slide.pills.map((pill) => {
-                const PillIcon = pill.icon;
-                return (
-                  <div
-                    key={pill.label}
-                    className="bg-white rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5 shadow-sm"
-                  >
-                    <PillIcon className="w-4 h-4 text-blue-600" />
-                    <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
-                      {pill.label}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-
-            <span className="relative w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
-              {slide.cta} <ChevronRight className="w-4 h-4" />
-            </span>
           </Link>
         ))}
       </div>

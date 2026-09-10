@@ -9,8 +9,8 @@ export function PromoSection({
   ctaLabel,
   href,
 }: {
-  badgeIcon: React.ReactNode;
-  badgeText: string;
+  badgeIcon?: React.ReactNode;
+  badgeText?: string;
   title: string;
   image: string;
   imageAlt: string;
@@ -20,10 +20,12 @@ export function PromoSection({
   return (
     <div className="px-6 mb-10">
       <h2 className="text-[26px] font-extrabold text-slate-900 leading-tight mb-2">{title}</h2>
-      <div className="flex items-center gap-1.5 mb-5">
-        {badgeIcon}
-        <span className="text-slate-500 text-[13px]">{badgeText}</span>
-      </div>
+      {badgeText && (
+        <div className="flex items-center gap-1.5 mb-5">
+          {badgeIcon}
+          <span className="text-slate-500 text-[13px]">{badgeText}</span>
+        </div>
+      )}
 
       <div className="relative mb-6">
         <span className="absolute -left-3 top-8 w-11 h-11 rounded-full bg-slate-900 flex items-center justify-center shadow-md z-10">

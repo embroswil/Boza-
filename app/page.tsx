@@ -1,7 +1,6 @@
 import {
   Bell,
   User,
-  Globe2,
   Plane,
   GraduationCap,
   ShieldCheck,
@@ -136,8 +135,8 @@ export default async function Home() {
 
         {/* Destinations d'études */}
         <PromoSection
-          badgeIcon={<Globe2 className="w-4 h-4 text-emerald-600" />}
-          badgeText="16 pays partenaires"
+          badgeIcon={null}
+          badgeText=""
           title="Étudiez dans le pays de vos rêves"
           image={getDestinationImage({ id: "home-etudes", name: "Destinations études" })}
           imageAlt="Destinations d'études"
