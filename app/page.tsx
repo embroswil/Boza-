@@ -11,6 +11,7 @@ import { HeroCarousel } from "@/components/hero-carousel";
 import { SearchBar } from "@/components/search-bar";
 import { SiteFooter } from "@/components/site-footer";
 import { PromoSection } from "@/components/promo-section";
+import { UserDashboardCard } from "@/components/user-dashboard-card";
 import { getProgramImage } from "@/lib/program-images";
 import { getDestinationImage } from "@/lib/destination-images";
 
@@ -25,6 +26,12 @@ export default async function Home() {
   const isLoggedIn = !!user;
 
   let hasUnreadNotifications = false;
+  let userApplications: {
+    id: string;
+    status: string;
+    visas: { name: string; countries: { name: string } | null } | null;
+    programs: { name: string; universities: { name: string } | null } | null;
+  }[] = [];
   if (isLoggedIn) {
     const { count } = await supabase
       .from("notifications")
@@ -32,6 +39,19 @@ export default async function Home() {
       .eq("user_id", user.id)
       .eq("is_read", false);
     hasUnreadNotifications = (count ?? 0) > 0;
+
+    const { data: applications } = await supabase
+      .from("applications")
+      .select(
+        `id, status,
+         visas ( name, countries ( name ) ),
+         programs:study_program_id ( name, universities ( name ) )`
+      )
+      .eq("user_id", user.id)
+      .neq("status", "brouillon")
+      .order("created_at", { ascending: false })
+      .limit(5);
+    userApplications = (applications ?? []) as unknown as typeof userApplications;
   }
 
   const FEATURED_UNIVERSITY_IDS = [
@@ -129,6 +149,9 @@ export default async function Home() {
 
         {/* Search */}
         <SearchBar />
+
+        {/* Tableau de bord utilisateur — juste sous la recherche */}
+        {isLoggedIn && <UserDashboardCard applications={userApplications} />}
 
         {/* Hero carrousel */}
         <HeroCarousel universities={featuredUniversities} />

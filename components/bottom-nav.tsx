@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Home as HomeIcon,
   ClipboardList,
-  User,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -50,12 +49,6 @@ export function BottomNav() {
       label: "Mes demandes",
       href: isLoggedIn ? "/demandes" : "/auth/login",
       match: "/demandes",
-    },
-    {
-      icon: User,
-      label: "Profil",
-      href: isLoggedIn ? "/profile" : "/auth/login",
-      match: "/profile",
     },
   ];
 
