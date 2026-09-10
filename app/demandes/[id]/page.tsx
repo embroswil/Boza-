@@ -39,5 +39,16 @@ export default async function DemandeDetailPage({
     notFound();
   }
 
-  return <ApplicationDetail application={application as unknown as never} /* eslint-disable-line @typescript-eslint/no-explicit-any */ />;
+  const { data: verificationRequests } = await supabase
+    .from("verification_requests")
+    .select("id, portal_name, instructions, status")
+    .eq("application_id", id)
+    .order("requested_at", { ascending: false });
+
+  return (
+    <ApplicationDetail
+      application={application as unknown as never} /* eslint-disable-line @typescript-eslint/no-explicit-any */
+      verificationRequests={verificationRequests ?? []}
+    />
+  );
 }
