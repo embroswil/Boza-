@@ -53,7 +53,7 @@ export default async function AdminApplicationPage({
 
   const { data: verificationRequests } = await supabase
     .from("verification_requests")
-    .select("id, portal_name, instructions, status, code, requested_at, fulfilled_at")
+    .select("id, application_id, portal_name, instructions, status, code, requested_at, fulfilled_at")
     .eq("application_id", id)
     .order("requested_at", { ascending: false });
 

@@ -16,7 +16,24 @@ export function BottomNav() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setIsLoggedIn(!!data.user));
+
+    // getSession() lit la session en local (cookies/stockage), sans aller
+    // taper le serveur Supabase — plus rapide et surtout plus fiable que
+    // getUser() ici : avant, un simple echec reseau sur cet appel (sans
+    // .catch()) laissait isLoggedIn bloque a `false` pour toujours, donc
+    // la barre de navigation restait invisible meme en etant connecte.
+    supabase.auth
+      .getSession()
+      .then(({ data }) => setIsLoggedIn(!!data.session))
+      .catch(() => setIsLoggedIn(false));
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   // Pas de barre de navigation sur les écrans d'authentification.
