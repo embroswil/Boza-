@@ -1,8 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { KeyRound, Loader2, Copy, Check } from "lucide-react";
+import Link from "next/link";
+import { KeyRound, Loader2, Copy, Check, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+
+const STATUS_STYLES: Record<string, { label: string; className: string }> = {
+  brouillon: { label: "Brouillon", className: "bg-slate-100 text-slate-500" },
+  soumise: { label: "Soumise", className: "bg-blue-50 text-blue-600" },
+  en_cours: { label: "En cours", className: "bg-amber-50 text-amber-600" },
+  documents_manquants: {
+    label: "Documents manquants",
+    className: "bg-orange-50 text-orange-600",
+  },
+  approuvee: { label: "Approuvée", className: "bg-emerald-50 text-emerald-600" },
+  refusee: { label: "Refusée", className: "bg-red-50 text-red-600" },
+  annulee: { label: "Annulée", className: "bg-slate-100 text-slate-400" },
+};
+
+const FILTER_TABS: { key: string; label: string }[] = [
+  { key: "all", label: "Toutes" },
+  { key: "soumise", label: "Soumises" },
+  { key: "en_cours", label: "En cours" },
+  { key: "documents_manquants", label: "Docs manquants" },
+  { key: "approuvee", label: "Approuvées" },
+  { key: "refusee", label: "Refusées" },
+];
 
 type Application = {
   id: string;
@@ -14,7 +37,7 @@ type Application = {
   programs: { name: string; universities: { name: string } | null } | null;
 };
 
-type VerificationRequest = {
+export type VerificationRequest = {
   id: string;
   application_id: string;
   portal_name: string;
@@ -33,7 +56,7 @@ function applicantLabel(a: Application) {
   return a.profiles?.full_name || a.profiles?.email || "Utilisateur";
 }
 
-function RequestForm({ applicationId }: { applicationId: string }) {
+export function RequestForm({ applicationId }: { applicationId: string }) {
   const [open, setOpen] = useState(false);
   const [portalName, setPortalName] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -113,7 +136,7 @@ function RequestForm({ applicationId }: { applicationId: string }) {
   );
 }
 
-function CodeRow({ r }: { r: VerificationRequest }) {
+export function CodeRow({ r }: { r: VerificationRequest }) {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -149,11 +172,15 @@ export function AdminDashboard({
 }) {
   const pending = verificationRequests.filter((r) => r.status === "pending");
   const fulfilled = verificationRequests.filter((r) => r.status === "fulfilled");
+  const [filter, setFilter] = useState("all");
+
+  const filteredApplications =
+    filter === "all" ? applications : applications.filter((a) => a.status === filter);
 
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
       <div className="w-full max-w-sm bg-slate-50 pb-24 px-5">
-        <h1 className="text-lg font-bold text-slate-900 mb-1">Admin — Codes de vérification</h1>
+        <h1 className="text-lg font-bold text-slate-900 mb-1">Admin — Demandes</h1>
         <p className="text-[11.5px] text-slate-400 mb-5">Réservé à Boza.</p>
 
         {pending.length > 0 && (
@@ -183,24 +210,58 @@ export function AdminDashboard({
         )}
 
         <h2 className="text-[13px] font-bold text-slate-900 mb-2">
-          Demandes récentes ({applications.length})
+          Demandes ({filteredApplications.length})
         </h2>
+
+        <div className="flex gap-1.5 overflow-x-auto pb-3 -mx-5 px-5 scrollbar-hide">
+          {FILTER_TABS.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setFilter(tab.key)}
+              className={`shrink-0 text-[11.5px] font-semibold px-3 py-1.5 rounded-full ${
+                filter === tab.key
+                  ? "bg-slate-900 text-white"
+                  : "bg-white text-slate-500 border border-slate-200"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
         <div className="flex flex-col gap-2">
-          {applications.map((a) => (
-            <div key={a.id} className="bg-white rounded-2xl shadow-sm p-3.5">
-              <div className="flex items-center justify-between">
-                <div className="min-w-0">
-                  <div className="text-[12.5px] font-semibold text-slate-900 truncate">
-                    {applicationLabel(a)}
+          {filteredApplications.length === 0 && (
+            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+              Aucune demande dans cette catégorie.
+            </div>
+          )}
+          {filteredApplications.map((a) => {
+            const statusInfo = STATUS_STYLES[a.status] ?? STATUS_STYLES.brouillon;
+            return (
+              <Link
+                key={a.id}
+                href={`/admin/applications/${a.id}`}
+                className="bg-white rounded-2xl shadow-sm p-3.5 flex items-center gap-2"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <div className="text-[12.5px] font-semibold text-slate-900 truncate">
+                      {applicationLabel(a)}
+                    </div>
+                    <span
+                      className={`shrink-0 text-[9.5px] font-bold px-1.5 py-0.5 rounded-full ${statusInfo.className}`}
+                    >
+                      {statusInfo.label}
+                    </span>
                   </div>
-                  <div className="text-[10.5px] text-slate-400 truncate">
-                    {applicantLabel(a)} · {a.status}
+                  <div className="text-[10.5px] text-slate-400 truncate mt-0.5">
+                    {applicantLabel(a)}
                   </div>
                 </div>
-              </div>
-              <RequestForm applicationId={a.id} />
-            </div>
-          ))}
+                <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+              </Link>
+            );
+          })}
         </div>
       </div>
     </div>
