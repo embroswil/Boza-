@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { formatXAF } from "@/lib/currency";
-import { VerificationCodeRequest } from "@/components/verification-code-request";
 
 type Application = {
   id: string;
@@ -98,18 +97,7 @@ function formatDate(value: string) {
   });
 }
 
-export function ApplicationDetail({
-  application,
-  verificationRequests = [],
-}: {
-  application: Application;
-  verificationRequests?: {
-    id: string;
-    portal_name: string;
-    instructions: string | null;
-    status: "pending" | "fulfilled" | "expired";
-  }[];
-}) {
+export function ApplicationDetail({ application }: { application: Application }) {
   const router = useRouter();
   const supabase = createClient();
   const [status, setStatus] = useState(application.status);
@@ -137,6 +125,14 @@ export function ApplicationDetail({
     } else {
       setStatus("soumise");
       router.refresh();
+      // Alerte l'équipe pour qu'elle traite la demande sans délai
+      // (échoue silencieusement si l'email n'est pas configurable, sans
+      // bloquer l'utilisateur).
+      fetch("/api/notify-team", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applicationId: application.id }),
+      }).catch(() => {});
     }
     setSubmitting(false);
   };
@@ -151,15 +147,6 @@ export function ApplicationDetail({
           </button>
           <h1 className="text-lg font-bold text-slate-900">Détail de la demande</h1>
         </div>
-
-        {/* Code de vérification requis */}
-        {verificationRequests
-          .filter((r) => r.status !== "expired")
-          .map((r) => (
-            <div key={r.id} className="px-5">
-              <VerificationCodeRequest request={r} />
-            </div>
-          ))}
 
         {/* Summary card */}
         <div className="px-5 mb-5">

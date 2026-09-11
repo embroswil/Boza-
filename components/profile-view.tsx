@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ArrowLeft,
   User,
@@ -13,6 +14,7 @@ import {
   Pencil,
   Camera,
   Check,
+  ShieldCheck,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cfaCountries } from "@/lib/cfa-countries";
@@ -24,6 +26,7 @@ export function ProfileView({
   phone,
   nationality,
   avatarUrl,
+  isAdmin = false,
 }: {
   userId: string;
   fullName: string;
@@ -31,6 +34,7 @@ export function ProfileView({
   phone: string;
   nationality: string;
   avatarUrl: string;
+  isAdmin?: boolean;
 }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -294,6 +298,19 @@ export function ProfileView({
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Admin */}
+        {!editing && isAdmin && (
+          <div className="px-5 mt-6">
+            <Link
+              href="/admin"
+              className="w-full bg-slate-900 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Tableau de bord admin
+            </Link>
           </div>
         )}
 
