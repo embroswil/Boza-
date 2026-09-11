@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -11,6 +11,11 @@ import {
   CalendarClock,
   Loader2,
   Send,
+  Mail,
+  Plus,
+  UploadCloud,
+  CheckCircle2,
+  Clock,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { formatXAF } from "@/lib/currency";
@@ -84,11 +89,17 @@ const STATUS_STYLES: Record<string, { label: string; className: string }> = {
   annulee: { label: "Annulée", className: "bg-slate-100 text-slate-400" },
 };
 
-const DOC_STATUS_LABELS: Record<string, string> = {
-  en_attente: "En attente",
-  valide: "Validé",
-  rejete: "Rejeté",
+const DOC_STATUS_STYLES: Record<string, { label: string; className: string }> = {
+  en_attente: { label: "En attente", className: "text-amber-600" },
+  valide: { label: "Validé", className: "text-emerald-600" },
+  rejete: { label: "Rejeté", className: "text-red-600" },
 };
+
+const STEPS = [
+  { key: "soumise", label: "Soumise" },
+  { key: "en_cours", label: "En cours" },
+  { key: "approuvee", label: "Approuvée" },
+];
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("fr-FR", {
@@ -101,6 +112,7 @@ function formatDate(value: string) {
 export function ApplicationDetail({
   application,
   verificationRequests = [],
+  userId,
 }: {
   application: Application;
   verificationRequests?: {
@@ -109,20 +121,26 @@ export function ApplicationDetail({
     instructions: string | null;
     status: "pending" | "fulfilled" | "expired";
   }[];
+  userId: string;
 }) {
   const router = useRouter();
   const supabase = createClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState(application.status);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [uploading, setUploading] = useState(false);
+  const [docLabel, setDocLabel] = useState("");
+  const [showUploadForm, setShowUploadForm] = useState(false);
+
   const country =
     application.visas?.countries ?? application.programs?.universities?.countries ?? null;
   const title = application.visas?.name ?? application.programs?.name ?? "Demande";
-  const subtitle =
-    application.programs?.universities?.name ?? country?.name ?? "";
+  const subtitle = application.programs?.universities?.name ?? country?.name ?? "";
   const statusInfo = STATUS_STYLES[status] ?? STATUS_STYLES.brouillon;
   const pendingPayment = application.payments.find((p) => p.status === "en_attente");
+  const currentStepIndex = STEPS.findIndex((s) => s.key === status);
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -141,6 +159,36 @@ export function ApplicationDetail({
     setSubmitting(false);
   };
 
+  const handleUpload = async (file: File) => {
+    if (!docLabel.trim()) {
+      setError("Précise le type de document avant d'envoyer.");
+      return;
+    }
+    setUploading(true);
+    setError(null);
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `${userId}/applications/${application.id}/${Date.now()}_${safeName}`;
+    const { error: uploadError } = await supabase.storage.from("documents").upload(path, file);
+
+    if (uploadError) {
+      setError("L'envoi du document a échoué. Réessaie.");
+      setUploading(false);
+      return;
+    }
+
+    await supabase.from("application_documents").insert({
+      application_id: application.id,
+      document_type: docLabel.trim(),
+      file_url: path,
+      status: "en_attente",
+    });
+
+    setUploading(false);
+    setDocLabel("");
+    setShowUploadForm(false);
+    router.refresh();
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
       <div className="w-full max-w-sm bg-slate-50 pb-24">
@@ -152,7 +200,7 @@ export function ApplicationDetail({
           <h1 className="text-lg font-bold text-slate-900">Détail de la demande</h1>
         </div>
 
-        {/* Code de vérification requis */}
+        {/* Code de vérification requis (actif) */}
         {verificationRequests
           .filter((r) => r.status !== "expired")
           .map((r) => (
@@ -161,30 +209,83 @@ export function ApplicationDetail({
             </div>
           ))}
 
-        {/* Summary card */}
+        {/* Hero / résumé */}
+        <div className="px-5 mb-4">
+          <div className="bg-white rounded-3xl shadow-sm p-5">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+                {country?.flag_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={country.flag_url}
+                    alt={country.name}
+                    className="w-full h-full object-cover object-left"
+                  />
+                ) : (
+                  <Globe2 className="w-7 h-7 text-blue-600" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[15px] font-bold text-slate-900 truncate">{title}</div>
+                <div className="text-[11.5px] text-slate-400 truncate">{subtitle}</div>
+                <span
+                  className={`inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusInfo.className}`}
+                >
+                  {statusInfo.label}
+                </span>
+              </div>
+            </div>
+
+            {/* Progression */}
+            {currentStepIndex >= 0 && status !== "refusee" && status !== "annulee" && (
+              <div className="flex items-center pt-1">
+                {STEPS.map((s, i) => (
+                  <div key={s.key} className="flex items-center flex-1 last:flex-none">
+                    <div className="flex flex-col items-center gap-1">
+                      <div
+                        className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                          i <= currentStepIndex
+                            ? "bg-blue-600 text-white"
+                            : "bg-slate-100 text-slate-300"
+                        }`}
+                      >
+                        {i < currentStepIndex ? (
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                        ) : (
+                          <span className="text-[10px] font-bold">{i + 1}</span>
+                        )}
+                      </div>
+                      <span
+                        className={`text-[9px] font-medium whitespace-nowrap ${
+                          i <= currentStepIndex ? "text-slate-700" : "text-slate-300"
+                        }`}
+                      >
+                        {s.label}
+                      </span>
+                    </div>
+                    {i < STEPS.length - 1 && (
+                      <div
+                        className={`flex-1 h-0.5 mx-1 mb-4 ${
+                          i < currentStepIndex ? "bg-blue-600" : "bg-slate-100"
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Info permanente : à quoi s'attendre */}
         <div className="px-5 mb-5">
-          <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
-              {country?.flag_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={country.flag_url}
-                  alt={country.name}
-                  className="w-full h-full object-cover object-left"
-                />
-              ) : (
-                <Globe2 className="w-6 h-6 text-blue-600" />
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-[14px] font-bold text-slate-900 truncate">{title}</div>
-              <div className="text-[11px] text-slate-400 truncate">{subtitle}</div>
-              <span
-                className={`inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusInfo.className}`}
-              >
-                {statusInfo.label}
-              </span>
-            </div>
+          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex gap-3">
+            <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+            <p className="text-[12px] text-blue-700 leading-relaxed">
+              À une étape de ta démarche, tu pourrais recevoir un{" "}
+              <b>code de confirmation par email</b>. Reviens sur cette page et colle-le dès que tu
+              le reçois — c&apos;est normal et ça fait avancer ton dossier.
+            </p>
           </div>
         </div>
 
@@ -312,24 +413,77 @@ export function ApplicationDetail({
 
         {/* Documents */}
         <div className="px-5 mb-5">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">Documents</h2>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-[13px] font-bold text-slate-900">Documents</h2>
+            <button
+              onClick={() => setShowUploadForm((v) => !v)}
+              className="text-[11px] font-semibold text-blue-600 flex items-center gap-1"
+            >
+              <Plus className="w-3.5 h-3.5" /> Ajouter
+            </button>
+          </div>
+
+          {showUploadForm && (
+            <div className="bg-white rounded-2xl shadow-sm p-3.5 mb-2 flex flex-col gap-2">
+              <input
+                value={docLabel}
+                onChange={(e) => setDocLabel(e.target.value)}
+                placeholder="Type de document (ex : Passeport, Relevé de notes...)"
+                className="border border-slate-200 rounded-xl px-3 py-2 text-[12.5px]"
+              />
+              <input
+                ref={fileInputRef}
+                type="file"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleUpload(file);
+                  e.target.value = "";
+                }}
+              />
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading || !docLabel.trim()}
+                className="w-full border border-dashed border-blue-300 text-blue-600 text-[12.5px] font-semibold rounded-xl py-2.5 flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {uploading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <UploadCloud className="w-4 h-4" />
+                )}
+                Choisir un fichier
+              </button>
+            </div>
+          )}
+
           {application.application_documents.length === 0 ? (
             <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
               Aucun document lié pour l&apos;instant.
             </div>
           ) : (
             <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
-              {application.application_documents.map((d) => (
-                <div key={d.id} className="flex items-center gap-3 px-4 py-3">
-                  <FileText className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span className="flex-1 text-[13px] text-slate-900 truncate">
-                    {d.document_type}
-                  </span>
-                  <span className="text-[11px] text-slate-400">
-                    {DOC_STATUS_LABELS[d.status] ?? d.status}
-                  </span>
-                </div>
-              ))}
+              {application.application_documents.map((d) => {
+                const docStatus = DOC_STATUS_STYLES[d.status] ?? {
+                  label: d.status,
+                  className: "text-slate-400",
+                };
+                return (
+                  <div key={d.id} className="flex items-center gap-3 px-4 py-3">
+                    <FileText className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="flex-1 text-[13px] text-slate-900 truncate">
+                      {d.document_type}
+                    </span>
+                    <span className={`text-[11px] font-medium flex items-center gap-1 ${docStatus.className}`}>
+                      {d.status === "valide" ? (
+                        <CheckCircle2 className="w-3 h-3" />
+                      ) : (
+                        <Clock className="w-3 h-3" />
+                      )}
+                      {docStatus.label}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
