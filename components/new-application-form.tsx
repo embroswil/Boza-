@@ -90,6 +90,7 @@ export function NewApplicationForm({
 
   // Étape 3 — informations du dossier
   const [passportNumber, setPassportNumber] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
   const [diplomaTitle, setDiplomaTitle] = useState("");
   const [diplomaInstitution, setDiplomaInstitution] = useState("");
@@ -172,8 +173,8 @@ export function NewApplicationForm({
   );
 
   const handleSubmitAndPay = async () => {
-    if (!passportNumber.trim() || !educationLevel) {
-      setError("Merci de renseigner au moins le passeport et le niveau d'études.");
+    if (!contactEmail.trim() || !passportNumber.trim() || !educationLevel) {
+      setError("Merci de renseigner au moins l'email, le passeport et le niveau d'études.");
       return;
     }
     if (missingRequiredDocs.length > 0) {
@@ -198,6 +199,7 @@ export function NewApplicationForm({
         visa_id: selectedVisa?.id ?? null,
         study_program_id: initialProgram?.id ?? null,
         status: "brouillon",
+        contact_email: contactEmail.trim(),
         passport_number: passportNumber.trim(),
         education_level: educationLevel,
         diploma_title: diplomaTitle.trim() || null,
@@ -213,6 +215,15 @@ export function NewApplicationForm({
       setSubmitting(false);
       return;
     }
+
+    // Alerte l'équipe À L'INSTANT où la demande est créée — pas besoin
+    // d'attendre le paiement, chaque minute compte pour créer le compte
+    // côté ambassade/université avant que le code n'expire.
+    fetch("/api/notify-team", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ applicationId: application.id }),
+    }).catch(() => {});
 
     // Téléverse chaque document dans le bucket "documents" et enregistre
     // une ligne application_documents par fichier.
@@ -399,6 +410,21 @@ export function NewApplicationForm({
               <h2 className="text-[13px] font-bold text-slate-900">
                 Informations du dossier
               </h2>
+              <div>
+                <label className={labelClass}>Email pour cette demande *</label>
+                <input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="ton.email@exemple.com"
+                  className={inputClass}
+                />
+                <p className="text-[10.5px] text-slate-400 mt-1">
+                  On l&apos;utilise pour créer ton dossier auprès de l&apos;ambassade/université —
+                  tu recevras un code de confirmation dessus.
+                </p>
+              </div>
+
               <div>
                 <label className={labelClass}>Numéro de passeport *</label>
                 <input

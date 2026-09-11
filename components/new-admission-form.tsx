@@ -57,6 +57,7 @@ export function NewAdmissionForm({
   const supabase = createClient();
 
   const [dateOfBirth, setDateOfBirth] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
   const [gender, setGender] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
   const [diplomaTitle, setDiplomaTitle] = useState("");
@@ -83,9 +84,9 @@ export function NewAdmissionForm({
   const currency = "XAF";
 
   const handleSubmit = async () => {
-    if (!dateOfBirth || !gender || !educationLevel || !motivationLetter.trim()) {
+    if (!contactEmail.trim() || !dateOfBirth || !gender || !educationLevel || !motivationLetter.trim()) {
       setError(
-        "Merci de remplir au moins la date de naissance, le genre, le niveau d'études et la lettre de motivation."
+        "Merci de remplir au moins l'email, la date de naissance, le genre, le niveau d'études et la lettre de motivation."
       );
       return;
     }
@@ -110,6 +111,7 @@ export function NewAdmissionForm({
         study_program_id: program.id,
         application_kind: "admission",
         status: "brouillon",
+        contact_email: contactEmail.trim(),
         date_of_birth: dateOfBirth,
         gender,
         education_level: educationLevel,
@@ -130,6 +132,13 @@ export function NewAdmissionForm({
       setSubmitting(false);
       return;
     }
+
+    // Alerte l'équipe À L'INSTANT où la demande est créée.
+    fetch("/api/notify-team", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ applicationId: data.id }),
+    }).catch(() => {});
 
     // Téléverse les documents dans le bucket "documents"
     const filesToUpload: { file: File; docType: string }[] = [
@@ -210,6 +219,20 @@ export function NewAdmissionForm({
           {/* Informations du dossier */}
           <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4">
             <h2 className="text-[13px] font-bold text-slate-900">Informations du dossier</h2>
+            <div>
+              <label className={labelClass}>Email pour cette demande *</label>
+              <input
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="ton.email@exemple.com"
+                className={inputClass}
+              />
+              <p className="text-[10.5px] text-slate-400 mt-1">
+                On l&apos;utilise pour créer ton dossier auprès de l&apos;université — tu
+                recevras un code de confirmation dessus.
+              </p>
+            </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className={labelClass}>Date de naissance *</label>

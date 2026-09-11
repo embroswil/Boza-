@@ -137,14 +137,6 @@ export function ApplicationDetail({
     } else {
       setStatus("soumise");
       router.refresh();
-      // Alerte l'équipe pour qu'elle traite la demande sans délai
-      // (échoue silencieusement si l'email n'est pas configurable, sans
-      // bloquer l'utilisateur).
-      fetch("/api/notify-team", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ applicationId: application.id }),
-      }).catch(() => {});
     }
     setSubmitting(false);
   };

@@ -32,7 +32,7 @@ export default async function AdminApplicationPage({
   const { data: application } = await supabase
     .from("applications")
     .select(
-      `id, status, submitted_at, created_at, application_kind,
+      `id, status, submitted_at, created_at, application_kind, contact_email,
        passport_number, education_level, diploma_title, diploma_institution,
        diploma_year, applicant_notes, date_of_birth, gender,
        language_proficiency, motivation_letter, financial_support,

@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const { data: application } = await supabase
       .from("applications")
       .select(
-        `id, application_kind, created_at,
+        `id, application_kind, contact_email, created_at,
          profiles ( full_name, email, phone ),
          visas ( name, countries ( name ) ),
          programs:study_program_id ( name, universities ( name, countries ( name ) ) )`
@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
 
     const a = application as unknown as {
       id: string;
+      contact_email: string | null;
       profiles: { full_name: string | null; email: string | null; phone: string | null } | null;
       visas: { name: string; countries: { name: string } | null } | null;
       programs: {
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest) {
     const destination =
       a.visas?.countries?.name ?? a.programs?.universities?.countries?.name ?? "";
     const applicantName = a.profiles?.full_name || "Utilisateur";
-    const applicantEmail = a.profiles?.email || "—";
+    const contactEmail = a.contact_email || a.profiles?.email || "—";
     const applicantPhone = a.profiles?.phone || "—";
 
     const apiKey = process.env.RESEND_API_KEY;
@@ -58,16 +59,19 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         from: "Boza <onboarding@resend.dev>",
         to: [TEAM_EMAIL],
-        subject: `Nouvelle demande à traiter — ${label}`,
+        subject: `⚡ Nouvelle demande — à créer maintenant — ${label}`,
         html: `
           <div style="font-family: Arial, sans-serif; font-size: 14px; color: #0f172a;">
             <h2 style="margin-bottom: 4px;">Nouvelle demande reçue</h2>
-            <p style="color: #64748b; margin-top: 0;">À traiter dès que possible sur le portail externe.</p>
+            <p style="color: #64748b; margin-top: 0;">
+              À traiter immédiatement : crée le compte sur le portail externe avec l'email
+              ci-dessous, le code de confirmation ne restera pas valable longtemps.
+            </p>
             <table style="border-collapse: collapse; margin-top: 12px;">
               <tr><td style="padding: 4px 12px 4px 0; color:#64748b;">Type</td><td><b>${label}</b></td></tr>
               <tr><td style="padding: 4px 12px 4px 0; color:#64748b;">Destination</td><td>${destination}</td></tr>
               <tr><td style="padding: 4px 12px 4px 0; color:#64748b;">Demandeur</td><td>${applicantName}</td></tr>
-              <tr><td style="padding: 4px 12px 4px 0; color:#64748b;">Email</td><td>${applicantEmail}</td></tr>
+              <tr><td style="padding: 4px 12px 4px 0; color:#64748b;">Email à utiliser</td><td><b>${contactEmail}</b></td></tr>
               <tr><td style="padding: 4px 12px 4px 0; color:#64748b;">Téléphone</td><td>${applicantPhone}</td></tr>
             </table>
             <p style="margin-top: 20px;">

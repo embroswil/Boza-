@@ -21,6 +21,7 @@ type Application = {
   submitted_at: string | null;
   created_at: string;
   application_kind: string | null;
+  contact_email: string | null;
   passport_number: string | null;
   education_level: string | null;
   diploma_title: string | null;
@@ -280,7 +281,11 @@ export function AdminApplicationDetail({
           <h2 className="text-[13px] font-bold text-slate-900 mb-2">Candidat</h2>
           <div className="bg-white rounded-2xl shadow-sm">
             <Field label="Nom" value={application.profiles?.full_name} />
-            <Field label="Email" value={application.profiles?.email} />
+            <Field
+              label="Email à utiliser (portail externe)"
+              value={application.contact_email}
+            />
+            <Field label="Email du compte Boza" value={application.profiles?.email} />
             <Field label="Téléphone" value={application.profiles?.phone} />
             <Field label="Nationalité" value={application.profiles?.nationality} />
             <Field label="Date de naissance" value={application.date_of_birth} />

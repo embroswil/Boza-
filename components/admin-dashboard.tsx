@@ -32,6 +32,7 @@ type Application = {
   status: string;
   submitted_at: string | null;
   application_kind: string | null;
+  contact_email: string | null;
   profiles: { full_name: string | null; email: string | null } | null;
   visas: { name: string; countries: { name: string } | null } | null;
   programs: { name: string; universities: { name: string } | null } | null;
@@ -257,6 +258,11 @@ export function AdminDashboard({
                   <div className="text-[10.5px] text-slate-400 truncate mt-0.5">
                     {applicantLabel(a)}
                   </div>
+                  {a.contact_email && (
+                    <div className="text-[11px] font-semibold text-blue-700 truncate mt-0.5">
+                      {a.contact_email}
+                    </div>
+                  )}
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
               </Link>
