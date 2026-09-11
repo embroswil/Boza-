@@ -3,7 +3,6 @@ import {
   User,
   Plane,
   GraduationCap,
-  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -188,18 +187,6 @@ export default async function Home() {
           ctaLabel="Voir tous les programmes"
           href="/programs"
         />
-
-        {/* Suivi des demandes */}
-        <PromoSection
-          badgeIcon={<ShieldCheck className="w-4 h-4 text-emerald-600" />}
-          badgeText="Suivi en temps réel"
-          title="Vous savez où en est votre dossier"
-          image={getProgramImage({ id: "home-suivi", name: "Suivi demandes" })}
-          imageAlt="Suivi des demandes"
-          ctaLabel="Découvrir le suivi de demandes"
-          href="/demandes"
-        />
-
 
         <SiteFooter destinations={destinations} />
       </div>

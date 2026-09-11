@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Home as HomeIcon,
-  ClipboardList,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -42,23 +41,13 @@ export function BottomNav() {
   // renvoie de toute façon vers la connexion.
   if (!isLoggedIn) return null;
 
-  const navItems = [
-    { icon: HomeIcon, label: "Accueil", href: "/" },
-    {
-      icon: ClipboardList,
-      label: "Mes demandes",
-      href: isLoggedIn ? "/demandes" : "/auth/login",
-      match: "/demandes",
-    },
-  ];
+  const navItems = [{ icon: HomeIcon, label: "Accueil", href: "/" }];
 
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-slate-100 px-4 py-3 flex items-center justify-between z-50">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-slate-100 px-4 py-3 flex items-center justify-center z-50">
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isActive = item.match
-          ? pathname?.startsWith(item.match)
-          : pathname === "/";
+        const isActive = pathname === "/";
 
         return (
           <Link
