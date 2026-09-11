@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { formatXAF } from "@/lib/currency";
+import { VerificationCodeRequest } from "@/components/verification-code-request";
 
 type Application = {
   id: string;
@@ -97,7 +98,18 @@ function formatDate(value: string) {
   });
 }
 
-export function ApplicationDetail({ application }: { application: Application }) {
+export function ApplicationDetail({
+  application,
+  verificationRequests = [],
+}: {
+  application: Application;
+  verificationRequests?: {
+    id: string;
+    portal_name: string;
+    instructions: string | null;
+    status: "pending" | "fulfilled" | "expired";
+  }[];
+}) {
   const router = useRouter();
   const supabase = createClient();
   const [status, setStatus] = useState(application.status);
@@ -147,6 +159,15 @@ export function ApplicationDetail({ application }: { application: Application })
           </button>
           <h1 className="text-lg font-bold text-slate-900">Détail de la demande</h1>
         </div>
+
+        {/* Code de vérification requis */}
+        {verificationRequests
+          .filter((r) => r.status !== "expired")
+          .map((r) => (
+            <div key={r.id} className="px-5">
+              <VerificationCodeRequest request={r} />
+            </div>
+          ))}
 
         {/* Summary card */}
         <div className="px-5 mb-5">
