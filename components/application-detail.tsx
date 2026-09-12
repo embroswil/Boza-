@@ -52,6 +52,7 @@ type Application = {
     name: string;
     universities: {
       name: string;
+      application_fee: number | null;
       countries: { name: string; flag_url: string | null } | null;
     } | null;
   } | null;
@@ -157,6 +158,31 @@ export function ApplicationDetail({
       router.refresh();
     }
     setSubmitting(false);
+  };
+
+  const handleContinue = async () => {
+    setSubmitting(true);
+    setError(null);
+
+    const amount =
+      application.visas != null
+        ? (application.visas.official_fee ?? 0) + (application.visas.service_fee ?? 0)
+        : application.programs?.universities?.application_fee ?? 0;
+    const currency = application.visas?.currency ?? "XAF";
+
+    const { error: payError } = await supabase.from("payments").insert({
+      application_id: application.id,
+      amount,
+      currency,
+      status: "en_attente",
+    });
+
+    setSubmitting(false);
+    if (payError) {
+      setError("Impossible de continuer la demande. Réessaie.");
+      return;
+    }
+    router.push(`/demandes/${application.id}/payer`);
   };
 
   const handleUpload = async (file: File) => {
@@ -463,7 +489,7 @@ export function ApplicationDetail({
                 value={docLabel}
                 onChange={(e) => setDocLabel(e.target.value)}
                 placeholder="Type de document (ex : Passeport, Relevé de notes...)"
-                className="border border-slate-200 rounded-xl px-3 py-2 text-[12.5px]"
+                className="border border-slate-200 rounded-xl px-3 py-2 text-[12.5px] bg-white text-slate-900 placeholder:text-slate-400"
               />
               <input
                 ref={fileInputRef}
@@ -476,8 +502,14 @@ export function ApplicationDetail({
                 }}
               />
               <button
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading || !docLabel.trim()}
+                onClick={() => {
+                  if (!docLabel.trim()) {
+                    setError("Précise le type de document avant d'envoyer.");
+                    return;
+                  }
+                  fileInputRef.current?.click();
+                }}
+                disabled={uploading}
                 className="w-full border border-dashed border-blue-300 text-blue-600 text-[12.5px] font-semibold rounded-xl py-2.5 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {uploading ? (
@@ -586,11 +618,11 @@ export function ApplicationDetail({
           </div>
         )}
 
-        {/* Submit button (anciennes demandes sans paiement associé) */}
+        {/* Continuer une demande sans paiement (ancien brouillon incomplet) */}
         {status === "brouillon" && application.payments.length === 0 && (
           <div className="px-5">
             <button
-              onClick={handleSubmit}
+              onClick={handleContinue}
               disabled={submitting}
               className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
             >
@@ -599,7 +631,7 @@ export function ApplicationDetail({
               ) : (
                 <Send className="w-4 h-4" />
               )}
-              Soumettre la demande
+              Continuer la demande
             </button>
           </div>
         )}
