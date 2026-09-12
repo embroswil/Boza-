@@ -1,15 +1,10 @@
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { ApplicationDetail } from "@/components/application-detail";
+import { AdminDashboard } from "@/components/admin-dashboard";
 
 export const dynamic = "force-dynamic";
 
-export default async function DemandeDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default async function AdminPage() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -19,37 +14,37 @@ export default async function DemandeDetailPage({
     redirect("/auth/login");
   }
 
-  const { data: application } = await supabase
-    .from("applications")
-    .select(
-      `id, status, submitted_at, created_at, application_kind,
-       passport_number, education_level, diploma_title, diploma_institution, diploma_year, applicant_notes,
-       date_of_birth, gender, language_proficiency, motivation_letter, financial_support, intended_start_date, health_conditions,
-       visas ( name, type, official_fee, service_fee, currency, processing_days, countries ( name, flag_url ) ),
-       programs ( name, universities ( name, countries ( name, flag_url ) ) ),
-       application_documents ( id, document_type, status, uploaded_at ),
-       payments ( id, amount, currency, status, paid_at ),
-       appointments ( id, appointment_date, status, embassies ( name, city ) )`
-    )
-    .eq("id", id)
-    .eq("user_id", user.id)
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("is_admin")
+    .eq("id", user.id)
     .single();
 
-  if (!application) {
-    notFound();
+  if (!profile?.is_admin) {
+    redirect("/");
   }
+
+  const { data: applications } = await supabase
+    .from("applications")
+    .select(
+      `id, user_id, status, submitted_at, application_kind, contact_email,
+       profiles ( full_name, email ),
+       visas ( name, countries ( name ) ),
+       programs:study_program_id ( name, universities ( name ) )`
+    )
+    .order("created_at", { ascending: false })
+    .limit(50);
 
   const { data: verificationRequests } = await supabase
     .from("verification_requests")
-    .select("id, portal_name, instructions, status")
-    .eq("application_id", id)
-    .order("requested_at", { ascending: false });
+    .select("id, application_id, portal_name, instructions, status, code, requested_at, fulfilled_at")
+    .order("requested_at", { ascending: false })
+    .limit(50);
 
   return (
-    <ApplicationDetail
-      application={application as unknown as never} /* eslint-disable-line @typescript-eslint/no-explicit-any */
+    <AdminDashboard
+      applications={(applications ?? []) as unknown as never}
       verificationRequests={verificationRequests ?? []}
-      userId={user.id}
     />
   );
 }

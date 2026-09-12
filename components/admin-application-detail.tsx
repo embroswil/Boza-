@@ -17,6 +17,7 @@ import { RequestForm, CodeRow, type VerificationRequest } from "@/components/adm
 
 type Application = {
   id: string;
+  user_id: string;
   status: string;
   submitted_at: string | null;
   created_at: string;
@@ -435,7 +436,7 @@ export function AdminApplicationDetail({
             </div>
           )}
           <div className="bg-white rounded-2xl shadow-sm p-3.5">
-            <RequestForm applicationId={application.id} />
+            <RequestForm applicationId={application.id} userId={application.user_id} />
           </div>
         </div>
       </div>

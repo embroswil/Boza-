@@ -29,6 +29,7 @@ const FILTER_TABS: { key: string; label: string }[] = [
 
 type Application = {
   id: string;
+  user_id: string;
   status: string;
   submitted_at: string | null;
   application_kind: string | null;
@@ -57,7 +58,13 @@ function applicantLabel(a: Application) {
   return a.profiles?.full_name || a.profiles?.email || "Utilisateur";
 }
 
-export function RequestForm({ applicationId }: { applicationId: string }) {
+export function RequestForm({
+  applicationId,
+  userId,
+}: {
+  applicationId: string;
+  userId: string;
+}) {
   const [open, setOpen] = useState(false);
   const [portalName, setPortalName] = useState("");
   const [instructions, setInstructions] = useState("");
@@ -74,6 +81,15 @@ export function RequestForm({ applicationId }: { applicationId: string }) {
       portal_name: portalName.trim(),
       instructions: instructions.trim() || null,
     });
+    if (!error) {
+      // Alerte l'utilisateur DANS l'app (cloche) pour qu'il revienne coller
+      // le code sans tarder, même s'il a déjà quitté la page de la demande.
+      await supabase.from("notifications").insert({
+        user_id: userId,
+        title: "Code de vérification requis",
+        message: `${portalName.trim()} attend un code pour continuer ta demande — va voir ta boîte mail et colle-le sur ta page de demande.`,
+      });
+    }
     setSubmitting(false);
     if (!error) {
       setDone(true);

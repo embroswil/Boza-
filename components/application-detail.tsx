@@ -90,9 +90,9 @@ const STATUS_STYLES: Record<string, { label: string; className: string }> = {
 };
 
 const DOC_STATUS_STYLES: Record<string, { label: string; className: string }> = {
-  en_attente: { label: "En attente", className: "text-amber-600" },
+  en_attente: { label: "En cours de vérification", className: "text-amber-600" },
   valide: { label: "Validé", className: "text-emerald-600" },
-  rejete: { label: "Rejeté", className: "text-red-600" },
+  rejete: { label: "Rejeté — à renvoyer", className: "text-red-600" },
 };
 
 const STEPS = [
@@ -208,6 +208,20 @@ export function ApplicationDetail({
               <VerificationCodeRequest request={r} />
             </div>
           ))}
+
+        {/* Prévenir à l'avance, tant qu'aucune demande de code n'est active */}
+        {verificationRequests.filter((r) => r.status !== "expired").length === 0 && (
+          <div className="px-5 mb-2">
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex gap-3">
+              <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+              <p className="text-[12px] text-blue-700 leading-relaxed">
+                Pendant qu&apos;on traite ton dossier, l&apos;université/l&apos;ambassade peut
+                t&apos;envoyer un code de confirmation par email. Si ça arrive, reviens ici pour
+                le coller — une carte apparaîtra automatiquement à cet endroit.
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Hero / résumé */}
         <div className="px-5 mb-4">
@@ -413,6 +427,26 @@ export function ApplicationDetail({
 
         {/* Documents */}
         <div className="px-5 mb-5">
+          {status === "documents_manquants" && (
+            <div className="bg-orange-50 border border-orange-200 rounded-2xl p-4 mb-3 flex gap-3">
+              <FileText className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-[12.5px] font-bold text-orange-800 mb-1">
+                  Des documents manquent à ton dossier
+                </p>
+                <p className="text-[11.5px] text-orange-700 leading-relaxed mb-2">
+                  Vérifie la liste ci-dessous et complète ce qu&apos;il manque pour ne pas
+                  bloquer ta demande.
+                </p>
+                <button
+                  onClick={() => setShowUploadForm(true)}
+                  className="text-[11.5px] font-bold text-white bg-orange-600 rounded-xl px-3 py-2"
+                >
+                  Ajouter un document maintenant
+                </button>
+              </div>
+            </div>
+          )}
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-[13px] font-bold text-slate-900">Documents</h2>
             <button
