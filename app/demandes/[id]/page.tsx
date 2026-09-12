@@ -49,6 +49,7 @@ export default async function DemandeDetailPage({
     <ApplicationDetail
       application={application as unknown as never} /* eslint-disable-line @typescript-eslint/no-explicit-any */
       verificationRequests={verificationRequests ?? []}
+      userId={user.id}
     />
   );
 }

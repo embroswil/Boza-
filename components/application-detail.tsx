@@ -119,7 +119,7 @@ export function ApplicationDetail({
     id: string;
     portal_name: string;
     instructions: string | null;
-    status: "pending" | "fulfilled" | "expired";
+    status: string;
   }[];
   userId: string;
 }) {
