@@ -618,8 +618,8 @@ export function ApplicationDetail({
           </div>
         )}
 
-        {/* Continuer une demande sans paiement (ancien brouillon incomplet) */}
-        {status === "brouillon" && application.payments.length === 0 && (
+        {/* Continuer une demande sans paiement (quel que soit le statut) */}
+        {application.payments.length === 0 && (
           <div className="px-5">
             <button
               onClick={handleContinue}
