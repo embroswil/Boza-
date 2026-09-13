@@ -55,6 +55,28 @@ const EDUCATION_LEVELS = [
   "Autre",
 ];
 
+const EMPLOYMENT_STATUS_OPTIONS = [
+  "Salarié(e)",
+  "Entrepreneur(e)",
+  "Étudiant(e)",
+  "Sans emploi",
+  "Autre",
+];
+
+const TRAVEL_MOTIVE_OPTIONS = ["Tourisme", "Visite", "Autre"];
+
+const FUNDS_OPTIONS = [
+  "Oui",
+  "Non",
+  "Je souhaite être accompagné(e) pour l'évaluation de mon dossier",
+];
+
+const BUDGET_OPTIONS = [
+  "Moins de 45 € / jour",
+  "45 € ou plus / jour",
+  "Je ne sais pas",
+];
+
 export function NewApplicationForm({
   countries,
   userId,
@@ -88,7 +110,7 @@ export function NewApplicationForm({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Étape 3 — informations du dossier
+  // Étape 3 — informations du dossier (visa études)
   const [passportNumber, setPassportNumber] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
@@ -96,6 +118,29 @@ export function NewApplicationForm({
   const [diplomaInstitution, setDiplomaInstitution] = useState("");
   const [diplomaYear, setDiplomaYear] = useState("");
   const [applicantNotes, setApplicantNotes] = useState("");
+
+  // Étape 3 — informations du dossier (visa tourisme)
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [residenceCountry, setResidenceCountry] = useState("");
+  const [residenceCity, setResidenceCity] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [emergencyContact, setEmergencyContact] = useState("");
+  const [profession, setProfession] = useState("");
+  const [employerName, setEmployerName] = useState("");
+  const [employmentStatus, setEmploymentStatus] = useState("");
+  const [passportIssueDate, setPassportIssueDate] = useState("");
+  const [passportExpiryDate, setPassportExpiryDate] = useState("");
+  const [passportIssuingCountry, setPassportIssuingCountry] = useState("");
+  const [travelDate, setTravelDate] = useState("");
+  const [travelDuration, setTravelDuration] = useState("");
+  const [travelCities, setTravelCities] = useState("");
+  const [travelMotive, setTravelMotive] = useState("");
+  const [hasSufficientFunds, setHasSufficientFunds] = useState("");
+  const [dailyBudget, setDailyBudget] = useState("");
 
   // Étape 3 — documents à téléverser (un fichier par exigence du visa)
   const [docFiles, setDocFiles] = useState<Record<string, File | null>>({});
@@ -173,8 +218,40 @@ export function NewApplicationForm({
   );
 
   const handleSubmitAndPay = async () => {
-    if (!contactEmail.trim() || !passportNumber.trim() || !educationLevel) {
-      setError("Merci de renseigner au moins l'email, le passeport et le niveau d'études.");
+    const isTourisme = selectedVisa?.type === "tourisme";
+    const isEtudes = selectedVisa?.type === "etudes";
+
+    if (!contactEmail.trim() || !passportNumber.trim()) {
+      setError("Merci de renseigner au moins l'email et le passeport.");
+      return;
+    }
+    if (isEtudes && !educationLevel) {
+      setError("Merci de renseigner le niveau d'études.");
+      return;
+    }
+    if (
+      isTourisme &&
+      (!lastName.trim() ||
+        !firstName.trim() ||
+        !dateOfBirth ||
+        !nationality.trim() ||
+        !residenceCountry.trim() ||
+        !residenceCity.trim() ||
+        !fullAddress.trim() ||
+        !contactPhone.trim() ||
+        !profession.trim() ||
+        !employmentStatus ||
+        !passportIssueDate ||
+        !passportExpiryDate ||
+        !passportIssuingCountry.trim() ||
+        !travelDate ||
+        !travelDuration.trim() ||
+        !travelCities.trim() ||
+        !travelMotive ||
+        !hasSufficientFunds ||
+        !dailyBudget)
+    ) {
+      setError("Merci de compléter tous les champs obligatoires (*) du formulaire.");
       return;
     }
     if (missingRequiredDocs.length > 0) {
@@ -201,11 +278,32 @@ export function NewApplicationForm({
         status: "brouillon",
         contact_email: contactEmail.trim(),
         passport_number: passportNumber.trim(),
-        education_level: educationLevel,
-        diploma_title: diplomaTitle.trim() || null,
-        diploma_institution: diplomaInstitution.trim() || null,
-        diploma_year: diplomaYear ? parseInt(diplomaYear, 10) : null,
+        education_level: isEtudes ? educationLevel : null,
+        diploma_title: isEtudes ? diplomaTitle.trim() || null : null,
+        diploma_institution: isEtudes ? diplomaInstitution.trim() || null : null,
+        diploma_year: isEtudes && diplomaYear ? parseInt(diplomaYear, 10) : null,
         applicant_notes: applicantNotes.trim() || null,
+        last_name: isTourisme ? lastName.trim() : null,
+        first_name: isTourisme ? firstName.trim() : null,
+        date_of_birth: isTourisme ? dateOfBirth : null,
+        nationality: isTourisme ? nationality.trim() : null,
+        residence_country: isTourisme ? residenceCountry.trim() : null,
+        residence_city: isTourisme ? residenceCity.trim() : null,
+        full_address: isTourisme ? fullAddress.trim() : null,
+        contact_phone: isTourisme ? contactPhone.trim() : null,
+        emergency_contact: isTourisme ? emergencyContact.trim() || null : null,
+        profession: isTourisme ? profession.trim() : null,
+        employer_name: isTourisme ? employerName.trim() || null : null,
+        employment_status: isTourisme ? employmentStatus : null,
+        passport_issue_date: isTourisme ? passportIssueDate : null,
+        passport_expiry_date: isTourisme ? passportExpiryDate : null,
+        passport_issuing_country: isTourisme ? passportIssuingCountry.trim() : null,
+        travel_date: isTourisme ? travelDate : null,
+        travel_duration: isTourisme ? travelDuration.trim() : null,
+        travel_cities: isTourisme ? travelCities.trim() : null,
+        travel_motive: isTourisme ? travelMotive : null,
+        has_sufficient_funds: isTourisme ? hasSufficientFunds : null,
+        daily_budget: isTourisme ? dailyBudget : null,
       })
       .select("id")
       .single();
@@ -436,54 +534,331 @@ export function NewApplicationForm({
                 />
               </div>
 
-              <div>
-                <label className={labelClass}>Niveau d&apos;études *</label>
-                <select
-                  value={educationLevel}
-                  onChange={(e) => setEducationLevel(e.target.value)}
-                  className={inputClass}
-                >
-                  <option value="">Sélectionne un niveau</option>
-                  {EDUCATION_LEVELS.map((lvl) => (
-                    <option key={lvl} value={lvl}>
-                      {lvl}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {selectedVisa?.type === "etudes" && (
+                <>
+                  <div>
+                    <label className={labelClass}>Niveau d&apos;études *</label>
+                    <select
+                      value={educationLevel}
+                      onChange={(e) => setEducationLevel(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Sélectionne un niveau</option>
+                      {EDUCATION_LEVELS.map((lvl) => (
+                        <option key={lvl} value={lvl}>
+                          {lvl}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-              <div>
-                <label className={labelClass}>Dernier diplôme obtenu</label>
-                <input
-                  type="text"
-                  value={diplomaTitle}
-                  onChange={(e) => setDiplomaTitle(e.target.value)}
-                  placeholder="Ex : Licence en Informatique"
-                  className={inputClass}
-                />
-              </div>
+                  <div>
+                    <label className={labelClass}>Dernier diplôme obtenu</label>
+                    <input
+                      type="text"
+                      value={diplomaTitle}
+                      onChange={(e) => setDiplomaTitle(e.target.value)}
+                      placeholder="Ex : Licence en Informatique"
+                      className={inputClass}
+                    />
+                  </div>
 
-              <div>
-                <label className={labelClass}>Établissement d&apos;obtention</label>
-                <input
-                  type="text"
-                  value={diplomaInstitution}
-                  onChange={(e) => setDiplomaInstitution(e.target.value)}
-                  placeholder="Ex : Université de Yaoundé I"
-                  className={inputClass}
-                />
-              </div>
+                  <div>
+                    <label className={labelClass}>Établissement d&apos;obtention</label>
+                    <input
+                      type="text"
+                      value={diplomaInstitution}
+                      onChange={(e) => setDiplomaInstitution(e.target.value)}
+                      placeholder="Ex : Université de Yaoundé I"
+                      className={inputClass}
+                    />
+                  </div>
 
-              <div>
-                <label className={labelClass}>Année d&apos;obtention</label>
-                <input
-                  type="number"
-                  value={diplomaYear}
-                  onChange={(e) => setDiplomaYear(e.target.value)}
-                  placeholder="Ex : 2023"
-                  className={inputClass}
-                />
-              </div>
+                  <div>
+                    <label className={labelClass}>Année d&apos;obtention</label>
+                    <input
+                      type="number"
+                      value={diplomaYear}
+                      onChange={(e) => setDiplomaYear(e.target.value)}
+                      placeholder="Ex : 2023"
+                      className={inputClass}
+                    />
+                  </div>
+                </>
+              )}
+
+              {selectedVisa?.type === "tourisme" && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelClass}>Nom(s) *</label>
+                      <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Prénom(s) *</label>
+                      <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Date de naissance *</label>
+                    <input
+                      type="date"
+                      value={dateOfBirth}
+                      onChange={(e) => setDateOfBirth(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelClass}>Nationalité *</label>
+                      <input
+                        type="text"
+                        value={nationality}
+                        onChange={(e) => setNationality(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Pays de résidence *</label>
+                      <input
+                        type="text"
+                        value={residenceCountry}
+                        onChange={(e) => setResidenceCountry(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Ville de résidence *</label>
+                    <input
+                      type="text"
+                      value={residenceCity}
+                      onChange={(e) => setResidenceCity(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Adresse complète *</label>
+                    <textarea
+                      value={fullAddress}
+                      onChange={(e) => setFullAddress(e.target.value)}
+                      rows={2}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Téléphone / WhatsApp *</label>
+                    <input
+                      type="tel"
+                      value={contactPhone}
+                      onChange={(e) => setContactPhone(e.target.value)}
+                      placeholder="Ex : +237 6XX XXX XXX"
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>
+                      Contact / personne à joindre en cas de besoin
+                    </label>
+                    <input
+                      type="text"
+                      value={emergencyContact}
+                      onChange={(e) => setEmergencyContact(e.target.value)}
+                      placeholder="Nom et téléphone"
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <h3 className="text-[12px] font-bold text-slate-300 mt-1">
+                    Situation professionnelle
+                  </h3>
+
+                  <div>
+                    <label className={labelClass}>Emploi / profession *</label>
+                    <input
+                      type="text"
+                      value={profession}
+                      onChange={(e) => setProfession(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>
+                      Nom de l&apos;entreprise / établissement{" "}
+                      <span className="text-slate-500 font-normal">(si applicable)</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={employerName}
+                      onChange={(e) => setEmployerName(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Situation *</label>
+                    <select
+                      value={employmentStatus}
+                      onChange={(e) => setEmploymentStatus(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Sélectionne une situation</option>
+                      {EMPLOYMENT_STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <h3 className="text-[12px] font-bold text-slate-300 mt-1">
+                    Informations du passeport
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelClass}>Date de délivrance *</label>
+                      <input
+                        type="date"
+                        value={passportIssueDate}
+                        onChange={(e) => setPassportIssueDate(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Date d&apos;expiration *</label>
+                      <input
+                        type="date"
+                        value={passportExpiryDate}
+                        onChange={(e) => setPassportExpiryDate(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Pays / autorité de délivrance *</label>
+                    <input
+                      type="text"
+                      value={passportIssuingCountry}
+                      onChange={(e) => setPassportIssuingCountry(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <h3 className="text-[12px] font-bold text-slate-300 mt-1">
+                    Projet de voyage
+                  </h3>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className={labelClass}>Date prévue du voyage *</label>
+                      <input
+                        type="date"
+                        value={travelDate}
+                        onChange={(e) => setTravelDate(e.target.value)}
+                        className={inputClass}
+                      />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Durée prévue du séjour *</label>
+                      <input
+                        type="text"
+                        value={travelDuration}
+                        onChange={(e) => setTravelDuration(e.target.value)}
+                        placeholder="Ex : 10 jours"
+                        className={inputClass}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Ville(s) de destination / séjour *</label>
+                    <input
+                      type="text"
+                      value={travelCities}
+                      onChange={(e) => setTravelCities(e.target.value)}
+                      className={inputClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Motif *</label>
+                    <select
+                      value={travelMotive}
+                      onChange={(e) => setTravelMotive(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Sélectionne un motif</option>
+                      {TRAVEL_MOTIVE_OPTIONS.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <h3 className="text-[12px] font-bold text-slate-300 mt-1">
+                    Ressources financières
+                  </h3>
+
+                  <div>
+                    <label className={labelClass}>
+                      Disposez-vous de ressources financières suffisantes pour couvrir votre
+                      séjour ? *
+                    </label>
+                    <select
+                      value={hasSufficientFunds}
+                      onChange={(e) => setHasSufficientFunds(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Sélectionne une réponse</option>
+                      {FUNDS_OPTIONS.map((f) => (
+                        <option key={f} value={f}>
+                          {f}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className={labelClass}>Budget disponible estimé *</label>
+                    <select
+                      value={dailyBudget}
+                      onChange={(e) => setDailyBudget(e.target.value)}
+                      className={inputClass}
+                    >
+                      <option value="">Sélectionne une réponse</option>
+                      {BUDGET_OPTIONS.map((b) => (
+                        <option key={b} value={b}>
+                          {b}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-[10.5px] text-slate-500 mt-1">
+                      Référence indicative : 45 € par jour de séjour. Les exigences financières
+                      peuvent varier selon le pays, la durée et les règles applicables.
+                    </p>
+                  </div>
+                </>
+              )}
 
               <div>
                 <label className={labelClass}>
