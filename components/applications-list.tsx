@@ -25,8 +25,8 @@ type Application = {
 };
 
 const STATUS_STYLES: Record<string, { label: string; className: string }> = {
-  brouillon: { label: "Brouillon", className: "bg-slate-100 text-slate-500" },
-  soumise: { label: "Soumise", className: "bg-blue-50 text-blue-600" },
+  brouillon: { label: "Brouillon", className: "bg-[#1C1C28] text-slate-500" },
+  soumise: { label: "Soumise", className: "bg-violet-500/10 text-violet-400" },
   en_cours: { label: "En cours", className: "bg-amber-50 text-amber-600" },
   documents_manquants: {
     label: "Documents manquants",
@@ -34,26 +34,26 @@ const STATUS_STYLES: Record<string, { label: string; className: string }> = {
   },
   approuvee: { label: "Approuvée", className: "bg-emerald-50 text-emerald-600" },
   refusee: { label: "Refusée", className: "bg-red-50 text-red-600" },
-  annulee: { label: "Annulée", className: "bg-slate-100 text-slate-400" },
+  annulee: { label: "Annulée", className: "bg-[#1C1C28] text-slate-500" },
 };
 
 export function ApplicationsList({ applications }: { applications: Application[] }) {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => router.back()} className="p-1 -ml-1">
-              <ArrowLeft className="w-5 h-5 text-slate-700" />
+              <ArrowLeft className="w-5 h-5 text-slate-200" />
             </button>
-            <h1 className="text-lg font-bold text-slate-900">Mes demandes</h1>
+            <h1 className="text-lg font-bold text-white">Mes demandes</h1>
           </div>
           <Link
             href="/demandes/nouvelle"
-            className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center shrink-0"
+            className="w-9 h-9 rounded-full bg-violet-600 flex items-center justify-center shrink-0"
           >
             <Plus className="w-5 h-5 text-white" />
           </Link>
@@ -62,14 +62,14 @@ export function ApplicationsList({ applications }: { applications: Application[]
         {/* Grille (une seule colonne) */}
         <div className="px-5 flex flex-col gap-3.5">
           {applications.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center shadow-sm flex flex-col items-center gap-3">
-              <FileQuestion className="w-8 h-8 text-slate-300" />
-              <p className="text-sm text-slate-400">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center shadow-none flex flex-col items-center gap-3">
+              <FileQuestion className="w-8 h-8 text-slate-600" />
+              <p className="text-sm text-slate-500">
                 Tu n&apos;as encore aucune demande soumise.
               </p>
               <Link
                 href="/demandes/nouvelle"
-                className="mt-1 bg-blue-600 text-white text-sm font-semibold rounded-xl px-4 py-2.5"
+                className="mt-1 bg-violet-600 text-white text-sm font-semibold rounded-xl px-4 py-2.5"
               >
                 Démarrer une demande
               </Link>
@@ -86,7 +86,7 @@ export function ApplicationsList({ applications }: { applications: Application[]
                 <Link
                   key={a.id}
                   href={`/demandes/${a.id}`}
-                  className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col"
+                  className="bg-[#15151F] rounded-2xl shadow-none overflow-hidden flex flex-col"
                 >
                   <div className="relative w-full aspect-[16/9]">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -99,7 +99,7 @@ export function ApplicationsList({ applications }: { applications: Application[]
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
-                    <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                    <span className="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-[#15151F]/95 flex items-center justify-center overflow-hidden shadow-none">
                       {country?.flag_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -108,7 +108,7 @@ export function ApplicationsList({ applications }: { applications: Application[]
                           className="w-full h-full object-cover object-left"
                         />
                       ) : (
-                        <Globe2 className="w-4 h-4 text-blue-600" />
+                        <Globe2 className="w-4 h-4 text-violet-400" />
                       )}
                     </span>
                     <span
@@ -119,12 +119,12 @@ export function ApplicationsList({ applications }: { applications: Application[]
                   </div>
                   <div className="px-4 py-3.5 flex items-center gap-3">
                     <div className="flex-1 min-w-0">
-                      <div className="text-[14px] font-semibold text-slate-900 truncate">
+                      <div className="text-[14px] font-semibold text-white truncate">
                         {title}
                       </div>
-                      <div className="text-[11.5px] text-slate-400 truncate">{subtitle}</div>
+                      <div className="text-[11.5px] text-slate-500 truncate">{subtitle}</div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                    <ChevronRight className="w-4 h-4 text-slate-600 shrink-0" />
                   </div>
                 </Link>
               );

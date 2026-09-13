@@ -1,6 +1,5 @@
 import {
   Bell,
-  User,
   Plane,
   GraduationCap,
 } from "lucide-react";
@@ -95,50 +94,47 @@ export default async function Home() {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center pt-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 relative">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center pt-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] relative">
         {/* Header */}
         {isLoggedIn ? (
-          <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-slate-50">
-            <div className="flex items-center gap-2">
-              <div className="relative w-10 h-10 flex items-center justify-center">
+          <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-[#0A0A12]">
+            <div className="flex items-center gap-2.5">
+              <div className="relative w-11 h-11 flex items-center justify-center rounded-full border-2 border-violet-600 p-0.5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
+                <img src="/logo.jpg" alt="Boza" className="w-full h-full rounded-full object-cover" />
               </div>
               <div>
-                <div className="font-extrabold text-slate-900 text-xl leading-none tracking-tight">
+                <div className="font-extrabold text-white text-xl leading-none tracking-tight">
                   BOZA
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5">
+                <div className="text-[11px] text-slate-500 mt-0.5">
                   Votre passeport pour le monde
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="relative">
-                <Bell className="w-6 h-6 text-slate-700" />
-                {hasUnreadNotifications && (
-                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-red-500 rounded-full border border-white" />
-                )}
-              </div>
-              <Link href="/profile">
-                <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center">
-                  <User className="w-5 h-5 text-slate-500" />
+              <Link href="/profile" className="relative">
+                <div className="w-11 h-11 rounded-full border-2 border-violet-600 flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-slate-200" />
                 </div>
+                {hasUnreadNotifications && (
+                  <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-[#0A0A12]" />
+                )}
               </Link>
             </div>
           </div>
         ) : (
-          <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-slate-50">
+          <div className="px-5 pt-5 pb-3 flex items-center justify-between bg-[#0A0A12]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
             <div className="flex items-center gap-4">
-              <Link href="/auth/login" className="text-[13px] font-semibold text-blue-600">
+              <Link href="/auth/login" className="text-[13px] font-semibold text-violet-400">
                 Se connecter
               </Link>
               <Link
                 href="/auth/sign-up"
-                className="bg-blue-600 text-white text-[13px] font-semibold rounded-xl px-4 py-2"
+                className="bg-violet-600 text-white text-[13px] font-semibold rounded-xl px-4 py-2"
               >
                 Créer un compte
               </Link>

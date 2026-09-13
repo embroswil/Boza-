@@ -16,17 +16,17 @@ export function SearchBar() {
 
   return (
     <div className="px-5 pb-4">
-      <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2 border border-slate-200">
-        <Search className="w-4 h-4 text-slate-400" strokeWidth={2} />
+      <div className="flex items-center gap-2.5 bg-[#15151F] rounded-xl px-3.5 py-2 border border-[#2E2E3D]">
+        <Search className="w-4 h-4 text-slate-500" strokeWidth={2} />
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && goSearch()}
           placeholder="Rechercher un pays, un visa ou un programme..."
-          className="flex-1 text-[13px] text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none"
+          className="flex-1 text-[13px] text-white placeholder:text-slate-500 bg-transparent focus:outline-none"
         />
         <button onClick={goSearch}>
-          <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
+          <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
         </button>
       </div>
     </div>

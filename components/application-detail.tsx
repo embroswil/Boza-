@@ -78,8 +78,8 @@ type Application = {
 };
 
 const STATUS_STYLES: Record<string, { label: string; className: string }> = {
-  brouillon: { label: "Brouillon", className: "bg-slate-100 text-slate-500" },
-  soumise: { label: "Soumise", className: "bg-blue-50 text-blue-600" },
+  brouillon: { label: "Brouillon", className: "bg-[#1C1C28] text-slate-500" },
+  soumise: { label: "Soumise", className: "bg-violet-500/10 text-violet-400" },
   en_cours: { label: "En cours", className: "bg-amber-50 text-amber-600" },
   documents_manquants: {
     label: "Documents manquants",
@@ -87,7 +87,7 @@ const STATUS_STYLES: Record<string, { label: string; className: string }> = {
   },
   approuvee: { label: "Approuvée", className: "bg-emerald-50 text-emerald-600" },
   refusee: { label: "Refusée", className: "bg-red-50 text-red-600" },
-  annulee: { label: "Annulée", className: "bg-slate-100 text-slate-400" },
+  annulee: { label: "Annulée", className: "bg-[#1C1C28] text-slate-500" },
 };
 
 const DOC_STATUS_STYLES: Record<string, { label: string; className: string }> = {
@@ -216,14 +216,14 @@ export function ApplicationDetail({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Détail de la demande</h1>
+          <h1 className="text-lg font-bold text-white">Détail de la demande</h1>
         </div>
 
         {/* Code de vérification requis (actif) */}
@@ -238,9 +238,9 @@ export function ApplicationDetail({
         {/* Prévenir à l'avance, tant qu'aucune demande de code n'est active */}
         {verificationRequests.filter((r) => r.status !== "expired").length === 0 && (
           <div className="px-5 mb-2">
-            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex gap-3">
-              <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <p className="text-[12px] text-blue-700 leading-relaxed">
+            <div className="bg-violet-500/10 border border-blue-100 rounded-2xl p-4 flex gap-3">
+              <Mail className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
+              <p className="text-[12px] text-violet-300 leading-relaxed">
                 Pendant qu&apos;on traite ton dossier, l&apos;université/l&apos;ambassade peut
                 t&apos;envoyer un code de confirmation par email. Si ça arrive, reviens ici pour
                 le coller — une carte apparaîtra automatiquement à cet endroit.
@@ -251,9 +251,9 @@ export function ApplicationDetail({
 
         {/* Hero / résumé */}
         <div className="px-5 mb-4">
-          <div className="bg-white rounded-3xl shadow-sm p-5">
+          <div className="bg-[#15151F] rounded-3xl shadow-none p-5">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+              <div className="w-14 h-14 rounded-2xl bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
                 {country?.flag_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -262,12 +262,12 @@ export function ApplicationDetail({
                     className="w-full h-full object-cover object-left"
                   />
                 ) : (
-                  <Globe2 className="w-7 h-7 text-blue-600" />
+                  <Globe2 className="w-7 h-7 text-violet-400" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[15px] font-bold text-slate-900 truncate">{title}</div>
-                <div className="text-[11.5px] text-slate-400 truncate">{subtitle}</div>
+                <div className="text-[15px] font-bold text-white truncate">{title}</div>
+                <div className="text-[11.5px] text-slate-500 truncate">{subtitle}</div>
                 <span
                   className={`inline-block mt-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full ${statusInfo.className}`}
                 >
@@ -285,8 +285,8 @@ export function ApplicationDetail({
                       <div
                         className={`w-6 h-6 rounded-full flex items-center justify-center ${
                           i <= currentStepIndex
-                            ? "bg-blue-600 text-white"
-                            : "bg-slate-100 text-slate-300"
+                            ? "bg-violet-600 text-white"
+                            : "bg-[#1C1C28] text-slate-600"
                         }`}
                       >
                         {i < currentStepIndex ? (
@@ -297,7 +297,7 @@ export function ApplicationDetail({
                       </div>
                       <span
                         className={`text-[9px] font-medium whitespace-nowrap ${
-                          i <= currentStepIndex ? "text-slate-700" : "text-slate-300"
+                          i <= currentStepIndex ? "text-slate-200" : "text-slate-600"
                         }`}
                       >
                         {s.label}
@@ -306,7 +306,7 @@ export function ApplicationDetail({
                     {i < STEPS.length - 1 && (
                       <div
                         className={`flex-1 h-0.5 mx-1 mb-4 ${
-                          i < currentStepIndex ? "bg-blue-600" : "bg-slate-100"
+                          i < currentStepIndex ? "bg-violet-600" : "bg-[#1C1C28]"
                         }`}
                       />
                     )}
@@ -319,9 +319,9 @@ export function ApplicationDetail({
 
         {/* Info permanente : à quoi s'attendre */}
         <div className="px-5 mb-5">
-          <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex gap-3">
-            <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <p className="text-[12px] text-blue-700 leading-relaxed">
+          <div className="bg-violet-500/10 border border-blue-100 rounded-2xl p-4 flex gap-3">
+            <Mail className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
+            <p className="text-[12px] text-violet-300 leading-relaxed">
               À une étape de ta démarche, tu pourrais recevoir un{" "}
               <b>code de confirmation par email</b>. Reviens sur cette page et colle-le dès que tu
               le reçois — c&apos;est normal et ça fait avancer ton dossier.
@@ -338,84 +338,84 @@ export function ApplicationDetail({
         {/* Informations du dossier */}
         {(application.passport_number || application.education_level) && (
           <div className="px-5 mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">
+            <h2 className="text-[13px] font-bold text-white mb-2">
               Informations du dossier
             </h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {application.passport_number && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Numéro de passeport</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="text-slate-500">Numéro de passeport</span>
+                  <span className="font-semibold text-white">
                     {application.passport_number}
                   </span>
                 </div>
               )}
               {application.education_level && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Niveau d&apos;études</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="text-slate-500">Niveau d&apos;études</span>
+                  <span className="font-semibold text-white">
                     {application.education_level}
                   </span>
                 </div>
               )}
               {application.diploma_title && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Dernier diplôme</span>
-                  <span className="font-semibold text-slate-900 text-right">
+                  <span className="text-slate-500">Dernier diplôme</span>
+                  <span className="font-semibold text-white text-right">
                     {application.diploma_title}
                   </span>
                 </div>
               )}
               {application.diploma_institution && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Établissement</span>
-                  <span className="font-semibold text-slate-900 text-right">
+                  <span className="text-slate-500">Établissement</span>
+                  <span className="font-semibold text-white text-right">
                     {application.diploma_institution}
                   </span>
                 </div>
               )}
               {application.diploma_year && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Année d&apos;obtention</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="text-slate-500">Année d&apos;obtention</span>
+                  <span className="font-semibold text-white">
                     {application.diploma_year}
                   </span>
                 </div>
               )}
               {application.date_of_birth && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Date de naissance</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="text-slate-500">Date de naissance</span>
+                  <span className="font-semibold text-white">
                     {application.date_of_birth}
                   </span>
                 </div>
               )}
               {application.language_proficiency && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Niveau de langue</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="text-slate-500">Niveau de langue</span>
+                  <span className="font-semibold text-white">
                     {application.language_proficiency}
                   </span>
                 </div>
               )}
               {application.intended_start_date && (
                 <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                  <span className="text-slate-400">Début souhaité</span>
-                  <span className="font-semibold text-slate-900">
+                  <span className="text-slate-500">Début souhaité</span>
+                  <span className="font-semibold text-white">
                     {application.intended_start_date}
                   </span>
                 </div>
               )}
               {application.motivation_letter && (
                 <div className="px-4 py-3 text-[13px]">
-                  <span className="text-slate-400 block mb-1">Lettre de motivation</span>
-                  <span className="text-slate-700">{application.motivation_letter}</span>
+                  <span className="text-slate-500 block mb-1">Lettre de motivation</span>
+                  <span className="text-slate-200">{application.motivation_letter}</span>
                 </div>
               )}
               {application.applicant_notes && (
                 <div className="px-4 py-3 text-[13px]">
-                  <span className="text-slate-400 block mb-1">Précisions</span>
-                  <span className="text-slate-700">{application.applicant_notes}</span>
+                  <span className="text-slate-500 block mb-1">Précisions</span>
+                  <span className="text-slate-200">{application.applicant_notes}</span>
                 </div>
               )}
             </div>
@@ -425,11 +425,11 @@ export function ApplicationDetail({
         {/* Visa info */}
         {application.visas && (
           <div className="px-5 mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">Informations visa</h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <h2 className="text-[13px] font-bold text-white mb-2">Informations visa</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                <span className="text-slate-400">Total</span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-slate-500">Total</span>
+                <span className="font-semibold text-white">
                   {application.visas.official_fee != null
                     ? formatXAF(
                         (application.visas.official_fee ?? 0) +
@@ -440,8 +440,8 @@ export function ApplicationDetail({
                 </span>
               </div>
               <div className="flex items-center justify-between px-4 py-3 text-[13px]">
-                <span className="text-slate-400">Délai de traitement</span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-slate-500">Délai de traitement</span>
+                <span className="font-semibold text-white">
                   {application.visas.processing_days
                     ? `${application.visas.processing_days} jours`
                     : "—"}
@@ -474,22 +474,22 @@ export function ApplicationDetail({
             </div>
           )}
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-[13px] font-bold text-slate-900">Documents</h2>
+            <h2 className="text-[13px] font-bold text-white">Documents</h2>
             <button
               onClick={() => setShowUploadForm((v) => !v)}
-              className="text-[11px] font-semibold text-blue-600 flex items-center gap-1"
+              className="text-[11px] font-semibold text-violet-400 flex items-center gap-1"
             >
               <Plus className="w-3.5 h-3.5" /> Ajouter
             </button>
           </div>
 
           {showUploadForm && (
-            <div className="bg-white rounded-2xl shadow-sm p-3.5 mb-2 flex flex-col gap-2">
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-3.5 mb-2 flex flex-col gap-2">
               <input
                 value={docLabel}
                 onChange={(e) => setDocLabel(e.target.value)}
                 placeholder="Type de document (ex : Passeport, Relevé de notes...)"
-                className="border border-slate-200 rounded-xl px-3 py-2 text-[12.5px] bg-white text-slate-900 placeholder:text-slate-400"
+                className="border border-[#2E2E3D] rounded-xl px-3 py-2 text-[12.5px] bg-[#15151F] text-white placeholder:text-slate-500"
               />
               <input
                 ref={fileInputRef}
@@ -510,7 +510,7 @@ export function ApplicationDetail({
                   fileInputRef.current?.click();
                 }}
                 disabled={uploading}
-                className="w-full border border-dashed border-blue-300 text-blue-600 text-[12.5px] font-semibold rounded-xl py-2.5 flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full border border-dashed border-blue-300 text-violet-400 text-[12.5px] font-semibold rounded-xl py-2.5 flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {uploading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -523,20 +523,20 @@ export function ApplicationDetail({
           )}
 
           {application.application_documents.length === 0 ? (
-            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
               Aucun document lié pour l&apos;instant.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {application.application_documents.map((d) => {
                 const docStatus = DOC_STATUS_STYLES[d.status] ?? {
                   label: d.status,
-                  className: "text-slate-400",
+                  className: "text-slate-500",
                 };
                 return (
                   <div key={d.id} className="flex items-center gap-3 px-4 py-3">
-                    <FileText className="w-4 h-4 text-blue-600 shrink-0" />
-                    <span className="flex-1 text-[13px] text-slate-900 truncate">
+                    <FileText className="w-4 h-4 text-violet-400 shrink-0" />
+                    <span className="flex-1 text-[13px] text-white truncate">
                       {d.document_type}
                     </span>
                     <span className={`text-[11px] font-medium flex items-center gap-1 ${docStatus.className}`}>
@@ -556,20 +556,20 @@ export function ApplicationDetail({
 
         {/* Payment */}
         <div className="px-5 mb-5">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">Paiement</h2>
+          <h2 className="text-[13px] font-bold text-white mb-2">Paiement</h2>
           {application.payments.length === 0 ? (
-            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
               Aucun paiement enregistré.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {application.payments.map((p) => (
                 <div key={p.id} className="flex items-center gap-3 px-4 py-3">
-                  <CreditCard className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span className="flex-1 text-[13px] text-slate-900">
+                  <CreditCard className="w-4 h-4 text-violet-400 shrink-0" />
+                  <span className="flex-1 text-[13px] text-white">
                     {formatXAF(p.amount, p.currency)}
                   </span>
-                  <span className="text-[11px] text-slate-400 capitalize">{p.status}</span>
+                  <span className="text-[11px] text-slate-500 capitalize">{p.status}</span>
                 </div>
               ))}
             </div>
@@ -578,27 +578,27 @@ export function ApplicationDetail({
 
         {/* Appointment */}
         <div className="px-5 mb-6">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">Rendez-vous</h2>
+          <h2 className="text-[13px] font-bold text-white mb-2">Rendez-vous</h2>
           {application.appointments.length === 0 ? (
-            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
               Aucun rendez-vous planifié.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {application.appointments.map((a) => (
                 <div key={a.id} className="flex items-center gap-3 px-4 py-3">
-                  <CalendarClock className="w-4 h-4 text-blue-600 shrink-0" />
+                  <CalendarClock className="w-4 h-4 text-violet-400 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="text-[13px] text-slate-900">
+                    <div className="text-[13px] text-white">
                       {formatDate(a.appointment_date)}
                     </div>
                     {a.embassies && (
-                      <div className="text-[11px] text-slate-400 truncate">
+                      <div className="text-[11px] text-slate-500 truncate">
                         {a.embassies.name} — {a.embassies.city}
                       </div>
                     )}
                   </div>
-                  <span className="text-[11px] text-slate-400 capitalize">{a.status}</span>
+                  <span className="text-[11px] text-slate-500 capitalize">{a.status}</span>
                 </div>
               ))}
             </div>
@@ -610,7 +610,7 @@ export function ApplicationDetail({
           <div className="px-5 mb-3">
             <Link
               href={`/demandes/${application.id}/payer`}
-              className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2"
+              className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2"
             >
               <CreditCard className="w-4 h-4" />
               Payer {formatXAF(pendingPayment.amount, pendingPayment.currency)}
@@ -624,7 +624,7 @@ export function ApplicationDetail({
             <button
               onClick={handleContinue}
               disabled={submitting}
-              className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {submitting ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

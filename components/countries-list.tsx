@@ -23,25 +23,25 @@ export function CountriesList({ countries }: { countries: Country[] }) {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Tous les pays</h1>
+          <h1 className="text-lg font-bold text-white">Tous les pays</h1>
         </div>
 
         {/* Search */}
         <div className="px-5 mb-5">
-          <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2.5 border border-slate-200">
-            <Search className="w-4 h-4 text-slate-400" />
+          <div className="flex items-center gap-2.5 bg-[#15151F] rounded-xl px-3.5 py-2.5 border border-[#2E2E3D]">
+            <Search className="w-4 h-4 text-slate-500" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher un pays..."
-              className="flex-1 text-[13.5px] text-slate-900 placeholder:text-slate-400 focus:outline-none bg-transparent"
+              className="flex-1 text-[13.5px] text-white placeholder:text-slate-500 focus:outline-none bg-transparent"
             />
           </div>
         </div>
@@ -49,7 +49,7 @@ export function CountriesList({ countries }: { countries: Country[] }) {
         {/* Grid */}
         <div className="px-5">
           {filtered.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
               {countries.length === 0
                 ? "Aucun pays pour l'instant."
                 : "Aucun résultat pour cette recherche."}
@@ -60,7 +60,7 @@ export function CountriesList({ countries }: { countries: Country[] }) {
                 <Link
                   key={c.id}
                   href={`/countries/${c.id}`}
-                  className="relative rounded-2xl overflow-hidden shadow-sm aspect-[4/5] group"
+                  className="relative rounded-2xl overflow-hidden shadow-none aspect-[4/5] group"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -69,7 +69,7 @@ export function CountriesList({ countries }: { countries: Country[] }) {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-[#15151F]/95 flex items-center justify-center overflow-hidden shadow-none">
                     {c.flag_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img

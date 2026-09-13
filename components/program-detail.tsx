@@ -65,18 +65,18 @@ export function ProgramDetail({ program }: { program: Program }) {
   ].filter((r) => r.value);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900 truncate">{program.name}</h1>
+          <h1 className="text-lg font-bold text-white truncate">{program.name}</h1>
         </div>
 
         {/* Bannière photo */}
-        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getProgramImage({
@@ -92,7 +92,7 @@ export function ProgramDetail({ program }: { program: Program }) {
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-[#15151F] shadow-none flex items-center justify-center overflow-hidden shrink-0">
               {country?.flag_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -105,7 +105,7 @@ export function ProgramDetail({ program }: { program: Program }) {
               )}
             </div>
             <div className="min-w-0">
-              <div className="text-xl font-extrabold text-slate-900">{program.name}</div>
+              <div className="text-xl font-extrabold text-white">{program.name}</div>
               {university && (
                 <div className="text-[12px] text-slate-500 flex items-center gap-1 truncate">
                   <MapPin className="w-3 h-3 shrink-0" />
@@ -116,7 +116,7 @@ export function ProgramDetail({ program }: { program: Program }) {
               {country && (
                 <Link
                   href={`/countries/${country.id}`}
-                  className="text-[12px] text-blue-600 flex items-center gap-1 mt-0.5"
+                  className="text-[12px] text-violet-400 flex items-center gap-1 mt-0.5"
                 >
                   <Globe2 className="w-3 h-3" /> {country.name}
                 </Link>
@@ -139,14 +139,14 @@ export function ProgramDetail({ program }: { program: Program }) {
         {/* Frais */}
         {program.tuition_fee != null && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Frais de scolarité</h2>
-            <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Frais de scolarité</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center shrink-0">
                 <Wallet className="w-4 h-4 text-amber-600" />
               </div>
-              <div className="text-lg font-extrabold text-slate-900">
+              <div className="text-lg font-extrabold text-white">
                 {formatXAF(program.tuition_fee, program.currency)}
-                <span className="text-[12px] font-medium text-slate-400"> /an</span>
+                <span className="text-[12px] font-medium text-slate-500"> /an</span>
               </div>
             </div>
           </div>
@@ -155,14 +155,14 @@ export function ProgramDetail({ program }: { program: Program }) {
         {/* Infos générales */}
         {infoRows.length > 0 && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Informations</h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Informations</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {infoRows.map((r) => (
                 <div key={r.label} className="flex items-center justify-between px-4 py-3">
-                  <span className="text-[12.5px] text-slate-400 flex items-center gap-2">
+                  <span className="text-[12.5px] text-slate-500 flex items-center gap-2">
                     <r.icon className="w-3.5 h-3.5" /> {r.label}
                   </span>
-                  <span className="text-[13px] font-medium text-slate-900">{r.value}</span>
+                  <span className="text-[13px] font-medium text-white">{r.value}</span>
                 </div>
               ))}
             </div>
@@ -172,10 +172,10 @@ export function ProgramDetail({ program }: { program: Program }) {
         {/* Conditions d'admission */}
         {program.admission_requirements && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">
               Conditions d&apos;admission
             </h2>
-            <div className="bg-white rounded-2xl shadow-sm p-4 text-[13px] text-slate-600 leading-relaxed">
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 text-[13px] text-slate-600 leading-relaxed">
               {program.admission_requirements}
             </div>
           </div>
@@ -184,9 +184,9 @@ export function ProgramDetail({ program }: { program: Program }) {
         {/* Documents requis */}
         {program.required_documents && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Documents requis</h2>
-            <div className="bg-white rounded-2xl shadow-sm p-4 text-[13px] text-slate-600 leading-relaxed flex items-start gap-2">
-              <FileText className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Documents requis</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 text-[13px] text-slate-600 leading-relaxed flex items-start gap-2">
+              <FileText className="w-4 h-4 text-violet-400 mt-0.5 shrink-0" />
               {program.required_documents}
             </div>
           </div>
@@ -196,7 +196,7 @@ export function ProgramDetail({ program }: { program: Program }) {
         <div className="px-5">
           <Link
             href={`/demandes/nouvelle?kind=admission&programId=${program.id}`}
-            className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center"
+            className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center"
           >
             Démarrer une demande
           </Link>

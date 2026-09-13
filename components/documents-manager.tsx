@@ -99,14 +99,14 @@ export function DocumentsManager({ userId }: { userId: string }) {
   const displayName = (name: string) => name.replace(/^\d+_/, "");
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Mes documents</h1>
+          <h1 className="text-lg font-bold text-white">Mes documents</h1>
         </div>
 
         {/* Upload button */}
@@ -121,7 +121,7 @@ export function DocumentsManager({ userId }: { userId: string }) {
           <button
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {uploading ? (
               <>
@@ -133,7 +133,7 @@ export function DocumentsManager({ userId }: { userId: string }) {
               </>
             )}
           </button>
-          <p className="text-[11px] text-slate-400 mt-2 text-center">
+          <p className="text-[11px] text-slate-500 mt-2 text-center">
             PDF, image ou Word — envoyé de façon sécurisée
           </p>
         </div>
@@ -148,35 +148,35 @@ export function DocumentsManager({ userId }: { userId: string }) {
         <div className="px-5">
           {loading ? (
             <div className="flex justify-center py-10">
-              <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+              <Loader2 className="w-5 h-5 text-slate-500 animate-spin" />
             </div>
           ) : files.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
               Aucun document pour l&apos;instant.
               <br />
               Ajoute ton premier fichier ci-dessus.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {files.map((file) => (
                 <div
                   key={file.id ?? file.name}
                   className="flex items-center gap-3 px-4 py-3.5"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                    <FileText className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
+                    <FileText className="w-5 h-5 text-violet-400" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-semibold text-slate-900 truncate">
+                    <div className="text-[13px] font-semibold text-white truncate">
                       {displayName(file.name)}
                     </div>
-                    <div className="text-[11px] text-slate-400">
+                    <div className="text-[11px] text-slate-500">
                       {formatSize(file.metadata?.size)}
                     </div>
                   </div>
                   <button
                     onClick={() => handleDownload(file.name)}
-                    className="p-2 text-slate-400"
+                    className="p-2 text-slate-500"
                     aria-label="Télécharger"
                   >
                     <Download className="w-4 h-4" />

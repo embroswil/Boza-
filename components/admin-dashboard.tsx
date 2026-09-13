@@ -6,8 +6,8 @@ import { KeyRound, Loader2, Copy, Check, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const STATUS_STYLES: Record<string, { label: string; className: string }> = {
-  brouillon: { label: "Brouillon", className: "bg-slate-100 text-slate-500" },
-  soumise: { label: "Soumise", className: "bg-blue-50 text-blue-600" },
+  brouillon: { label: "Brouillon", className: "bg-[#1C1C28] text-slate-500" },
+  soumise: { label: "Soumise", className: "bg-violet-500/10 text-violet-400" },
   en_cours: { label: "En cours", className: "bg-amber-50 text-amber-600" },
   documents_manquants: {
     label: "Documents manquants",
@@ -15,7 +15,7 @@ const STATUS_STYLES: Record<string, { label: string; className: string }> = {
   },
   approuvee: { label: "Approuvée", className: "bg-emerald-50 text-emerald-600" },
   refusee: { label: "Refusée", className: "bg-red-50 text-red-600" },
-  annulee: { label: "Annulée", className: "bg-slate-100 text-slate-400" },
+  annulee: { label: "Annulée", className: "bg-[#1C1C28] text-slate-500" },
 };
 
 const FILTER_TABS: { key: string; label: string }[] = [
@@ -119,13 +119,13 @@ export function RequestForm({
         value={portalName}
         onChange={(e) => setPortalName(e.target.value)}
         placeholder="Nom du portail (ex: Portail visa Géorgie)"
-        className="border border-slate-200 rounded-lg px-2.5 py-1.5 text-[11.5px]"
+        className="border border-[#2E2E3D] rounded-lg px-2.5 py-1.5 text-[11.5px]"
       />
       <input
         value={instructions}
         onChange={(e) => setInstructions(e.target.value)}
         placeholder="Instructions à afficher à l'utilisateur (optionnel)"
-        className="border border-slate-200 rounded-lg px-2.5 py-1.5 text-[11.5px]"
+        className="border border-[#2E2E3D] rounded-lg px-2.5 py-1.5 text-[11.5px]"
       />
       <div className="flex gap-1.5">
         <button
@@ -144,7 +144,7 @@ export function RequestForm({
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="text-[11.5px] text-slate-400 px-2 py-1.5"
+          className="text-[11.5px] text-slate-500 px-2 py-1.5"
         >
           Annuler
         </button>
@@ -157,10 +157,10 @@ export function CodeRow({ r }: { r: VerificationRequest }) {
   const [copied, setCopied] = useState(false);
 
   return (
-    <div className="bg-white rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
+    <div className="bg-[#15151F] rounded-xl px-3 py-2.5 flex items-center justify-between gap-2">
       <div className="min-w-0">
-        <div className="text-[12px] font-semibold text-slate-900 truncate">{r.portal_name}</div>
-        <div className="text-[10.5px] text-slate-400">
+        <div className="text-[12px] font-semibold text-white truncate">{r.portal_name}</div>
+        <div className="text-[10.5px] text-slate-500">
           {r.status === "pending" ? "En attente du code" : "Code reçu"}
         </div>
       </div>
@@ -195,14 +195,14 @@ export function AdminDashboard({
     filter === "all" ? applications : applications.filter((a) => a.status === filter);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24 px-5">
-        <h1 className="text-lg font-bold text-slate-900 mb-1">Admin — Demandes</h1>
-        <p className="text-[11.5px] text-slate-400 mb-5">Réservé à Boza.</p>
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24 px-5">
+        <h1 className="text-lg font-bold text-white mb-1">Admin — Demandes</h1>
+        <p className="text-[11.5px] text-slate-500 mb-5">Réservé à Boza.</p>
 
         {pending.length > 0 && (
           <div className="mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">
+            <h2 className="text-[13px] font-bold text-white mb-2">
               En attente ({pending.length})
             </h2>
             <div className="flex flex-col gap-2">
@@ -215,7 +215,7 @@ export function AdminDashboard({
 
         {fulfilled.length > 0 && (
           <div className="mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">
+            <h2 className="text-[13px] font-bold text-white mb-2">
               Codes reçus ({fulfilled.length})
             </h2>
             <div className="flex flex-col gap-2">
@@ -226,7 +226,7 @@ export function AdminDashboard({
           </div>
         )}
 
-        <h2 className="text-[13px] font-bold text-slate-900 mb-2">
+        <h2 className="text-[13px] font-bold text-white mb-2">
           Demandes ({filteredApplications.length})
         </h2>
 
@@ -238,7 +238,7 @@ export function AdminDashboard({
               className={`shrink-0 text-[11.5px] font-semibold px-3 py-1.5 rounded-full ${
                 filter === tab.key
                   ? "bg-slate-900 text-white"
-                  : "bg-white text-slate-500 border border-slate-200"
+                  : "bg-[#15151F] text-slate-500 border border-[#2E2E3D]"
               }`}
             >
               {tab.label}
@@ -248,7 +248,7 @@ export function AdminDashboard({
 
         <div className="flex flex-col gap-2">
           {filteredApplications.length === 0 && (
-            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
               Aucune demande dans cette catégorie.
             </div>
           )}
@@ -258,11 +258,11 @@ export function AdminDashboard({
               <Link
                 key={a.id}
                 href={`/admin/applications/${a.id}`}
-                className="bg-white rounded-2xl shadow-sm p-3.5 flex items-center gap-2"
+                className="bg-[#15151F] rounded-2xl shadow-none p-3.5 flex items-center gap-2"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
-                    <div className="text-[12.5px] font-semibold text-slate-900 truncate">
+                    <div className="text-[12.5px] font-semibold text-white truncate">
                       {applicationLabel(a)}
                     </div>
                     <span
@@ -271,16 +271,16 @@ export function AdminDashboard({
                       {statusInfo.label}
                     </span>
                   </div>
-                  <div className="text-[10.5px] text-slate-400 truncate mt-0.5">
+                  <div className="text-[10.5px] text-slate-500 truncate mt-0.5">
                     {applicantLabel(a)}
                   </div>
                   {a.contact_email && (
-                    <div className="text-[11px] font-semibold text-blue-700 truncate mt-0.5">
+                    <div className="text-[11px] font-semibold text-violet-300 truncate mt-0.5">
                       {a.contact_email}
                     </div>
                   )}
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />
+                <ChevronRight className="w-4 h-4 text-slate-600 shrink-0" />
               </Link>
             );
           })}

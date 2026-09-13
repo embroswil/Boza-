@@ -83,36 +83,36 @@ export function ProgramsList({
   }, [filtered]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Programmes d&apos;études</h1>
+          <h1 className="text-lg font-bold text-white">Programmes d&apos;études</h1>
         </div>
 
         {/* Search */}
         <div className="px-5 mb-2">
-          <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2.5 border border-slate-200">
-            <Search className="w-4 h-4 text-slate-400" />
+          <div className="flex items-center gap-2.5 bg-[#15151F] rounded-xl px-3.5 py-2.5 border border-[#2E2E3D]">
+            <Search className="w-4 h-4 text-slate-500" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Rechercher un programme, une université..."
-              className="flex-1 text-[13.5px] text-slate-900 placeholder:text-slate-400 focus:outline-none bg-transparent"
+              className="flex-1 text-[13.5px] text-white placeholder:text-slate-500 focus:outline-none bg-transparent"
             />
           </div>
         </div>
-        <div className="px-5 mb-4 flex items-center gap-2 text-[11px] text-slate-400">
+        <div className="px-5 mb-4 flex items-center gap-2 text-[11px] text-slate-500">
           <span>
             {filtered.length} programme{filtered.length > 1 ? "s" : ""}
           </span>
           {levelFilter && (
             <button
               onClick={() => setLevelFilter(null)}
-              className="flex items-center gap-1 bg-blue-50 text-blue-600 font-semibold px-2 py-0.5 rounded-full"
+              className="flex items-center gap-1 bg-violet-500/10 text-violet-400 font-semibold px-2 py-0.5 rounded-full"
             >
               {LEVEL_LABELS[levelFilter] ?? levelFilter} ✕
             </button>
@@ -121,7 +121,7 @@ export function ProgramsList({
 
         {filtered.length === 0 ? (
           <div className="px-5">
-            <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
               {programs.length === 0
                 ? "Aucun programme pour l'instant."
                 : "Aucun résultat pour cette recherche."}
@@ -140,7 +140,7 @@ export function ProgramsList({
                 ) : (
                   <span className="text-xl">🌍</span>
                 )}
-                <h2 className="font-bold text-slate-900 text-[15px]">
+                <h2 className="font-bold text-white text-[15px]">
                   {group.countryName}
                 </h2>
               </div>
@@ -148,7 +148,7 @@ export function ProgramsList({
               {group.levelGroups.map(([level, progs]) => (
                 <div key={level} className="mb-4 last:mb-0">
                   <div className="px-5 mb-2">
-                    <span className="text-[11px] font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
+                    <span className="text-[11px] font-semibold text-violet-400 bg-violet-500/10 px-2.5 py-1 rounded-full">
                       {LEVEL_LABELS[level] ?? level} · {progs.length}
                     </span>
                   </div>
@@ -157,7 +157,7 @@ export function ProgramsList({
                       <Link
                         key={p.id}
                         href={`/programs/${p.id}`}
-                        className="relative rounded-2xl overflow-hidden shadow-sm aspect-[4/5] group"
+                        className="relative rounded-2xl overflow-hidden shadow-none aspect-[4/5] group"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -167,7 +167,7 @@ export function ProgramsList({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                         {p.tuition_fee != null && (
-                          <div className="absolute top-2 right-2 text-[10px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur text-slate-900">
+                          <div className="absolute top-2 right-2 text-[10px] font-bold px-2 py-1 rounded-full bg-[#15151F]/90 backdrop-blur text-white">
                             {formatXAF(p.tuition_fee, p.currency)}
                           </div>
                         )}

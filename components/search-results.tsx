@@ -42,39 +42,39 @@ export function SearchResults({
     countries.length + visas.length + programs.length + universities.length;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Recherche</h1>
+          <h1 className="text-lg font-bold text-white">Recherche</h1>
         </div>
 
         {/* Search input */}
         <div className="px-5 mb-5">
-          <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2.5 border border-slate-200">
-            <Search className="w-4 h-4 text-slate-400" />
+          <div className="flex items-center gap-2.5 bg-[#15151F] rounded-xl px-3.5 py-2.5 border border-[#2E2E3D]">
+            <Search className="w-4 h-4 text-slate-500" />
             <input
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && goSearch()}
               placeholder="Rechercher..."
-              className="flex-1 text-[13.5px] text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-none"
+              className="flex-1 text-[13.5px] text-white placeholder:text-slate-500 bg-transparent focus:outline-none"
             />
           </div>
         </div>
 
         {!query ? (
           <div className="px-5">
-            <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
               Tape un mot-clé pour chercher un pays, un visa, une université ou un programme.
             </div>
           </div>
         ) : totalResults === 0 ? (
           <div className="px-5">
-            <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
               Aucun résultat pour &quot;{query}&quot;.
             </div>
           </div>
@@ -82,17 +82,17 @@ export function SearchResults({
           <div className="px-5 flex flex-col gap-5">
             {countries.length > 0 && (
               <div>
-                <h2 className="text-[13px] font-bold text-slate-400 uppercase mb-2">
+                <h2 className="text-[13px] font-bold text-slate-500 uppercase mb-2">
                   Pays
                 </h2>
-                <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+                <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
                   {countries.map((c) => (
                     <Link
                       key={c.id}
                       href={`/countries/${c.id}`}
                       className="flex items-center gap-3 px-4 py-3"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
                         {c.flag_url ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -101,13 +101,13 @@ export function SearchResults({
                             className="w-full h-full object-cover object-left"
                           />
                         ) : (
-                          <Globe2 className="w-4 h-4 text-blue-600" />
+                          <Globe2 className="w-4 h-4 text-violet-400" />
                         )}
                       </div>
-                      <span className="flex-1 text-[13.5px] font-medium text-slate-900">
+                      <span className="flex-1 text-[13.5px] font-medium text-white">
                         {c.name}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                      <ChevronRight className="w-4 h-4 text-slate-600" />
                     </Link>
                   ))}
                 </div>
@@ -116,10 +116,10 @@ export function SearchResults({
 
             {visas.length > 0 && (
               <div>
-                <h2 className="text-[13px] font-bold text-slate-400 uppercase mb-2">
+                <h2 className="text-[13px] font-bold text-slate-500 uppercase mb-2">
                   Visas
                 </h2>
-                <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+                <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
                   {visas.map((v) => (
                     <Link
                       key={v.id}
@@ -129,10 +129,10 @@ export function SearchResults({
                       <div className="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
                         <FileCheck2 className="w-4 h-4 text-emerald-600" />
                       </div>
-                      <span className="flex-1 text-[13.5px] font-medium text-slate-900">
+                      <span className="flex-1 text-[13.5px] font-medium text-white">
                         {v.name}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                      <ChevronRight className="w-4 h-4 text-slate-600" />
                     </Link>
                   ))}
                 </div>
@@ -141,10 +141,10 @@ export function SearchResults({
 
             {programs.length > 0 && (
               <div>
-                <h2 className="text-[13px] font-bold text-slate-400 uppercase mb-2">
+                <h2 className="text-[13px] font-bold text-slate-500 uppercase mb-2">
                   Programmes d&apos;études
                 </h2>
-                <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+                <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
                   {programs.map((p) => (
                     <Link
                       key={p.id}
@@ -154,10 +154,10 @@ export function SearchResults({
                       <div className="w-9 h-9 rounded-xl bg-violet-50 flex items-center justify-center shrink-0">
                         <GraduationCap className="w-4 h-4 text-violet-600" />
                       </div>
-                      <span className="flex-1 text-[13.5px] font-medium text-slate-900">
+                      <span className="flex-1 text-[13.5px] font-medium text-white">
                         {p.name}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                      <ChevronRight className="w-4 h-4 text-slate-600" />
                     </Link>
                   ))}
                 </div>
@@ -166,10 +166,10 @@ export function SearchResults({
 
             {universities.length > 0 && (
               <div>
-                <h2 className="text-[13px] font-bold text-slate-400 uppercase mb-2">
+                <h2 className="text-[13px] font-bold text-slate-500 uppercase mb-2">
                   Universités
                 </h2>
-                <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+                <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
                   {universities.map((u) => (
                     <Link
                       key={u.id}
@@ -180,11 +180,11 @@ export function SearchResults({
                         <Building2 className="w-4 h-4 text-amber-600" />
                       </div>
                       <div>
-                        <div className="text-[13.5px] font-medium text-slate-900">
+                        <div className="text-[13.5px] font-medium text-white">
                           {u.name}
                         </div>
                         {u.city && (
-                          <div className="text-[11px] text-slate-400">{u.city}</div>
+                          <div className="text-[11px] text-slate-500">{u.city}</div>
                         )}
                       </div>
                     </Link>

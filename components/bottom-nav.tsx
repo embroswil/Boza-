@@ -7,7 +7,6 @@ import {
   Home as HomeIcon,
   ClipboardList,
   Plus,
-  FileText,
   User,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -32,13 +31,8 @@ export function BottomNav() {
   // Pas de barre de navigation sur les écrans d'authentification.
   if (pathname?.startsWith("/auth")) return null;
 
-  // Tant qu'on ne sait pas encore (vérification en cours) ou si la personne
-  // n'est pas connectée, pas de barre — tout y renvoie de toute façon vers
-  // la connexion.
-  if (!isLoggedIn) return null;
-
   const navItems = [
-    { icon: HomeIcon, label: "Accueil", href: "/" },
+    { icon: HomeIcon, label: "Accueil", href: "/", match: "__home__" },
     {
       icon: ClipboardList,
       label: "Mes demandes",
@@ -52,12 +46,6 @@ export function BottomNav() {
       href: isLoggedIn ? "/demandes/nouvelle" : "/auth/login",
     },
     {
-      icon: FileText,
-      label: "Documents",
-      href: isLoggedIn ? "/documents" : "/auth/login",
-      match: "/documents",
-    },
-    {
       icon: User,
       label: "Profil",
       href: isLoggedIn ? "/profile" : "/auth/login",
@@ -66,18 +54,17 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-white border-t border-slate-100 px-4 py-3 flex items-center justify-between z-50">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-[#15151F]/95 backdrop-blur-md border-t border-[#26263380] px-6 py-3 flex items-center justify-between z-50">
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isActive = item.match
-          ? pathname?.startsWith(item.match)
-          : pathname === "/";
+        const isActive =
+          item.match === "__home__" ? pathname === "/" : pathname?.startsWith(item.match);
 
         if (item.isCenter) {
           return (
-            <Link href={item.href} key={item.label}>
-              <button className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center -mt-6 shadow-lg shadow-blue-600/30">
-                <Icon className="w-6 h-6 text-white" />
+            <Link href={item.href} key={item.label} className="flex flex-col items-center">
+              <button className="w-14 h-14 rounded-full bg-violet-600 flex items-center justify-center -mt-8 shadow-lg shadow-violet-600/40 border-4 border-[#0A0A12] active:scale-95 transition-transform">
+                <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
               </button>
             </Link>
           );
@@ -88,9 +75,9 @@ export function BottomNav() {
             key={item.label}
             className="flex flex-col items-center gap-1"
           >
-            <Icon className={`w-5 h-5 ${isActive ? "text-blue-600" : "text-slate-400"}`} />
+            <Icon className={`w-5 h-5 ${isActive ? "text-violet-400" : "text-slate-500"}`} />
             <span
-              className={`text-[9.5px] ${isActive ? "text-blue-600 font-semibold" : "text-slate-400"}`}
+              className={`text-[9.5px] ${isActive ? "text-violet-400 font-semibold" : "text-slate-500"}`}
             >
               {item.label}
             </span>

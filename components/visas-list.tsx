@@ -47,27 +47,27 @@ export function VisasList({
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">{title}</h1>
+          <h1 className="text-lg font-bold text-white">{title}</h1>
         </div>
 
         {!isTourismOnly && (
           <>
             {/* Search */}
             <div className="px-5 mb-4">
-              <div className="flex items-center gap-2.5 bg-white rounded-xl px-3.5 py-2.5 border border-slate-200">
-                <Search className="w-4 h-4 text-slate-400" />
+              <div className="flex items-center gap-2.5 bg-[#15151F] rounded-xl px-3.5 py-2.5 border border-[#2E2E3D]">
+                <Search className="w-4 h-4 text-slate-500" />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Rechercher un visa..."
-                  className="flex-1 text-[13.5px] text-slate-900 placeholder:text-slate-400 focus:outline-none bg-transparent"
+                  className="flex-1 text-[13.5px] text-white placeholder:text-slate-500 focus:outline-none bg-transparent"
                 />
               </div>
             </div>
@@ -77,7 +77,7 @@ export function VisasList({
               <Link
                 href="/visas"
                 className={`shrink-0 text-[12.5px] font-semibold px-4 py-2 rounded-full ${
-                  !activeType ? "bg-blue-600 text-white shadow-sm" : "bg-white text-slate-500 border border-slate-200"
+                  !activeType ? "bg-violet-600 text-white shadow-none" : "bg-[#15151F] text-slate-500 border border-[#2E2E3D]"
                 }`}
               >
                 Tous
@@ -88,8 +88,8 @@ export function VisasList({
                   href={`/visas?type=${value}`}
                   className={`shrink-0 text-[12.5px] font-semibold px-4 py-2 rounded-full ${
                     activeType === value
-                      ? "bg-blue-600 text-white shadow-sm"
-                      : "bg-white text-slate-500 border border-slate-200"
+                      ? "bg-violet-600 text-white shadow-none"
+                      : "bg-[#15151F] text-slate-500 border border-[#2E2E3D]"
                   }`}
                 >
                   {label}
@@ -100,7 +100,7 @@ export function VisasList({
         )}
 
         {isTourismOnly && (
-          <div className="px-5 mb-4 text-[12.5px] text-slate-400">
+          <div className="px-5 mb-4 text-[12.5px] text-slate-500">
             {visas.length} destination{visas.length > 1 ? "s" : ""} disponible
             {visas.length > 1 ? "s" : ""}
           </div>
@@ -109,7 +109,7 @@ export function VisasList({
         {/* Grid — même traitement visuel (photos) pour toutes les vues */}
         <div className="px-5">
           {filtered.length === 0 ? (
-            <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
               {visas.length === 0
                 ? "Aucun visa pour l'instant."
                 : "Aucun résultat pour cette recherche."}
@@ -120,7 +120,7 @@ export function VisasList({
                 <Link
                   key={v.id}
                   href={`/visas/${v.id}`}
-                  className="relative rounded-2xl overflow-hidden shadow-sm aspect-[4/5] group"
+                  className="relative rounded-2xl overflow-hidden shadow-none aspect-[4/5] group"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -132,7 +132,7 @@ export function VisasList({
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-white/95 flex items-center justify-center overflow-hidden shadow-sm">
+                  <div className="absolute top-2 left-2 w-8 h-8 rounded-full bg-[#15151F]/95 flex items-center justify-center overflow-hidden shadow-none">
                     {v.countries?.flag_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -144,7 +144,7 @@ export function VisasList({
                       <span className="text-base">🌍</span>
                     )}
                   </div>
-                  <div className="absolute top-2 right-2 text-[9px] font-bold px-2 py-1 rounded-full bg-white/90 backdrop-blur text-slate-700">
+                  <div className="absolute top-2 right-2 text-[9px] font-bold px-2 py-1 rounded-full bg-[#15151F]/90 backdrop-blur text-slate-200">
                     {TYPE_LABELS[v.type] ?? v.type}
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-3">

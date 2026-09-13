@@ -64,7 +64,7 @@ export function VerificationCodeRequest({ request }: { request: VerificationRequ
           value={code}
           onChange={(e) => setCode(e.target.value)}
           placeholder="Code reçu par email"
-          className="flex-1 bg-white border border-amber-200 rounded-xl px-3 py-2.5 text-[13px] text-slate-900 outline-none"
+          className="flex-1 bg-[#15151F] border border-amber-200 rounded-xl px-3 py-2.5 text-[13px] text-white outline-none"
         />
         <button
           type="submit"

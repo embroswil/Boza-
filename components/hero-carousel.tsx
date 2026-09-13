@@ -107,7 +107,7 @@ export function HeroCarousel({ universities }: { universities: HeroUniversity[] 
             ref={(el) => {
               slideRefs.current[i] = el;
             }}
-            className="relative rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-sm min-w-[calc(100%-2.5rem)] flex flex-col snap-center"
+            className="relative rounded-3xl overflow-hidden bg-[#15151F] border border-[#26263380] shadow-none min-w-[calc(100%-2.5rem)] flex flex-col snap-center"
           >
             {/* Image en en-tête, propre, sans superposition */}
             <div className="relative w-full aspect-[16/10] shrink-0">
@@ -118,16 +118,16 @@ export function HeroCarousel({ universities }: { universities: HeroUniversity[] 
                 className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-transparent" />
-              <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-blue-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
+              <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 bg-violet-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full">
                 {slide.badge}
               </span>
             </div>
 
             <div className="p-5 flex flex-col flex-1">
-              <h1 className="text-[22px] font-extrabold text-slate-900 leading-tight">
+              <h1 className="text-[22px] font-extrabold text-white leading-tight">
                 {slide.line1}
                 <br />
-                <span className="text-blue-600">{slide.highlight}</span>
+                <span className="text-violet-400">{slide.highlight}</span>
               </h1>
               <p className="text-slate-500 text-[13px] mt-2 leading-relaxed">
                 {slide.desc}
@@ -139,10 +139,10 @@ export function HeroCarousel({ universities }: { universities: HeroUniversity[] 
                   return (
                     <div
                       key={pill.label}
-                      className="bg-slate-50 rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5"
+                      className="bg-[#0A0A12] rounded-xl px-2.5 py-2.5 flex flex-col gap-1.5"
                     >
-                      <PillIcon className="w-4 h-4 text-blue-600" />
-                      <span className="text-[10.5px] font-medium text-slate-700 leading-tight">
+                      <PillIcon className="w-4 h-4 text-violet-400" />
+                      <span className="text-[10.5px] font-medium text-slate-200 leading-tight">
                         {pill.label}
                       </span>
                     </div>
@@ -150,7 +150,7 @@ export function HeroCarousel({ universities }: { universities: HeroUniversity[] 
                 })}
               </div>
 
-              <span className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
+              <span className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 mt-4 flex items-center justify-center gap-2">
                 {slide.cta} <ChevronRight className="w-4 h-4" />
               </span>
             </div>
@@ -162,7 +162,7 @@ export function HeroCarousel({ universities }: { universities: HeroUniversity[] 
           <span
             key={slide.key}
             className={`h-1.5 rounded-full transition-all ${
-              i === index ? "w-4 bg-blue-600" : "w-1.5 bg-slate-200"
+              i === index ? "w-4 bg-violet-600" : "w-1.5 bg-slate-200"
             }`}
           />
         ))}

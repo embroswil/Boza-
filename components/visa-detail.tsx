@@ -63,18 +63,18 @@ export function VisaDetail({
   ].filter((r) => r.value);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900 truncate">{visa.name}</h1>
+          <h1 className="text-lg font-bold text-white truncate">{visa.name}</h1>
         </div>
 
         {/* Bannière photo */}
-        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getDestinationImage({
@@ -89,7 +89,7 @@ export function VisaDetail({
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-[#15151F] shadow-none flex items-center justify-center overflow-hidden shrink-0">
               {visa.countries?.flag_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -98,15 +98,15 @@ export function VisaDetail({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <FileCheck2 className="w-7 h-7 text-blue-600" />
+                <FileCheck2 className="w-7 h-7 text-violet-400" />
               )}
             </div>
             <div>
-              <div className="text-xl font-extrabold text-slate-900">{visa.name}</div>
+              <div className="text-xl font-extrabold text-white">{visa.name}</div>
               {visa.countries && (
                 <Link
                   href={`/countries/${visa.countries.id}`}
-                  className="text-[12px] text-blue-600 flex items-center gap-1"
+                  className="text-[12px] text-violet-400 flex items-center gap-1"
                 >
                   <Globe2 className="w-3 h-3" /> {visa.countries.name}
                 </Link>
@@ -116,7 +116,7 @@ export function VisaDetail({
           {visa.description && (
             <p className="text-[13px] text-slate-500 mt-3 leading-relaxed">{visa.description}</p>
           )}
-          <span className="inline-block mt-3 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+          <span className="inline-block mt-3 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-violet-300">
             {TYPE_LABELS[visa.type] ?? visa.type}
           </span>
         </div>
@@ -124,13 +124,13 @@ export function VisaDetail({
         {/* Frais */}
         {(visa.official_fee != null || visa.service_fee != null) && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Frais</h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Frais</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               <div className="flex items-center justify-between px-4 py-3">
-                <span className="text-[12.5px] text-slate-400 flex items-center gap-2">
+                <span className="text-[12.5px] text-slate-500 flex items-center gap-2">
                   <Wallet className="w-3.5 h-3.5" /> Total à payer
                 </span>
-                <span className="text-[13px] font-bold text-slate-900">
+                <span className="text-[13px] font-bold text-white">
                   {formatXAF((visa.official_fee ?? 0) + (visa.service_fee ?? 0), visa.currency)}
                 </span>
               </div>
@@ -141,14 +141,14 @@ export function VisaDetail({
         {/* Infos générales */}
         {infoRows.length > 0 && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Informations</h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Informations</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {infoRows.map((r) => (
                 <div key={r.label} className="flex items-center justify-between px-4 py-3">
-                  <span className="text-[12.5px] text-slate-400 flex items-center gap-2">
+                  <span className="text-[12.5px] text-slate-500 flex items-center gap-2">
                     <r.icon className="w-3.5 h-3.5" /> {r.label}
                   </span>
-                  <span className="text-[13px] font-medium text-slate-900">{r.value}</span>
+                  <span className="text-[13px] font-medium text-white">{r.value}</span>
                 </div>
               ))}
             </div>
@@ -158,8 +158,8 @@ export function VisaDetail({
         {/* Éligibilité */}
         {visa.eligibility && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Éligibilité</h2>
-            <div className="bg-white rounded-2xl shadow-sm p-4 text-[13px] text-slate-600 leading-relaxed">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Éligibilité</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 text-[13px] text-slate-600 leading-relaxed">
               {visa.eligibility}
             </div>
           </div>
@@ -168,24 +168,24 @@ export function VisaDetail({
         {/* Documents requis */}
         {requirements.length > 0 && (
           <div className="px-5 mb-5">
-            <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">Documents requis</h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <h2 className="font-bold text-white text-[15px] mb-2.5">Documents requis</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {requirements.map((r) => (
                 <div key={r.id} className="flex items-start gap-3 px-4 py-3.5">
                   {r.is_required ? (
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
                   ) : (
-                    <Circle className="w-4 h-4 text-slate-300 mt-0.5 shrink-0" />
+                    <Circle className="w-4 h-4 text-slate-600 mt-0.5 shrink-0" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-semibold text-slate-900">
+                    <div className="text-[13px] font-semibold text-white">
                       {r.document_name}
                     </div>
                     {r.description && (
-                      <div className="text-[11px] text-slate-400 mt-0.5">{r.description}</div>
+                      <div className="text-[11px] text-slate-500 mt-0.5">{r.description}</div>
                     )}
                     {(r.format || r.copies) && (
-                      <div className="text-[11px] text-slate-400 mt-0.5">
+                      <div className="text-[11px] text-slate-500 mt-0.5">
                         {[r.format, r.copies ? `${r.copies} copie(s)` : null]
                           .filter(Boolean)
                           .join(" · ")}
@@ -202,7 +202,7 @@ export function VisaDetail({
         <div className="px-5">
           <Link
             href={`/demandes/nouvelle?visaId=${visa.id}`}
-            className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center"
+            className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center"
           >
             Démarrer une demande
           </Link>

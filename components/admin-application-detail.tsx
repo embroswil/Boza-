@@ -81,8 +81,8 @@ type Application = {
 };
 
 const STATUS_STYLES: Record<string, { label: string; className: string }> = {
-  brouillon: { label: "Brouillon", className: "bg-slate-100 text-slate-500" },
-  soumise: { label: "Soumise", className: "bg-blue-50 text-blue-600" },
+  brouillon: { label: "Brouillon", className: "bg-[#1C1C28] text-slate-500" },
+  soumise: { label: "Soumise", className: "bg-violet-500/10 text-violet-400" },
   en_cours: { label: "En cours", className: "bg-amber-50 text-amber-600" },
   documents_manquants: {
     label: "Documents manquants",
@@ -90,7 +90,7 @@ const STATUS_STYLES: Record<string, { label: string; className: string }> = {
   },
   approuvee: { label: "Approuvée", className: "bg-emerald-50 text-emerald-600" },
   refusee: { label: "Refusée", className: "bg-red-50 text-red-600" },
-  annulee: { label: "Annulée", className: "bg-slate-100 text-slate-400" },
+  annulee: { label: "Annulée", className: "bg-[#1C1C28] text-slate-500" },
 };
 
 const STATUS_ORDER = [
@@ -119,9 +119,9 @@ function formatDate(value: string) {
 function Field({ label, value }: { label: string; value: string | null | undefined }) {
   if (!value) return null;
   return (
-    <div className="flex items-center justify-between px-4 py-2.5 text-[13px] border-b border-slate-100 last:border-0">
-      <span className="text-slate-400">{label}</span>
-      <span className="font-semibold text-slate-900 text-right ml-3">{value}</span>
+    <div className="flex items-center justify-between px-4 py-2.5 text-[13px] border-b border-[#26263380] last:border-0">
+      <span className="text-slate-500">{label}</span>
+      <span className="font-semibold text-white text-right ml-3">{value}</span>
     </div>
   );
 }
@@ -161,7 +161,7 @@ function StatusSwitcher({
             className={`text-[11px] font-semibold px-2.5 py-1.5 rounded-full flex items-center gap-1 ${
               active
                 ? `${info.className} ring-1 ring-inset ring-current`
-                : "bg-white text-slate-500 border border-slate-200"
+                : "bg-[#15151F] text-slate-500 border border-[#2E2E3D]"
             } disabled:opacity-60`}
           >
             {updating === s ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
@@ -200,16 +200,16 @@ function DocumentRow({ doc }: { doc: Application["application_documents"][number
   }
 
   return (
-    <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-100 last:border-0">
-      <FileText className="w-4 h-4 text-blue-600 shrink-0" />
+    <div className="flex items-center gap-2 px-4 py-3 border-b border-[#26263380] last:border-0">
+      <FileText className="w-4 h-4 text-violet-400 shrink-0" />
       <div className="flex-1 min-w-0">
-        <div className="text-[13px] text-slate-900 truncate">{doc.document_type}</div>
-        <div className="text-[10.5px] text-slate-400">{DOC_STATUS_LABELS[status] ?? status}</div>
+        <div className="text-[13px] text-white truncate">{doc.document_type}</div>
+        <div className="text-[10.5px] text-slate-500">{DOC_STATUS_LABELS[status] ?? status}</div>
       </div>
       <button
         onClick={handleView}
         disabled={busy !== null}
-        className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 disabled:opacity-50"
+        className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-[#1C1C28] text-slate-600 disabled:opacity-50"
         title="Voir le document"
       >
         {busy === "view" ? (
@@ -254,8 +254,8 @@ export function AdminApplicationDetail({
   const subtitle = application.programs?.universities?.name ?? country?.name ?? "";
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24 px-5">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24 px-5">
         <Link
           href="/admin"
           className="inline-flex items-center gap-1 text-[12.5px] text-slate-500 mb-4"
@@ -263,8 +263,8 @@ export function AdminApplicationDetail({
           <ArrowLeft className="w-3.5 h-3.5" /> Retour au tableau de bord
         </Link>
 
-        <h1 className="text-lg font-bold text-slate-900">{title}</h1>
-        {subtitle && <p className="text-[12.5px] text-slate-400 mb-3">{subtitle}</p>}
+        <h1 className="text-lg font-bold text-white">{title}</h1>
+        {subtitle && <p className="text-[12.5px] text-slate-500 mb-3">{subtitle}</p>}
 
         <div className="mb-5">
           <StatusSwitcher
@@ -279,8 +279,8 @@ export function AdminApplicationDetail({
 
         {/* Candidat */}
         <div className="mb-5">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">Candidat</h2>
-          <div className="bg-white rounded-2xl shadow-sm">
+          <h2 className="text-[13px] font-bold text-white mb-2">Candidat</h2>
+          <div className="bg-[#15151F] rounded-2xl shadow-none">
             <Field label="Nom" value={application.profiles?.full_name} />
             <Field
               label="Email à utiliser (portail externe)"
@@ -298,8 +298,8 @@ export function AdminApplicationDetail({
         {/* Détails de la demande (études) */}
         {application.programs && (
           <div className="mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">Détails du dossier</h2>
-            <div className="bg-white rounded-2xl shadow-sm">
+            <h2 className="text-[13px] font-bold text-white mb-2">Détails du dossier</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none">
               <Field label="Niveau" value={application.education_level} />
               <Field label="Diplôme" value={application.diploma_title} />
               <Field label="Établissement" value={application.diploma_institution} />
@@ -310,17 +310,17 @@ export function AdminApplicationDetail({
               <Field label="Santé (déclaré)" value={application.health_conditions} />
             </div>
             {application.motivation_letter && (
-              <div className="bg-white rounded-2xl shadow-sm mt-2 p-3.5">
-                <div className="text-[11px] text-slate-400 mb-1">Lettre de motivation</div>
-                <p className="text-[12.5px] text-slate-700 whitespace-pre-wrap">
+              <div className="bg-[#15151F] rounded-2xl shadow-none mt-2 p-3.5">
+                <div className="text-[11px] text-slate-500 mb-1">Lettre de motivation</div>
+                <p className="text-[12.5px] text-slate-200 whitespace-pre-wrap">
                   {application.motivation_letter}
                 </p>
               </div>
             )}
             {application.applicant_notes && (
-              <div className="bg-white rounded-2xl shadow-sm mt-2 p-3.5">
-                <div className="text-[11px] text-slate-400 mb-1">Notes du candidat</div>
-                <p className="text-[12.5px] text-slate-700 whitespace-pre-wrap">
+              <div className="bg-[#15151F] rounded-2xl shadow-none mt-2 p-3.5">
+                <div className="text-[11px] text-slate-500 mb-1">Notes du candidat</div>
+                <p className="text-[12.5px] text-slate-200 whitespace-pre-wrap">
                   {application.applicant_notes}
                 </p>
               </div>
@@ -331,8 +331,8 @@ export function AdminApplicationDetail({
         {/* Visa */}
         {application.visas && (
           <div className="mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">Visa</h2>
-            <div className="bg-white rounded-2xl shadow-sm">
+            <h2 className="text-[13px] font-bold text-white mb-2">Visa</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none">
               <Field label="Type" value={application.visas.type} />
               <Field
                 label="Total"
@@ -360,15 +360,15 @@ export function AdminApplicationDetail({
 
         {/* Documents */}
         <div className="mb-5">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">
+          <h2 className="text-[13px] font-bold text-white mb-2">
             Documents ({application.application_documents.length})
           </h2>
           {application.application_documents.length === 0 ? (
-            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
               Aucun document envoyé.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl shadow-none">
               {application.application_documents.map((d) => (
                 <DocumentRow key={d.id} doc={d} />
               ))}
@@ -378,16 +378,16 @@ export function AdminApplicationDetail({
 
         {/* Paiement */}
         <div className="mb-5">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">Paiement</h2>
+          <h2 className="text-[13px] font-bold text-white mb-2">Paiement</h2>
           {application.payments.length === 0 ? (
-            <div className="bg-white rounded-2xl p-4 text-center text-[12.5px] text-slate-400 shadow-sm">
+            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
               Aucun paiement enregistré.
             </div>
           ) : (
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {application.payments.map((p) => (
                 <div key={p.id} className="flex items-center justify-between px-4 py-3">
-                  <span className="text-[13px] font-semibold text-slate-900">
+                  <span className="text-[13px] font-semibold text-white">
                     {formatXAF(p.amount, p.currency)}
                   </span>
                   <span
@@ -408,14 +408,14 @@ export function AdminApplicationDetail({
         {/* Rendez-vous */}
         {application.appointments.length > 0 && (
           <div className="mb-5">
-            <h2 className="text-[13px] font-bold text-slate-900 mb-2">Rendez-vous</h2>
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <h2 className="text-[13px] font-bold text-white mb-2">Rendez-vous</h2>
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               {application.appointments.map((a) => (
                 <div key={a.id} className="px-4 py-3">
-                  <div className="text-[13px] font-semibold text-slate-900">
+                  <div className="text-[13px] font-semibold text-white">
                     {formatDate(a.appointment_date)}
                   </div>
-                  <div className="text-[11px] text-slate-400">
+                  <div className="text-[11px] text-slate-500">
                     {a.embassies?.name}
                     {a.embassies?.city ? ` — ${a.embassies.city}` : ""} · {a.status}
                   </div>
@@ -427,7 +427,7 @@ export function AdminApplicationDetail({
 
         {/* Codes de vérification */}
         <div className="mb-5">
-          <h2 className="text-[13px] font-bold text-slate-900 mb-2">Codes de vérification</h2>
+          <h2 className="text-[13px] font-bold text-white mb-2">Codes de vérification</h2>
           {verificationRequests.length > 0 && (
             <div className="flex flex-col gap-2 mb-2">
               {verificationRequests.map((r) => (
@@ -435,7 +435,7 @@ export function AdminApplicationDetail({
               ))}
             </div>
           )}
-          <div className="bg-white rounded-2xl shadow-sm p-3.5">
+          <div className="bg-[#15151F] rounded-2xl shadow-none p-3.5">
             <RequestForm applicationId={application.id} userId={application.user_id} />
           </div>
         </div>

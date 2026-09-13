@@ -43,7 +43,7 @@ export function SiteFooter({
       <h3 className="text-white text-[22px] font-extrabold leading-tight mb-3">
         Votre passeport pour le monde
       </h3>
-      <p className="text-slate-400 text-[13px] leading-relaxed mb-8">
+      <p className="text-slate-500 text-[13px] leading-relaxed mb-8">
         Visa, admission, documents, paiement : Boza vous accompagne du premier clic jusqu&apos;à
         votre départ, sans jamais quitter la plateforme.
       </p>
@@ -56,7 +56,7 @@ export function SiteFooter({
               <Link
                 key={d.id}
                 href={`/countries/${d.id}`}
-                className="text-slate-400 text-[13px]"
+                className="text-slate-500 text-[13px]"
               >
                 {d.name}
               </Link>
@@ -67,7 +67,7 @@ export function SiteFooter({
           <h4 className="text-white font-bold text-[14px] mb-4">Boza</h4>
           <div className="flex flex-col gap-3">
             {COMPANY_LINKS.map((l) => (
-              <Link key={l.href} href={l.href} className="text-slate-400 text-[13px]">
+              <Link key={l.href} href={l.href} className="text-slate-500 text-[13px]">
                 {l.label}
               </Link>
             ))}
@@ -87,7 +87,7 @@ export function SiteFooter({
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-700"
+              className="w-10 h-10 rounded-full bg-[#15151F] flex items-center justify-center text-slate-200"
             >
               <s.icon className="w-4.5 h-4.5" />
             </Link>

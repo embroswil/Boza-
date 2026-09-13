@@ -54,20 +54,20 @@ export function UniversityDetail({
   const country = university.countries;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900 truncate">
+          <h1 className="text-lg font-bold text-white truncate">
             {university.name}
           </h1>
         </div>
 
         {/* Bannière photo */}
-        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-sm">
+        <div className="mx-5 mb-3 rounded-3xl overflow-hidden aspect-[16/9] shadow-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={getUniversityImage({
@@ -83,7 +83,7 @@ export function UniversityDetail({
         {/* Hero */}
         <div className="mx-5 mb-5 rounded-3xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-100 p-5">
           <div className="flex items-center gap-3">
-            <div className="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-[#15151F] shadow-none flex items-center justify-center overflow-hidden shrink-0">
               {country?.flag_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -96,7 +96,7 @@ export function UniversityDetail({
               )}
             </div>
             <div className="min-w-0">
-              <div className="text-xl font-extrabold text-slate-900">
+              <div className="text-xl font-extrabold text-white">
                 {university.name}
               </div>
               {university.city && (
@@ -108,7 +108,7 @@ export function UniversityDetail({
               {country && (
                 <Link
                   href={`/countries/${country.id}`}
-                  className="text-[12px] text-blue-600 flex items-center gap-1 mt-0.5"
+                  className="text-[12px] text-violet-400 flex items-center gap-1 mt-0.5"
                 >
                   <Globe2 className="w-3 h-3" /> {country.name}
                 </Link>
@@ -129,11 +129,11 @@ export function UniversityDetail({
 
         {/* Programmes proposés */}
         <div className="px-5 mb-5">
-          <h2 className="font-bold text-slate-900 text-[15px] mb-2.5">
+          <h2 className="font-bold text-white text-[15px] mb-2.5">
             Programmes proposés
           </h2>
           {programs.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-sm p-4 text-[13px] text-slate-400 text-center">
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 text-[13px] text-slate-500 text-center">
               Aucun programme référencé pour l&apos;instant.
             </div>
           ) : (
@@ -142,7 +142,7 @@ export function UniversityDetail({
                 <Link
                   key={p.id}
                   href={`/programs/${p.id}`}
-                  className="relative rounded-2xl overflow-hidden shadow-sm aspect-[16/10] group"
+                  className="relative rounded-2xl overflow-hidden shadow-none aspect-[16/10] group"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -157,7 +157,7 @@ export function UniversityDetail({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   {p.tuition_fee != null && (
-                    <div className="absolute top-2.5 right-2.5 bg-white/95 rounded-full px-2.5 py-1 text-[11px] font-bold text-slate-900">
+                    <div className="absolute top-2.5 right-2.5 bg-[#15151F]/95 rounded-full px-2.5 py-1 text-[11px] font-bold text-white">
                       {formatXAF(p.tuition_fee, p.currency)}
                     </div>
                   )}

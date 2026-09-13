@@ -121,20 +121,20 @@ export function ProfileView({
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={() => router.back()} className="p-1 -ml-1">
-              <ArrowLeft className="w-5 h-5 text-slate-700" />
+              <ArrowLeft className="w-5 h-5 text-slate-200" />
             </button>
-            <h1 className="text-lg font-bold text-slate-900">Mon profil</h1>
+            <h1 className="text-lg font-bold text-white">Mon profil</h1>
           </div>
           {!editing && (
             <button
               onClick={() => setEditing(true)}
-              className="flex items-center gap-1 text-blue-600 text-[13px] font-semibold"
+              className="flex items-center gap-1 text-violet-400 text-[13px] font-semibold"
             >
               <Pencil className="w-3.5 h-3.5" /> Modifier
             </button>
@@ -144,7 +144,7 @@ export function ProfileView({
         {/* Avatar */}
         <div className="flex flex-col items-center mb-6">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
+            <div className="w-20 h-20 rounded-full bg-violet-600 flex items-center justify-center text-white text-2xl font-bold overflow-hidden">
               {avatar ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
@@ -155,12 +155,12 @@ export function ProfileView({
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingAvatar}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center shadow-sm"
+              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#15151F] border border-[#2E2E3D] flex items-center justify-center shadow-none"
             >
               {uploadingAvatar ? (
-                <Loader2 className="w-3.5 h-3.5 text-blue-600 animate-spin" />
+                <Loader2 className="w-3.5 h-3.5 text-violet-400 animate-spin" />
               ) : (
-                <Camera className="w-3.5 h-3.5 text-blue-600" />
+                <Camera className="w-3.5 h-3.5 text-violet-400" />
               )}
             </button>
             <input
@@ -172,7 +172,7 @@ export function ProfileView({
             />
           </div>
           {!editing && (
-            <div className="mt-3 font-bold text-slate-900 text-base">
+            <div className="mt-3 font-bold text-white text-base">
               {nameValue || "Bienvenue"}
             </div>
           )}
@@ -192,20 +192,20 @@ export function ProfileView({
         {editing ? (
           /* Formulaire d'édition */
           <div className="px-5">
-            <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4">
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex flex-col gap-4">
               <div>
-                <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                   Nom complet
                 </label>
                 <input
                   type="text"
                   value={nameValue}
                   onChange={(e) => setNameValue(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
                 />
               </div>
               <div>
-                <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                   Téléphone
                 </label>
                 <input
@@ -213,17 +213,17 @@ export function ProfileView({
                   value={phoneValue}
                   onChange={(e) => setPhoneValue(e.target.value)}
                   placeholder="+237 6XX XXX XXX"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
                 />
               </div>
               <div>
-                <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                   Nationalité
                 </label>
                 <select
                   value={nationalityValue}
                   onChange={(e) => setNationalityValue(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white focus:outline-none focus:ring-2 focus:ring-violet-500"
                 >
                   <option value="">Sélectionne ton pays</option>
                   {cfaCountries.map((c) => (
@@ -242,14 +242,14 @@ export function ProfileView({
                     setPhoneValue(phone);
                     setNationalityValue(nationality);
                   }}
-                  className="flex-1 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl py-3"
+                  className="flex-1 bg-[#1C1C28] text-slate-600 text-sm font-semibold rounded-xl py-3"
                 >
                   Annuler
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="flex-1 bg-blue-600 text-white text-sm font-semibold rounded-xl py-3 flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="flex-1 bg-violet-600 text-white text-sm font-semibold rounded-xl py-3 flex items-center justify-center gap-2 disabled:opacity-60"
                 >
                   {saving ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -263,36 +263,36 @@ export function ProfileView({
         ) : (
           /* Vue lecture seule */
           <div className="px-5">
-            <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
               <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                  <Mail className="w-4 h-4 text-blue-600" />
+                <div className="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
+                  <Mail className="w-4 h-4 text-violet-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11px] text-slate-400">Email</div>
-                  <div className="text-[13.5px] font-medium text-slate-900 truncate">
+                  <div className="text-[11px] text-slate-500">Email</div>
+                  <div className="text-[13.5px] font-medium text-white truncate">
                     {email}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                  <Phone className="w-4 h-4 text-blue-600" />
+                <div className="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
+                  <Phone className="w-4 h-4 text-violet-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11px] text-slate-400">Téléphone</div>
-                  <div className="text-[13.5px] font-medium text-slate-900 truncate">
+                  <div className="text-[11px] text-slate-500">Téléphone</div>
+                  <div className="text-[13.5px] font-medium text-white truncate">
                     {phoneValue || "Non renseigné"}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 px-4 py-3.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
-                  <Flag className="w-4 h-4 text-blue-600" />
+                <div className="w-9 h-9 rounded-xl bg-violet-500/10 flex items-center justify-center shrink-0">
+                  <Flag className="w-4 h-4 text-violet-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[11px] text-slate-400">Nationalité</div>
-                  <div className="text-[13.5px] font-medium text-slate-900 truncate">
+                  <div className="text-[11px] text-slate-500">Nationalité</div>
+                  <div className="text-[13.5px] font-medium text-white truncate">
                     {nationalityValue || "Non renseignée"}
                   </div>
                 </div>
@@ -320,7 +320,7 @@ export function ProfileView({
             <button
               onClick={handleLogout}
               disabled={loggingOut}
-              className="w-full bg-white border border-red-200 text-red-500 text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full bg-[#15151F] border border-red-200 text-red-500 text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {loggingOut ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

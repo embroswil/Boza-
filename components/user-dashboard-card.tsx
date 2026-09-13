@@ -54,21 +54,21 @@ export function UserDashboardCard({
   if (applications.length === 0) {
     return (
       <div className="px-5 pb-5">
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-            <PlusCircle className="w-5 h-5 text-blue-600" />
+        <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-violet-500/10 flex items-center justify-center shrink-0">
+            <PlusCircle className="w-5 h-5 text-violet-400" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-[13px] font-semibold text-slate-900">
+            <div className="text-[13px] font-semibold text-white">
               Vous n&apos;avez pas encore de demande
             </div>
-            <div className="text-[11.5px] text-slate-400">
+            <div className="text-[11.5px] text-slate-500">
               Lancez votre première demande de visa ou d&apos;admission.
             </div>
           </div>
           <Link
             href="/search"
-            className="shrink-0 text-[12px] font-bold text-blue-600 bg-blue-50 rounded-full px-3 py-1.5"
+            className="shrink-0 text-[12px] font-bold text-violet-400 bg-violet-500/10 rounded-full px-3 py-1.5"
           >
             Démarrer
           </Link>
@@ -94,23 +94,23 @@ export function UserDashboardCard({
   return (
     <div className="px-5 pb-5">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-[15px] font-bold text-slate-900">Mon tableau de bord</h2>
+        <h2 className="text-[15px] font-bold text-white">Mon tableau de bord</h2>
         <Link
           href="/demandes"
-          className="text-[11.5px] font-semibold text-blue-600 flex items-center gap-0.5"
+          className="text-[11.5px] font-semibold text-violet-400 flex items-center gap-0.5"
         >
           Voir tout <ChevronRight className="w-3 h-3" />
         </Link>
       </div>
 
       {/* Bandeau de stats */}
-      <div className="bg-white rounded-2xl shadow-sm p-4 grid grid-cols-4 gap-2 mb-3">
+      <div className="bg-[#15151F] rounded-2xl shadow-none p-4 grid grid-cols-4 gap-2 mb-3">
         {stats.map((s) => (
           <div key={s.label} className="text-center">
-            <div className="text-[19px] font-extrabold text-slate-900 leading-none">
+            <div className="text-[19px] font-extrabold text-white leading-none">
               {s.value}
             </div>
-            <div className="text-[9.5px] text-slate-400 mt-1 leading-tight">
+            <div className="text-[9.5px] text-slate-500 mt-1 leading-tight">
               {s.label}
             </div>
           </div>
@@ -118,8 +118,8 @@ export function UserDashboardCard({
       </div>
 
       {/* Progression par demande */}
-      <div className="bg-white rounded-2xl shadow-sm p-4">
-        <div className="text-[11px] font-semibold text-slate-400 mb-3">
+      <div className="bg-[#15151F] rounded-2xl shadow-none p-4">
+        <div className="text-[11px] font-semibold text-slate-500 mb-3">
           Avancement de mes demandes
         </div>
         <div className="flex flex-col gap-3">
@@ -129,18 +129,18 @@ export function UserDashboardCard({
               <Link key={a.id} href={`/demandes/${a.id}`} className="block">
                 <div className="flex items-center justify-between mb-1">
                   <div className="min-w-0 pr-2">
-                    <div className="text-[12.5px] font-semibold text-slate-900 truncate">
+                    <div className="text-[12.5px] font-semibold text-white truncate">
                       {applicationLabel(a)}
                     </div>
-                    <div className="text-[10px] text-slate-400 truncate">
+                    <div className="text-[10px] text-slate-500 truncate">
                       {applicationSubtitle(a)} · {STATUS_LABELS[a.status] ?? a.status}
                     </div>
                   </div>
-                  <span className="shrink-0 text-[12px] font-bold text-slate-700">
+                  <span className="shrink-0 text-[12px] font-bold text-slate-200">
                     {pct}%
                   </span>
                 </div>
-                <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-[#1C1C28] rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full ${progressColor(pct, a.status)}`}
                     style={{ width: `${pct}%` }}

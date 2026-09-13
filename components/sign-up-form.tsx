@@ -59,27 +59,27 @@ export function SignUpForm() {
   };
 
   const inputClass =
-    "w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600";
-  const labelClass = "text-[13px] font-medium text-slate-700 mb-1.5 block";
+    "w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
+  const labelClass = "text-[13px] font-medium text-slate-200 mb-1.5 block";
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#0A0A12] flex flex-col">
       {/* Header */}
       <div className="px-5 pt-5 pb-3 flex items-center justify-between max-w-sm w-full mx-auto">
         <Link href="/">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.jpg" alt="Boza" className="w-10 h-10 rounded-xl object-cover" />
         </Link>
-        <Link href="/auth/login" className="text-[13px] font-semibold text-blue-600">
+        <Link href="/auth/login" className="text-[13px] font-semibold text-violet-400">
           J&apos;ai déjà un compte
         </Link>
       </div>
 
       <div className="px-6 pt-2 pb-10">
       <div className="w-full max-w-sm mx-auto">
-        <div className="bg-white rounded-3xl shadow-sm p-6">
-          <h1 className="text-xl font-bold text-slate-900">Créer un compte</h1>
-          <p className="text-sm text-slate-400 mt-1 mb-6">
+        <div className="bg-[#15151F] rounded-3xl shadow-none p-6">
+          <h1 className="text-xl font-bold text-white">Créer un compte</h1>
+          <p className="text-sm text-slate-500 mt-1 mb-6">
             Commence tes démarches en quelques minutes.
           </p>
 
@@ -111,7 +111,7 @@ export function SignUpForm() {
 
             <div>
               <label className={labelClass}>
-                Téléphone <span className="text-slate-400 font-normal">(facultatif)</span>
+                Téléphone <span className="text-slate-500 font-normal">(facultatif)</span>
               </label>
               <input
                 type="tel"
@@ -149,7 +149,7 @@ export function SignUpForm() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
                 >
                   {showPassword ? (
                     <EyeOff className="w-4 h-4" />
@@ -182,7 +182,7 @@ export function SignUpForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 text-white text-sm font-semibold rounded-xl py-3.5 mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full bg-violet-600 text-white text-sm font-semibold rounded-xl py-3.5 mt-2 flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {isLoading ? (
                 <>
@@ -196,7 +196,7 @@ export function SignUpForm() {
 
           <p className="text-center text-[13px] text-slate-500 mt-5">
             Déjà inscrit ?{" "}
-            <Link href="/auth/login" className="text-blue-600 font-semibold">
+            <Link href="/auth/login" className="text-violet-400 font-semibold">
               Se connecter
             </Link>
           </p>

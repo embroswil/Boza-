@@ -46,7 +46,7 @@ export function PaymentForm({
   const [error, setError] = useState<string | null>(null);
 
   const inputClass =
-    "w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600";
+    "w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
 
   const handlePay = async () => {
     if (method === "mobile_money" && phone.trim().length < 8) {
@@ -92,50 +92,50 @@ export function PaymentForm({
 
   if (success) {
     return (
-      <div className="min-h-screen bg-slate-50 flex justify-center items-center py-6 font-sans">
+      <div className="min-h-screen bg-[#0A0A12] flex justify-center items-center py-6 font-sans">
         <div className="w-full max-w-sm flex flex-col items-center gap-4 px-6 text-center">
           <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center">
             <CheckCircle2 className="w-9 h-9 text-emerald-600" />
           </div>
-          <h1 className="text-lg font-bold text-slate-900">Paiement confirmé</h1>
+          <h1 className="text-lg font-bold text-white">Paiement confirmé</h1>
           <p className="text-[13px] text-slate-500">
             Ta demande a bien été soumise. Redirection vers ton dossier...
           </p>
-          <Loader2 className="w-4 h-4 text-slate-300 animate-spin" />
+          <Loader2 className="w-4 h-4 text-slate-600 animate-spin" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button onClick={() => router.back()} className="p-1 -ml-1">
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Paiement</h1>
+          <h1 className="text-lg font-bold text-white">Paiement</h1>
         </div>
 
         {/* Récap */}
         <div className="px-5 mb-5">
-          <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+          <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex items-center gap-3">
+            <div className="w-11 h-11 rounded-xl bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
               {countryFlag ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={countryFlag} alt="" className="w-full h-full object-cover object-left" />
               ) : (
-                <Globe2 className="w-5 h-5 text-blue-600" />
+                <Globe2 className="w-5 h-5 text-violet-400" />
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[13.5px] font-semibold text-slate-900 truncate">{title}</div>
+              <div className="text-[13.5px] font-semibold text-white truncate">{title}</div>
               {countryName && (
-                <div className="text-[11px] text-slate-400 truncate">{countryName}</div>
+                <div className="text-[11px] text-slate-500 truncate">{countryName}</div>
               )}
             </div>
-            <div className="text-[15px] font-extrabold text-slate-900 whitespace-nowrap">
+            <div className="text-[15px] font-extrabold text-white whitespace-nowrap">
               {formatXAF(amount, currency)}
             </div>
           </div>
@@ -153,36 +153,36 @@ export function PaymentForm({
             onClick={() => setMethod("mobile_money")}
             className={`rounded-2xl py-3 flex flex-col items-center gap-1.5 border ${
               method === "mobile_money"
-                ? "bg-blue-50 border-blue-600"
-                : "bg-white border-slate-100 shadow-sm"
+                ? "bg-violet-500/10 border-violet-500"
+                : "bg-[#15151F] border-[#26263380] shadow-none"
             }`}
           >
             <Smartphone
-              className={`w-5 h-5 ${method === "mobile_money" ? "text-blue-600" : "text-slate-400"}`}
+              className={`w-5 h-5 ${method === "mobile_money" ? "text-violet-400" : "text-slate-500"}`}
             />
-            <span className="text-[11.5px] font-semibold text-slate-800">Mobile Money</span>
+            <span className="text-[11.5px] font-semibold text-slate-100">Mobile Money</span>
           </button>
           <button
             onClick={() => setMethod("carte")}
             className={`rounded-2xl py-3 flex flex-col items-center gap-1.5 border ${
               method === "carte"
-                ? "bg-blue-50 border-blue-600"
-                : "bg-white border-slate-100 shadow-sm"
+                ? "bg-violet-500/10 border-violet-500"
+                : "bg-[#15151F] border-[#26263380] shadow-none"
             }`}
           >
             <CreditCard
-              className={`w-5 h-5 ${method === "carte" ? "text-blue-600" : "text-slate-400"}`}
+              className={`w-5 h-5 ${method === "carte" ? "text-violet-400" : "text-slate-500"}`}
             />
-            <span className="text-[11.5px] font-semibold text-slate-800">Carte bancaire</span>
+            <span className="text-[11.5px] font-semibold text-slate-100">Carte bancaire</span>
           </button>
         </div>
 
         {/* Formulaire */}
         <div className="px-5 mb-5">
-          <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-3.5">
+          <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex flex-col gap-3.5">
             {method === "mobile_money" ? (
               <div>
-                <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                   Numéro Orange Money / MTN MoMo
                 </label>
                 <input
@@ -196,7 +196,7 @@ export function PaymentForm({
             ) : (
               <>
                 <div>
-                  <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                  <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                     Numéro de carte
                   </label>
                   <input
@@ -210,7 +210,7 @@ export function PaymentForm({
                 </div>
                 <div className="flex gap-3">
                   <div className="flex-1">
-                    <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                    <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                       Expiration
                     </label>
                     <input
@@ -222,7 +222,7 @@ export function PaymentForm({
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="text-[13px] font-medium text-slate-700 mb-1.5 block">
+                    <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
                       CVC
                     </label>
                     <input
@@ -238,7 +238,7 @@ export function PaymentForm({
               </>
             )}
           </div>
-          <p className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-2.5 px-1">
+          <p className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-2.5 px-1">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
             Paiement sécurisé — tes informations ne sont pas stockées.
           </p>
@@ -248,7 +248,7 @@ export function PaymentForm({
           <button
             onClick={handlePay}
             disabled={submitting}
-            className="w-full bg-blue-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {submitting ? (
               <>

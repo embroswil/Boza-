@@ -19,7 +19,7 @@ export function PromoSection({
 }) {
   return (
     <div className="px-6 mb-10">
-      <h2 className="text-[26px] font-extrabold text-slate-900 leading-tight mb-2">{title}</h2>
+      <h2 className="text-[26px] font-extrabold text-white leading-tight mb-2">{title}</h2>
       {badgeText && (
         <div className="flex items-center gap-1.5 mb-5">
           {badgeIcon}
@@ -44,7 +44,7 @@ export function PromoSection({
 
       <Link href={href} className="block relative">
         <span className="absolute inset-x-2 -bottom-1.5 h-full bg-blue-300 rounded-full" />
-        <span className="relative block w-full bg-blue-600 text-white text-center text-[15px] font-bold rounded-full py-4">
+        <span className="relative block w-full bg-violet-600 text-white text-center text-[15px] font-bold rounded-full py-4">
           {ctaLabel}
         </span>
       </Link>

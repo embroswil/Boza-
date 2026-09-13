@@ -263,12 +263,12 @@ export function NewApplicationForm({
   };
 
   const inputClass =
-    "w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600";
-  const labelClass = "text-[13px] font-medium text-slate-700 mb-1.5 block";
+    "w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
+  const labelClass = "text-[13px] font-medium text-slate-200 mb-1.5 block";
 
   return (
-    <div className="min-h-screen bg-slate-50 flex justify-center py-6 font-sans">
-      <div className="w-full max-w-sm bg-slate-50 pb-24">
+    <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
+      <div className="w-full max-w-sm bg-[#0A0A12] pb-24">
         {/* Header */}
         <div className="px-5 pt-2 pb-4 flex items-center gap-3">
           <button
@@ -281,10 +281,10 @@ export function NewApplicationForm({
             }
             className="p-1 -ml-1"
           >
-            <ArrowLeft className="w-5 h-5 text-slate-700" />
+            <ArrowLeft className="w-5 h-5 text-slate-200" />
           </button>
           <div>
-            <h1 className="text-lg font-bold text-slate-900">
+            <h1 className="text-lg font-bold text-white">
               {step === 1
                 ? "Choisis une destination"
                 : step === 2
@@ -292,7 +292,7 @@ export function NewApplicationForm({
                 : "Finalise ta demande"}
             </h1>
             {step >= 2 && selectedCountry && (
-              <p className="text-[11px] text-slate-400 flex items-center gap-1">
+              <p className="text-[11px] text-slate-500 flex items-center gap-1">
                 {selectedCountry.flag_url && (
                   <img
                     src={selectedCountry.flag_url}
@@ -314,7 +314,7 @@ export function NewApplicationForm({
             <div
               key={s}
               className={`h-1 flex-1 rounded-full ${
-                s <= step ? "bg-blue-600" : "bg-slate-200"
+                s <= step ? "bg-violet-600" : "bg-slate-200"
               }`}
             />
           ))}
@@ -329,18 +329,18 @@ export function NewApplicationForm({
         {step === 1 && (
           <div className="px-5">
             {countries.length === 0 ? (
-              <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+              <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
                 Aucun pays disponible pour l&apos;instant.
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+              <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
                 {countries.map((c) => (
                   <button
                     key={c.id}
                     onClick={() => handleChooseCountry(c)}
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-left"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center overflow-hidden shrink-0">
                       {c.flag_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
@@ -349,13 +349,13 @@ export function NewApplicationForm({
                           className="w-full h-full object-cover object-left"
                         />
                       ) : (
-                        <Globe2 className="w-5 h-5 text-blue-600" />
+                        <Globe2 className="w-5 h-5 text-violet-400" />
                       )}
                     </div>
-                    <div className="flex-1 text-[13.5px] font-semibold text-slate-900">
+                    <div className="flex-1 text-[13.5px] font-semibold text-white">
                       {c.name}
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                    <ChevronRight className="w-4 h-4 text-slate-600" />
                   </button>
                 ))}
               </div>
@@ -367,14 +367,14 @@ export function NewApplicationForm({
           <div className="px-5">
             {loadingVisas ? (
               <div className="flex justify-center py-10">
-                <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+                <Loader2 className="w-5 h-5 text-slate-500 animate-spin" />
               </div>
             ) : visas.length === 0 ? (
-              <div className="bg-white rounded-2xl p-6 text-center text-sm text-slate-400 shadow-sm">
+              <div className="bg-[#15151F] rounded-2xl p-6 text-center text-sm text-slate-500 shadow-none">
                 Aucun visa disponible pour ce pays pour l&apos;instant.
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-sm divide-y divide-slate-100">
+              <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
                 {visas.map((v) => (
                   <button
                     key={v.id}
@@ -382,20 +382,20 @@ export function NewApplicationForm({
                     className="w-full flex items-center gap-3 px-4 py-3.5 text-left"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="text-[13.5px] font-semibold text-slate-900">
+                      <div className="text-[13.5px] font-semibold text-white">
                         {v.name}
                       </div>
-                      <div className="text-[11px] text-slate-400 mt-0.5">
+                      <div className="text-[11px] text-slate-500 mt-0.5">
                         {VISA_TYPE_LABELS[v.type] ?? v.type}
                         {v.processing_days ? ` · ${v.processing_days} jours` : ""}
                       </div>
                     </div>
                     {v.official_fee != null && (
-                      <div className="text-[13px] font-bold text-slate-900 whitespace-nowrap">
+                      <div className="text-[13px] font-bold text-white whitespace-nowrap">
                         {formatXAF((v.official_fee ?? 0) + (v.service_fee ?? 0), v.currency)}
                       </div>
                     )}
-                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                    <ChevronRight className="w-4 h-4 text-slate-600" />
                   </button>
                 ))}
               </div>
@@ -406,8 +406,8 @@ export function NewApplicationForm({
         {step === 3 && (
           <div className="px-5 flex flex-col gap-5">
             {/* Informations du dossier */}
-            <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4">
-              <h2 className="text-[13px] font-bold text-slate-900">
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex flex-col gap-4">
+              <h2 className="text-[13px] font-bold text-white">
                 Informations du dossier
               </h2>
               <div>
@@ -419,7 +419,7 @@ export function NewApplicationForm({
                   placeholder="ton.email@exemple.com"
                   className={inputClass}
                 />
-                <p className="text-[10.5px] text-slate-400 mt-1">
+                <p className="text-[10.5px] text-slate-500 mt-1">
                   On l&apos;utilise pour créer ton dossier auprès de l&apos;ambassade/université —
                   tu recevras un code de confirmation dessus.
                 </p>
@@ -488,7 +488,7 @@ export function NewApplicationForm({
               <div>
                 <label className={labelClass}>
                   Précisions supplémentaires{" "}
-                  <span className="text-slate-400 font-normal">(facultatif)</span>
+                  <span className="text-slate-500 font-normal">(facultatif)</span>
                 </label>
                 <textarea
                   value={applicantNotes}
@@ -501,22 +501,22 @@ export function NewApplicationForm({
             </div>
 
             {/* Documents requis */}
-            <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-3">
-              <h2 className="text-[13px] font-bold text-slate-900">
+            <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex flex-col gap-3">
+              <h2 className="text-[13px] font-bold text-white">
                 Documents à téléverser
               </h2>
 
               {loadingRequirements ? (
                 <div className="flex justify-center py-6">
-                  <Loader2 className="w-4 h-4 text-slate-400 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-slate-500 animate-spin" />
                 </div>
               ) : requirements.length === 0 ? (
-                <p className="text-[12px] text-slate-400">
+                <p className="text-[12px] text-slate-500">
                   Aucun document spécifique requis pour ce visa — tu peux tout de
                   même en ajouter ci-dessous si besoin.
                 </p>
               ) : (
-                <div className="flex flex-col divide-y divide-slate-100">
+                <div className="flex flex-col divide-y divide-[#26263380]">
                   {requirements.map((r) => {
                     const file = docFiles[r.id];
                     return (
@@ -524,17 +524,17 @@ export function NewApplicationForm({
                         {file ? (
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
                         ) : (
-                          <Circle className="w-4 h-4 text-slate-300 mt-0.5 shrink-0" />
+                          <Circle className="w-4 h-4 text-slate-600 mt-0.5 shrink-0" />
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="text-[13px] font-semibold text-slate-900">
+                          <div className="text-[13px] font-semibold text-white">
                             {r.document_name}
                             {!r.is_required && (
-                              <span className="text-slate-400 font-normal"> (optionnel)</span>
+                              <span className="text-slate-500 font-normal"> (optionnel)</span>
                             )}
                           </div>
                           {r.description && (
-                            <div className="text-[11px] text-slate-400 mt-0.5">
+                            <div className="text-[11px] text-slate-500 mt-0.5">
                               {r.description}
                             </div>
                           )}
@@ -547,13 +547,13 @@ export function NewApplicationForm({
                                 onClick={() =>
                                   setDocFiles((prev) => ({ ...prev, [r.id]: null }))
                                 }
-                                className="text-slate-400"
+                                className="text-slate-500"
                               >
                                 <X className="w-3.5 h-3.5" />
                               </button>
                             </div>
                           ) : (
-                            <label className="inline-flex items-center gap-1.5 mt-1.5 text-[11.5px] font-semibold text-blue-600 cursor-pointer">
+                            <label className="inline-flex items-center gap-1.5 mt-1.5 text-[11.5px] font-semibold text-violet-400 cursor-pointer">
                               <Upload className="w-3.5 h-3.5" />
                               Ajouter un fichier
                               <input
@@ -578,19 +578,19 @@ export function NewApplicationForm({
               <div className="pt-1">
                 {extraFiles.map((f, i) => (
                   <div key={i} className="flex items-center gap-2 py-1.5">
-                    <FileText className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <FileText className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                     <span className="flex-1 text-[11.5px] text-slate-600 truncate">
                       {f.name}
                     </span>
                     <button
                       onClick={() => setExtraFiles((prev) => prev.filter((_, idx) => idx !== i))}
-                      className="text-slate-400"
+                      className="text-slate-500"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}
-                <label className="inline-flex items-center gap-1.5 mt-1.5 text-[11.5px] font-semibold text-blue-600 cursor-pointer">
+                <label className="inline-flex items-center gap-1.5 mt-1.5 text-[11.5px] font-semibold text-violet-400 cursor-pointer">
                   <Upload className="w-3.5 h-3.5" />
                   Ajouter un autre document
                   <input
@@ -609,8 +609,8 @@ export function NewApplicationForm({
 
             {/* Récap frais + bouton payer */}
             {selectedVisa && (
-              <div className="bg-blue-50 rounded-2xl p-4 flex items-center justify-between">
-                <span className="text-[12.5px] text-blue-700 font-medium">
+              <div className="bg-violet-500/10 rounded-2xl p-4 flex items-center justify-between">
+                <span className="text-[12.5px] text-violet-300 font-medium">
                   Total à payer
                 </span>
                 <span className="text-[15px] font-extrabold text-blue-800">
@@ -625,7 +625,7 @@ export function NewApplicationForm({
             <button
               onClick={handleSubmitAndPay}
               disabled={submitting}
-              className="w-full bg-blue-600 text-white text-sm font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+              className="w-full bg-violet-600 text-white text-sm font-semibold rounded-xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
             >
               {submitting ? (
                 <>
