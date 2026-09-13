@@ -57,8 +57,11 @@ export function BottomNav() {
     <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-[#15151F]/95 backdrop-blur-md border-t border-[#26263380] px-6 py-3 flex items-center justify-between z-50">
       {navItems.map((item) => {
         const Icon = item.icon;
-        const isActive =
-          item.match === "__home__" ? pathname === "/" : pathname?.startsWith(item.match);
+        const isActive = item.match
+          ? item.match === "__home__"
+            ? pathname === "/"
+            : pathname?.startsWith(item.match)
+          : false;
 
         if (item.isCenter) {
           return (
