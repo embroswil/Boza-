@@ -11,7 +11,6 @@ import {
   CalendarClock,
   Loader2,
   Send,
-  Mail,
   Plus,
   UploadCloud,
   CheckCircle2,
@@ -235,20 +234,6 @@ export function ApplicationDetail({
             </div>
           ))}
 
-        {/* Prévenir à l'avance, tant qu'aucune demande de code n'est active */}
-        {verificationRequests.filter((r) => r.status !== "expired").length === 0 && (
-          <div className="px-5 mb-2">
-            <div className="bg-violet-500/10 border border-blue-100 rounded-2xl p-4 flex gap-3">
-              <Mail className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
-              <p className="text-[12px] text-violet-300 leading-relaxed">
-                Pendant qu&apos;on traite ton dossier, l&apos;université/l&apos;ambassade peut
-                t&apos;envoyer un code de confirmation par email. Si ça arrive, reviens ici pour
-                le coller — une carte apparaîtra automatiquement à cet endroit.
-              </p>
-            </div>
-          </div>
-        )}
-
         {/* Hero / résumé */}
         <div className="px-5 mb-4">
           <div className="bg-[#15151F] rounded-3xl shadow-none p-5">
@@ -314,18 +299,6 @@ export function ApplicationDetail({
                 ))}
               </div>
             )}
-          </div>
-        </div>
-
-        {/* Info permanente : à quoi s'attendre */}
-        <div className="px-5 mb-5">
-          <div className="bg-violet-500/10 border border-blue-100 rounded-2xl p-4 flex gap-3">
-            <Mail className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
-            <p className="text-[12px] text-violet-300 leading-relaxed">
-              À une étape de ta démarche, tu pourrais recevoir un{" "}
-              <b>code de confirmation par email</b>. Reviens sur cette page et colle-le dès que tu
-              le reçois — c&apos;est normal et ça fait avancer ton dossier.
-            </p>
           </div>
         </div>
 

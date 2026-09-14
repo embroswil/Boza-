@@ -113,6 +113,7 @@ export function NewApplicationForm({
   // Étape 3 — informations du dossier (visa études)
   const [passportNumber, setPassportNumber] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [confirmationCode, setConfirmationCode] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
   const [diplomaTitle, setDiplomaTitle] = useState("");
   const [diplomaInstitution, setDiplomaInstitution] = useState("");
@@ -218,19 +219,16 @@ export function NewApplicationForm({
   );
 
   const handleSubmitAndPay = async () => {
-    const isTourisme = selectedVisa?.type === "tourisme";
-    const isEtudes = selectedVisa?.type === "etudes";
-
     if (!contactEmail.trim() || !passportNumber.trim()) {
       setError("Merci de renseigner au moins l'email et le passeport.");
       return;
     }
-    if (isEtudes && !educationLevel) {
-      setError("Merci de renseigner le niveau d'études.");
+    if (selectedVisa?.type === "etudes" && !educationLevel) {
+      setError("Merci de renseigner ton niveau d'études.");
       return;
     }
     if (
-      isTourisme &&
+      selectedVisa?.type === "tourisme" &&
       (!lastName.trim() ||
         !firstName.trim() ||
         !dateOfBirth ||
@@ -251,7 +249,7 @@ export function NewApplicationForm({
         !hasSufficientFunds ||
         !dailyBudget)
     ) {
-      setError("Merci de compléter tous les champs obligatoires (*) du formulaire.");
+      setError("Merci de compléter tous les champs obligatoires (*) du dossier.");
       return;
     }
     if (missingRequiredDocs.length > 0) {
@@ -277,33 +275,34 @@ export function NewApplicationForm({
         study_program_id: initialProgram?.id ?? null,
         status: "brouillon",
         contact_email: contactEmail.trim(),
+        confirmation_code: confirmationCode.trim() || null,
         passport_number: passportNumber.trim(),
-        education_level: isEtudes ? educationLevel : null,
-        diploma_title: isEtudes ? diplomaTitle.trim() || null : null,
-        diploma_institution: isEtudes ? diplomaInstitution.trim() || null : null,
-        diploma_year: isEtudes && diplomaYear ? parseInt(diplomaYear, 10) : null,
+        education_level: educationLevel || null,
+        diploma_title: diplomaTitle.trim() || null,
+        diploma_institution: diplomaInstitution.trim() || null,
+        diploma_year: diplomaYear ? parseInt(diplomaYear, 10) : null,
         applicant_notes: applicantNotes.trim() || null,
-        last_name: isTourisme ? lastName.trim() : null,
-        first_name: isTourisme ? firstName.trim() : null,
-        date_of_birth: isTourisme ? dateOfBirth : null,
-        nationality: isTourisme ? nationality.trim() : null,
-        residence_country: isTourisme ? residenceCountry.trim() : null,
-        residence_city: isTourisme ? residenceCity.trim() : null,
-        full_address: isTourisme ? fullAddress.trim() : null,
-        contact_phone: isTourisme ? contactPhone.trim() : null,
-        emergency_contact: isTourisme ? emergencyContact.trim() || null : null,
-        profession: isTourisme ? profession.trim() : null,
-        employer_name: isTourisme ? employerName.trim() || null : null,
-        employment_status: isTourisme ? employmentStatus : null,
-        passport_issue_date: isTourisme ? passportIssueDate : null,
-        passport_expiry_date: isTourisme ? passportExpiryDate : null,
-        passport_issuing_country: isTourisme ? passportIssuingCountry.trim() : null,
-        travel_date: isTourisme ? travelDate : null,
-        travel_duration: isTourisme ? travelDuration.trim() : null,
-        travel_cities: isTourisme ? travelCities.trim() : null,
-        travel_motive: isTourisme ? travelMotive : null,
-        has_sufficient_funds: isTourisme ? hasSufficientFunds : null,
-        daily_budget: isTourisme ? dailyBudget : null,
+        last_name: lastName.trim() || null,
+        first_name: firstName.trim() || null,
+        date_of_birth: dateOfBirth || null,
+        nationality: nationality.trim() || null,
+        residence_country: residenceCountry.trim() || null,
+        residence_city: residenceCity.trim() || null,
+        full_address: fullAddress.trim() || null,
+        contact_phone: contactPhone.trim() || null,
+        emergency_contact: emergencyContact.trim() || null,
+        profession: profession.trim() || null,
+        employer_name: employerName.trim() || null,
+        employment_status: employmentStatus || null,
+        passport_issue_date: passportIssueDate || null,
+        passport_expiry_date: passportExpiryDate || null,
+        passport_issuing_country: passportIssuingCountry.trim() || null,
+        travel_date: travelDate || null,
+        travel_duration: travelDuration.trim() || null,
+        travel_cities: travelCities.trim() || null,
+        travel_motive: travelMotive || null,
+        has_sufficient_funds: hasSufficientFunds || null,
+        daily_budget: dailyBudget || null,
       })
       .select("id")
       .single();
@@ -518,9 +517,24 @@ export function NewApplicationForm({
                   className={inputClass}
                 />
                 <p className="text-[10.5px] text-slate-500 mt-1">
-                  On l&apos;utilise pour créer ton dossier auprès de l&apos;ambassade/université —
-                  tu recevras un code de confirmation dessus.
+                  Vous allez recevoir un code de confirmation par email.
                 </p>
+              </div>
+
+              <div>
+                <label className={labelClass}>
+                  Code de confirmation{" "}
+                  <span className="text-slate-400 font-normal">
+                    (si déjà reçu — sinon laisse vide, tu pourras le coller plus tard)
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  value={confirmationCode}
+                  onChange={(e) => setConfirmationCode(e.target.value)}
+                  placeholder="Code reçu par email"
+                  className={inputClass}
+                />
               </div>
 
               <div>
@@ -702,7 +716,7 @@ export function NewApplicationForm({
                   <div>
                     <label className={labelClass}>
                       Nom de l&apos;entreprise / établissement{" "}
-                      <span className="text-slate-500 font-normal">(si applicable)</span>
+                      <span className="text-slate-400 font-normal">(si applicable)</span>
                     </label>
                     <input
                       type="text"
@@ -852,9 +866,8 @@ export function NewApplicationForm({
                         </option>
                       ))}
                     </select>
-                    <p className="text-[10.5px] text-slate-500 mt-1">
-                      Référence indicative : 45 € par jour de séjour. Les exigences financières
-                      peuvent varier selon le pays, la durée et les règles applicables.
+                    <p className="text-[10.5px] text-slate-400 mt-1">
+                      Référence indicative : 45 € par jour de séjour.
                     </p>
                   </div>
                 </>

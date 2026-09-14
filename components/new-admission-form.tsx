@@ -58,6 +58,17 @@ export function NewAdmissionForm({
 
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [residenceCountry, setResidenceCountry] = useState("");
+  const [residenceCity, setResidenceCity] = useState("");
+  const [fullAddress, setFullAddress] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [emergencyContact, setEmergencyContact] = useState("");
+  const [passportNumber, setPassportNumber] = useState("");
+  const [passportIssueDate, setPassportIssueDate] = useState("");
+  const [passportExpiryDate, setPassportExpiryDate] = useState("");
+  const [passportIssuingCountry, setPassportIssuingCountry] = useState("");
   const [gender, setGender] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
   const [diplomaTitle, setDiplomaTitle] = useState("");
@@ -84,10 +95,23 @@ export function NewAdmissionForm({
   const currency = "XAF";
 
   const handleSubmit = async () => {
-    if (!contactEmail.trim() || !dateOfBirth || !gender || !educationLevel || !motivationLetter.trim()) {
-      setError(
-        "Merci de remplir au moins l'email, la date de naissance, le genre, le niveau d'études et la lettre de motivation."
-      );
+    if (
+      !contactEmail.trim() ||
+      !dateOfBirth ||
+      !gender ||
+      !educationLevel ||
+      !motivationLetter.trim() ||
+      !nationality.trim() ||
+      !residenceCountry.trim() ||
+      !residenceCity.trim() ||
+      !fullAddress.trim() ||
+      !contactPhone.trim() ||
+      !passportNumber.trim() ||
+      !passportIssueDate ||
+      !passportExpiryDate ||
+      !passportIssuingCountry.trim()
+    ) {
+      setError("Merci de compléter tous les champs obligatoires (*) du dossier.");
       return;
     }
     if (motivationLetter.trim().length < 50) {
@@ -112,8 +136,19 @@ export function NewAdmissionForm({
         application_kind: "admission",
         status: "brouillon",
         contact_email: contactEmail.trim(),
+        confirmation_code: confirmationCode.trim() || null,
         date_of_birth: dateOfBirth,
         gender,
+        nationality: nationality.trim() || null,
+        residence_country: residenceCountry.trim() || null,
+        residence_city: residenceCity.trim() || null,
+        full_address: fullAddress.trim() || null,
+        contact_phone: contactPhone.trim() || null,
+        emergency_contact: emergencyContact.trim() || null,
+        passport_number: passportNumber.trim() || null,
+        passport_issue_date: passportIssueDate || null,
+        passport_expiry_date: passportExpiryDate || null,
+        passport_issuing_country: passportIssuingCountry.trim() || null,
         education_level: educationLevel,
         diploma_title: diplomaTitle.trim() || null,
         diploma_institution: diplomaInstitution.trim() || null,
@@ -229,9 +264,122 @@ export function NewAdmissionForm({
                 className={inputClass}
               />
               <p className="text-[10.5px] text-slate-500 mt-1">
-                On l&apos;utilise pour créer ton dossier auprès de l&apos;université — tu
-                recevras un code de confirmation dessus.
+                Vous allez recevoir un code de confirmation par email.
               </p>
+            </div>
+            <div>
+              <label className={labelClass}>
+                Code de confirmation{" "}
+                <span className="text-slate-400 font-normal">
+                  (si déjà reçu — sinon laisse vide, tu pourras le coller plus tard)
+                </span>
+              </label>
+              <input
+                type="text"
+                value={confirmationCode}
+                onChange={(e) => setConfirmationCode(e.target.value)}
+                placeholder="Code reçu par email"
+                className={inputClass}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelClass}>Nationalité *</label>
+                <input
+                  type="text"
+                  value={nationality}
+                  onChange={(e) => setNationality(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Pays de résidence *</label>
+                <input
+                  type="text"
+                  value={residenceCountry}
+                  onChange={(e) => setResidenceCountry(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+            <div>
+              <label className={labelClass}>Ville de résidence *</label>
+              <input
+                type="text"
+                value={residenceCity}
+                onChange={(e) => setResidenceCity(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Adresse complète *</label>
+              <textarea
+                value={fullAddress}
+                onChange={(e) => setFullAddress(e.target.value)}
+                rows={2}
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Téléphone / WhatsApp *</label>
+              <input
+                type="tel"
+                value={contactPhone}
+                onChange={(e) => setContactPhone(e.target.value)}
+                placeholder="Ex : +237 6XX XXX XXX"
+                className={inputClass}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Contact / personne à joindre en cas de besoin</label>
+              <input
+                type="text"
+                value={emergencyContact}
+                onChange={(e) => setEmergencyContact(e.target.value)}
+                placeholder="Nom et téléphone"
+                className={inputClass}
+              />
+            </div>
+            <h3 className="text-[12px] font-bold text-slate-300 mt-1">
+              Informations du passeport
+            </h3>
+            <div>
+              <label className={labelClass}>Numéro de passeport *</label>
+              <input
+                type="text"
+                value={passportNumber}
+                onChange={(e) => setPassportNumber(e.target.value)}
+                className={inputClass}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className={labelClass}>Date de délivrance *</label>
+                <input
+                  type="date"
+                  value={passportIssueDate}
+                  onChange={(e) => setPassportIssueDate(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+              <div>
+                <label className={labelClass}>Date d&apos;expiration *</label>
+                <input
+                  type="date"
+                  value={passportExpiryDate}
+                  onChange={(e) => setPassportExpiryDate(e.target.value)}
+                  className={inputClass}
+                />
+              </div>
+            </div>
+            <div>
+              <label className={labelClass}>Pays / autorité de délivrance *</label>
+              <input
+                type="text"
+                value={passportIssuingCountry}
+                onChange={(e) => setPassportIssuingCountry(e.target.value)}
+                className={inputClass}
+              />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>

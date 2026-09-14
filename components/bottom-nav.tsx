@@ -31,6 +31,10 @@ export function BottomNav() {
   // Pas de barre de navigation sur les écrans d'authentification.
   if (pathname?.startsWith("/auth")) return null;
 
+  // Tant qu'on ne sait pas encore, ou si la personne n'est pas connectée,
+  // pas de barre de navigation du tout.
+  if (!isLoggedIn) return null;
+
   const navItems = [
     { icon: HomeIcon, label: "Accueil", href: "/", match: "__home__" },
     {
