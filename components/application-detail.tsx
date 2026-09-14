@@ -19,12 +19,16 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { formatXAF } from "@/lib/currency";
 import { VerificationCodeRequest } from "@/components/verification-code-request";
+import { CompleteApplicationForm, getMissingFields } from "@/components/complete-application-form";
 
 type Application = {
   id: string;
   status: string;
   submitted_at: string | null;
   created_at: string;
+  application_kind: string | null;
+  contact_email: string | null;
+  confirmation_code: string | null;
   passport_number: string | null;
   education_level: string | null;
   diploma_title: string | null;
@@ -38,6 +42,26 @@ type Application = {
   financial_support: string | null;
   intended_start_date: string | null;
   health_conditions: string | null;
+  last_name: string | null;
+  first_name: string | null;
+  nationality: string | null;
+  residence_country: string | null;
+  residence_city: string | null;
+  full_address: string | null;
+  contact_phone: string | null;
+  emergency_contact: string | null;
+  profession: string | null;
+  employer_name: string | null;
+  employment_status: string | null;
+  passport_issue_date: string | null;
+  passport_expiry_date: string | null;
+  passport_issuing_country: string | null;
+  travel_date: string | null;
+  travel_duration: string | null;
+  travel_cities: string | null;
+  travel_motive: string | null;
+  has_sufficient_funds: string | null;
+  daily_budget: string | null;
   visas: {
     name: string;
     type: string;
@@ -141,6 +165,18 @@ export function ApplicationDetail({
   const statusInfo = STATUS_STYLES[status] ?? STATUS_STYLES.brouillon;
   const pendingPayment = application.payments.find((p) => p.status === "en_attente");
   const currentStepIndex = STEPS.findIndex((s) => s.key === status);
+
+  const applicationKind: "tourisme" | "etudes" | "admission" =
+    application.application_kind === "admission" || (!application.visas && application.programs)
+      ? "admission"
+      : application.visas?.type === "etudes"
+        ? "etudes"
+        : "tourisme";
+
+  const missingFields = getMissingFields(
+    application as unknown as Record<string, unknown>,
+    applicationKind
+  );
 
   const handleSubmit = async () => {
     setSubmitting(true);
@@ -594,18 +630,26 @@ export function ApplicationDetail({
         {/* Continuer une demande sans paiement (quel que soit le statut) */}
         {application.payments.length === 0 && (
           <div className="px-5">
-            <button
-              onClick={handleContinue}
-              disabled={submitting}
-              className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
-            >
-              {submitting ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )}
-              Continuer la demande
-            </button>
+            {missingFields.length > 0 ? (
+              <CompleteApplicationForm
+                applicationId={application.id}
+                missingFields={missingFields}
+                onDone={handleContinue}
+              />
+            ) : (
+              <button
+                onClick={handleContinue}
+                disabled={submitting}
+                className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {submitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                Continuer la demande
+              </button>
+            )}
           </div>
         )}
       </div>

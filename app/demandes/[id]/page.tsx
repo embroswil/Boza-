@@ -22,9 +22,13 @@ export default async function DemandeDetailPage({
   const { data: application } = await supabase
     .from("applications")
     .select(
-      `id, status, submitted_at, created_at, application_kind,
+      `id, status, submitted_at, created_at, application_kind, contact_email, confirmation_code,
        passport_number, education_level, diploma_title, diploma_institution, diploma_year, applicant_notes,
        date_of_birth, gender, language_proficiency, motivation_letter, financial_support, intended_start_date, health_conditions,
+       last_name, first_name, nationality, residence_country, residence_city, full_address,
+       contact_phone, emergency_contact, profession, employer_name, employment_status,
+       passport_issue_date, passport_expiry_date, passport_issuing_country,
+       travel_date, travel_duration, travel_cities, travel_motive, has_sufficient_funds, daily_budget,
        visas ( name, type, official_fee, service_fee, currency, processing_days, countries ( name, flag_url ) ),
        programs ( name, universities ( name, application_fee, countries ( name, flag_url ) ) ),
        application_documents ( id, document_type, status, uploaded_at ),
