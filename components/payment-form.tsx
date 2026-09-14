@@ -4,20 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  CreditCard,
   Smartphone,
   Loader2,
   ShieldCheck,
-  CheckCircle2,
   Globe2,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 import { formatXAF } from "@/lib/currency";
 
-type Method = "carte" | "mobile_money";
-
 export function PaymentForm({
-  applicationId,
   paymentId,
   title,
   countryName,
@@ -34,78 +28,44 @@ export function PaymentForm({
   currency: string;
 }) {
   const router = useRouter();
-  const supabase = createClient();
 
-  const [method, setMethod] = useState<Method>("mobile_money");
   const [phone, setPhone] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [cardExpiry, setCardExpiry] = useState("");
-  const [cardCvc, setCardCvc] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const inputClass =
     "w-full bg-[#0A0A12] border border-[#2E2E3D] rounded-xl px-4 py-3 text-[14px] text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500";
 
   const handlePay = async () => {
-    if (method === "mobile_money" && phone.trim().length < 8) {
-      setError("Merci d'indiquer un numéro de téléphone valide.");
-      return;
-    }
-    if (method === "carte" && (cardNumber.trim().length < 12 || !cardExpiry || cardCvc.trim().length < 3)) {
-      setError("Merci de renseigner des informations de carte valides.");
+    if (phone.trim().length < 8) {
+      setError("Merci d'indiquer un numéro de téléphone Mobile Money valide.");
       return;
     }
     setError(null);
     setSubmitting(true);
 
-    // ⚠️ Paiement simulé : aucune passerelle réelle (Stripe / CinetPay /
-    // Orange Money / MTN MoMo...) n'est branchée ici. On enregistre juste le
-    // paiement comme "réussi" pour faire avancer le dossier dans l'app.
-    await new Promise((resolve) => setTimeout(resolve, 1400));
+    try {
+      const res = await fetch("/api/payments/monetbil/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId, phone: phone.trim() }),
+      });
+      const data = await res.json();
 
-    const { error: payError } = await supabase
-      .from("payments")
-      .update({
-        status: "reussi",
-        payment_method: method,
-        paid_at: new Date().toISOString(),
-      })
-      .eq("id", paymentId);
+      if (!res.ok || !data.url) {
+        setError(data.error || "Impossible de lancer le paiement. Réessaie.");
+        setSubmitting(false);
+        return;
+      }
 
-    if (payError) {
-      setError("Le paiement a échoué. Réessaie.");
+      // Redirection vers le widget Monetbil (Orange Money / MTN MoMo...).
+      // Le retour se fera sur /paiement/succes ou /paiement/echec.
+      window.location.href = data.url;
+    } catch {
+      setError("Une erreur est survenue. Vérifie ta connexion et réessaie.");
       setSubmitting(false);
-      return;
     }
-
-    await supabase
-      .from("applications")
-      .update({ status: "soumise", submitted_at: new Date().toISOString() })
-      .eq("id", applicationId);
-
-    setSubmitting(false);
-    setSuccess(true);
-    setTimeout(() => router.push(`/demandes/${applicationId}`), 1600);
   };
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-[#0A0A12] flex justify-center items-center py-6 font-sans">
-        <div className="w-full max-w-sm flex flex-col items-center gap-4 px-6 text-center">
-          <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center">
-            <CheckCircle2 className="w-9 h-9 text-emerald-600" />
-          </div>
-          <h1 className="text-lg font-bold text-white">Paiement confirmé</h1>
-          <p className="text-[13px] text-slate-500">
-            Ta demande a bien été soumise. Redirection vers ton dossier...
-          </p>
-          <Loader2 className="w-4 h-4 text-slate-600 animate-spin" />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#0A0A12] flex justify-center py-6 font-sans">
@@ -142,105 +102,39 @@ export function PaymentForm({
         </div>
 
         {error && (
-          <div className="mx-5 mb-4 bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">
+          <div className="mx-5 mb-4 bg-red-500/10 text-red-400 text-sm rounded-xl px-4 py-3">
             {error}
           </div>
         )}
 
-        {/* Méthode de paiement */}
-        <div className="px-5 mb-4 grid grid-cols-2 gap-2.5">
-          <button
-            onClick={() => setMethod("mobile_money")}
-            className={`rounded-2xl py-3 flex flex-col items-center gap-1.5 border ${
-              method === "mobile_money"
-                ? "bg-violet-500/10 border-violet-500"
-                : "bg-[#15151F] border-[#26263380] shadow-none"
-            }`}
-          >
-            <Smartphone
-              className={`w-5 h-5 ${method === "mobile_money" ? "text-violet-400" : "text-slate-500"}`}
-            />
-            <span className="text-[11.5px] font-semibold text-slate-100">Mobile Money</span>
-          </button>
-          <button
-            onClick={() => setMethod("carte")}
-            className={`rounded-2xl py-3 flex flex-col items-center gap-1.5 border ${
-              method === "carte"
-                ? "bg-violet-500/10 border-violet-500"
-                : "bg-[#15151F] border-[#26263380] shadow-none"
-            }`}
-          >
-            <CreditCard
-              className={`w-5 h-5 ${method === "carte" ? "text-violet-400" : "text-slate-500"}`}
-            />
-            <span className="text-[11.5px] font-semibold text-slate-100">Carte bancaire</span>
-          </button>
+        {/* Mobile Money (Orange Money / MTN MoMo via Monetbil) */}
+        <div className="px-5 mb-4">
+          <div className="rounded-2xl py-3 flex items-center justify-center gap-2 border bg-violet-500/10 border-violet-500">
+            <Smartphone className="w-5 h-5 text-violet-400" />
+            <span className="text-[12.5px] font-semibold text-slate-100">
+              Mobile Money (Orange Money / MTN MoMo)
+            </span>
+          </div>
         </div>
 
-        {/* Formulaire */}
         <div className="px-5 mb-5">
           <div className="bg-[#15151F] rounded-2xl shadow-none p-4 flex flex-col gap-3.5">
-            {method === "mobile_money" ? (
-              <div>
-                <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
-                  Numéro Orange Money / MTN MoMo
-                </label>
-                <input
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Ex : 6XX XX XX XX"
-                  className={inputClass}
-                />
-              </div>
-            ) : (
-              <>
-                <div>
-                  <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
-                    Numéro de carte
-                  </label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={cardNumber}
-                    onChange={(e) => setCardNumber(e.target.value)}
-                    placeholder="1234 5678 9012 3456"
-                    className={inputClass}
-                  />
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex-1">
-                    <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
-                      Expiration
-                    </label>
-                    <input
-                      type="text"
-                      value={cardExpiry}
-                      onChange={(e) => setCardExpiry(e.target.value)}
-                      placeholder="MM/AA"
-                      className={inputClass}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
-                      CVC
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={cardCvc}
-                      onChange={(e) => setCardCvc(e.target.value)}
-                      placeholder="123"
-                      className={inputClass}
-                    />
-                  </div>
-                </div>
-              </>
-            )}
+            <div>
+              <label className="text-[13px] font-medium text-slate-200 mb-1.5 block">
+                Numéro Mobile Money
+              </label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Ex : 6XX XX XX XX"
+                className={inputClass}
+              />
+            </div>
           </div>
           <p className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-2.5 px-1">
             <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
-            Paiement sécurisé — tes informations ne sont pas stockées.
+            Paiement sécurisé par Monetbil — tu recevras une demande de confirmation sur ton téléphone.
           </p>
         </div>
 
@@ -252,7 +146,7 @@ export function PaymentForm({
           >
             {submitting ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" /> Traitement...
+                <Loader2 className="w-4 h-4 animate-spin" /> Redirection vers Monetbil...
               </>
             ) : (
               `Payer ${formatXAF(amount, currency)}`
