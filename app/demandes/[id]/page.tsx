@@ -49,6 +49,18 @@ export default async function DemandeDetailPage({
     notFound();
   }
 
+  // L'email de contact ne doit jamais être redemandé dans le formulaire —
+  // on a déjà celui du compte connecté. S'il manque encore sur cette
+  // demande (créée avant ce champ, ou jamais renseigné), on le renseigne
+  // silencieusement avec l'email du compte.
+  if (!application.contact_email && user.email) {
+    await supabase
+      .from("applications")
+      .update({ contact_email: user.email })
+      .eq("id", id);
+    application.contact_email = user.email;
+  }
+
   const { data: verificationRequests } = await supabase
     .from("verification_requests")
     .select("id, portal_name, instructions, status")

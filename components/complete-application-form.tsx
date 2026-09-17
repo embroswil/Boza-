@@ -144,8 +144,25 @@ export function getRequiredFieldKeys(kind: "tourisme" | "etudes" | "admission"):
       "motivation_letter",
     ];
   }
-  // etudes (visa)
-  return ["contact_email", "passport_number", "education_level"];
+  // etudes (visa) — alignés sur le tourisme : un dossier de visa a besoin
+  // des mêmes informations de base (identité, passeport, résidence), moins
+  // les champs propres au séjour touristique (durée, villes, budget/jour).
+  return [
+    "contact_email",
+    "last_name",
+    "first_name",
+    "date_of_birth",
+    "nationality",
+    "residence_country",
+    "residence_city",
+    "full_address",
+    "contact_phone",
+    "passport_number",
+    "passport_issue_date",
+    "passport_expiry_date",
+    "passport_issuing_country",
+    "education_level",
+  ];
 }
 
 export function getMissingFields(
@@ -170,13 +187,23 @@ export function CompleteApplicationForm({
   missingFields: FieldDef[];
   onDone: () => void;
 }) {
-  const [values, setValues] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const missing = missingFields.filter((f) => !values[f.key]?.trim());
+
+    // Lecture directe des valeurs du formulaire (FormData) plutôt que du
+    // state React : certains navigateurs (Safari notamment) remplissent les
+    // champs automatiquement sans déclencher onChange, ce qui faisait que
+    // le state restait vide alors que le champ affichait bien une valeur.
+    const formData = new FormData(e.currentTarget);
+    const values: Record<string, string> = {};
+    missingFields.forEach((f) => {
+      values[f.key] = String(formData.get(f.key) ?? "").trim();
+    });
+
+    const missing = missingFields.filter((f) => !values[f.key]);
     if (missing.length > 0) {
       setError(`Merci de compléter : ${missing.map((f) => f.label).join(", ")}.`);
       return;
@@ -185,14 +212,9 @@ export function CompleteApplicationForm({
     setError(null);
 
     const supabase = createClient();
-    const payload: Record<string, string> = {};
-    missingFields.forEach((f) => {
-      payload[f.key] = values[f.key].trim();
-    });
-
     const { error: updateError } = await supabase
       .from("applications")
-      .update(payload)
+      .update(values)
       .eq("id", applicationId);
 
     setSubmitting(false);
@@ -216,11 +238,7 @@ export function CompleteApplicationForm({
         <div key={f.key}>
           <label className={labelClass}>{f.label} *</label>
           {f.type === "select" ? (
-            <select
-              value={values[f.key] ?? ""}
-              onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
-              className={inputClass}
-            >
+            <select name={f.key} defaultValue="" className={inputClass}>
               <option value="">Sélectionne une réponse</option>
               {f.options?.map((o) => (
                 <option key={o} value={o}>
@@ -229,19 +247,9 @@ export function CompleteApplicationForm({
               ))}
             </select>
           ) : f.type === "textarea" ? (
-            <textarea
-              value={values[f.key] ?? ""}
-              onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
-              rows={2}
-              className={inputClass}
-            />
+            <textarea name={f.key} rows={2} className={inputClass} />
           ) : (
-            <input
-              type={f.type}
-              value={values[f.key] ?? ""}
-              onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
-              className={inputClass}
-            />
+            <input type={f.type} name={f.key} className={inputClass} />
           )}
         </div>
       ))}
