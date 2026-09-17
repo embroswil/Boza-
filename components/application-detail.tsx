@@ -119,11 +119,31 @@ const DOC_STATUS_STYLES: Record<string, { label: string; className: string }> = 
   rejete: { label: "Rejeté — à renvoyer", className: "text-red-600" },
 };
 
-const STEPS = [
-  { key: "soumise", label: "Soumise" },
-  { key: "en_cours", label: "En cours" },
-  { key: "approuvee", label: "Approuvée" },
-];
+// Documents requis selon le type de dossier — chacun s'affiche comme une
+// ligne individuelle avec son propre bouton d'envoi, plutôt qu'un ajout
+// libre en vrac.
+const REQUIRED_DOCUMENTS: Record<"tourisme" | "etudes" | "admission", string[]> = {
+  tourisme: [
+    "Passeport",
+    "Photo d'identité",
+    "Preuve de ressources financières / Relevé de compte",
+  ],
+  etudes: [
+    "Passeport",
+    "Photo d'identité",
+    "Lettre d'admission",
+    "Preuve de ressources financières / Relevé de compte",
+    "Attestation de niveau d'anglais",
+    "Relevés de notes",
+  ],
+  admission: [
+    "Passeport",
+    "Photo d'identité",
+    "Relevés de notes",
+    "Diplôme",
+    "Lettre de motivation",
+  ],
+};
 
 function formatDate(value: string) {
   return new Date(value).toLocaleDateString("fr-FR", {
@@ -164,7 +184,6 @@ export function ApplicationDetail({
   const subtitle = application.programs?.universities?.name ?? country?.name ?? "";
   const statusInfo = STATUS_STYLES[status] ?? STATUS_STYLES.brouillon;
   const pendingPayment = application.payments.find((p) => p.status === "en_attente");
-  const currentStepIndex = STEPS.findIndex((s) => s.key === status);
 
   const applicationKind: "tourisme" | "etudes" | "admission" =
     application.application_kind === "admission" || (!application.visas && application.programs)
@@ -229,12 +248,12 @@ export function ApplicationDetail({
     router.push(`/demandes/${application.id}/payer`);
   };
 
-  const handleUpload = async (file: File) => {
-    if (!docLabel.trim()) {
-      setError("Précise le type de document avant d'envoyer.");
-      return;
-    }
+  const [uploadingType, setUploadingType] = useState<string | null>(null);
+  const pendingUploadType = useRef<string | null>(null);
+
+  const handleUpload = async (file: File, docType: string) => {
     setUploading(true);
+    setUploadingType(docType);
     setError(null);
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
     const path = `${userId}/applications/${application.id}/${Date.now()}_${safeName}`;
@@ -243,20 +262,30 @@ export function ApplicationDetail({
     if (uploadError) {
       setError("L'envoi du document a échoué. Réessaie.");
       setUploading(false);
+      setUploadingType(null);
       return;
     }
 
     await supabase.from("application_documents").insert({
       application_id: application.id,
-      document_type: docLabel.trim(),
+      document_type: docType,
       file_url: path,
       status: "en_attente",
     });
 
     setUploading(false);
+    setUploadingType(null);
     setDocLabel("");
     setShowUploadForm(false);
     router.refresh();
+  };
+
+  // Déclenche le sélecteur de fichier pour une ligne de document précise
+  // (on passe le type via une ref plutôt que le state, pour l'avoir tout de
+  // suite disponible dans le onChange du input file, sans latence de re-render).
+  const triggerUploadFor = (docType: string) => {
+    pendingUploadType.current = docType;
+    fileInputRef.current?.click();
   };
 
   return (
@@ -305,45 +334,6 @@ export function ApplicationDetail({
                 </span>
               </div>
             </div>
-
-            {/* Progression */}
-            {currentStepIndex >= 0 && status !== "refusee" && status !== "annulee" && (
-              <div className="flex items-center pt-1">
-                {STEPS.map((s, i) => (
-                  <div key={s.key} className="flex items-center flex-1 last:flex-none">
-                    <div className="flex flex-col items-center gap-1">
-                      <div
-                        className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                          i <= currentStepIndex
-                            ? "bg-violet-600 text-white"
-                            : "bg-[#1C1C28] text-slate-600"
-                        }`}
-                      >
-                        {i < currentStepIndex ? (
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                        ) : (
-                          <span className="text-[10px] font-bold">{i + 1}</span>
-                        )}
-                      </div>
-                      <span
-                        className={`text-[9px] font-medium whitespace-nowrap ${
-                          i <= currentStepIndex ? "text-slate-200" : "text-slate-600"
-                        }`}
-                      >
-                        {s.label}
-                      </span>
-                    </div>
-                    {i < STEPS.length - 1 && (
-                      <div
-                        className={`flex-1 h-0.5 mx-1 mb-4 ${
-                          i < currentStepIndex ? "bg-violet-600" : "bg-[#1C1C28]"
-                        }`}
-                      />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
@@ -478,98 +468,153 @@ export function ApplicationDetail({
                 <p className="text-[12.5px] font-bold text-orange-800 mb-1">
                   Des documents manquent à ton dossier
                 </p>
-                <p className="text-[11.5px] text-orange-700 leading-relaxed mb-2">
-                  Vérifie la liste ci-dessous et complète ce qu&apos;il manque pour ne pas
-                  bloquer ta demande.
+                <p className="text-[11.5px] text-orange-700 leading-relaxed">
+                  Complète ci-dessous ce qu&apos;il manque pour ne pas bloquer ta demande.
                 </p>
-                <button
-                  onClick={() => setShowUploadForm(true)}
-                  className="text-[11.5px] font-bold text-white bg-orange-600 rounded-xl px-3 py-2"
-                >
-                  Ajouter un document maintenant
-                </button>
               </div>
             </div>
           )}
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-[13px] font-bold text-white">Documents</h2>
-            <button
-              onClick={() => setShowUploadForm((v) => !v)}
-              className="text-[11px] font-semibold text-violet-400 flex items-center gap-1"
-            >
-              <Plus className="w-3.5 h-3.5" /> Ajouter
-            </button>
-          </div>
+          <h2 className="text-[13px] font-bold text-white mb-2">Documents</h2>
 
-          {showUploadForm && (
-            <div className="bg-[#15151F] rounded-2xl shadow-none p-3.5 mb-2 flex flex-col gap-2">
-              <input
-                value={docLabel}
-                onChange={(e) => setDocLabel(e.target.value)}
-                placeholder="Type de document (ex : Passeport, Relevé de notes...)"
-                className="border border-[#2E2E3D] rounded-xl px-3 py-2 text-[12.5px] bg-[#15151F] text-white placeholder:text-slate-500"
-              />
-              <input
-                ref={fileInputRef}
-                type="file"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) handleUpload(file);
-                  e.target.value = "";
-                }}
-              />
-              <button
-                onClick={() => {
-                  if (!docLabel.trim()) {
-                    setError("Précise le type de document avant d'envoyer.");
-                    return;
+          {/* Input file caché, partagé par toutes les lignes ci-dessous */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              const docType = pendingUploadType.current;
+              if (file && docType) handleUpload(file, docType);
+              e.target.value = "";
+            }}
+          />
+
+          <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
+            {REQUIRED_DOCUMENTS[applicationKind].map((docType) => {
+              const existing = application.application_documents.find(
+                (d) => d.document_type.toLowerCase() === docType.toLowerCase()
+              );
+              const docStatus = existing
+                ? DOC_STATUS_STYLES[existing.status] ?? {
+                    label: existing.status,
+                    className: "text-slate-500",
                   }
-                  fileInputRef.current?.click();
-                }}
-                disabled={uploading}
-                className="w-full border border-dashed border-blue-300 text-violet-400 text-[12.5px] font-semibold rounded-xl py-2.5 flex items-center justify-center gap-2 disabled:opacity-50"
-              >
-                {uploading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <UploadCloud className="w-4 h-4" />
-                )}
-                Choisir un fichier
-              </button>
-            </div>
-          )}
+                : null;
+              const isUploadingThis = uploading && uploadingType === docType;
 
-          {application.application_documents.length === 0 ? (
-            <div className="bg-[#15151F] rounded-2xl p-4 text-center text-[12.5px] text-slate-500 shadow-none">
-              Aucun document lié pour l&apos;instant.
-            </div>
-          ) : (
-            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380]">
-              {application.application_documents.map((d) => {
-                const docStatus = DOC_STATUS_STYLES[d.status] ?? {
-                  label: d.status,
-                  className: "text-slate-500",
-                };
-                return (
-                  <div key={d.id} className="flex items-center gap-3 px-4 py-3">
-                    <FileText className="w-4 h-4 text-violet-400 shrink-0" />
-                    <span className="flex-1 text-[13px] text-white truncate">
-                      {d.document_type}
-                    </span>
-                    <span className={`text-[11px] font-medium flex items-center gap-1 ${docStatus.className}`}>
-                      {d.status === "valide" ? (
+              return (
+                <div key={docType} className="flex items-center gap-3 px-4 py-3">
+                  <FileText className="w-4 h-4 text-violet-400 shrink-0" />
+                  <span className="flex-1 min-w-0 text-[12.5px] text-white">{docType}</span>
+                  {existing ? (
+                    <span
+                      className={`text-[11px] font-medium flex items-center gap-1 shrink-0 ${docStatus!.className}`}
+                    >
+                      {existing.status === "valide" ? (
                         <CheckCircle2 className="w-3 h-3" />
                       ) : (
                         <Clock className="w-3 h-3" />
                       )}
-                      {docStatus.label}
+                      {docStatus!.label}
                     </span>
-                  </div>
-                );
-              })}
+                  ) : (
+                    <button
+                      onClick={() => triggerUploadFor(docType)}
+                      disabled={uploading}
+                      className="shrink-0 text-[11px] font-bold text-violet-400 bg-violet-500/10 rounded-full px-3 py-1.5 flex items-center gap-1 disabled:opacity-50"
+                    >
+                      {isUploadingThis ? (
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                      ) : (
+                        <UploadCloud className="w-3 h-3" />
+                      )}
+                      Ajouter
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Documents additionnels envoyés en dehors de la liste ci-dessus */}
+          {application.application_documents.filter(
+            (d) =>
+              !REQUIRED_DOCUMENTS[applicationKind].some(
+                (t) => t.toLowerCase() === d.document_type.toLowerCase()
+              )
+          ).length > 0 && (
+            <div className="bg-[#15151F] rounded-2xl shadow-none divide-y divide-[#26263380] mt-2">
+              {application.application_documents
+                .filter(
+                  (d) =>
+                    !REQUIRED_DOCUMENTS[applicationKind].some(
+                      (t) => t.toLowerCase() === d.document_type.toLowerCase()
+                    )
+                )
+                .map((d) => {
+                  const docStatus = DOC_STATUS_STYLES[d.status] ?? {
+                    label: d.status,
+                    className: "text-slate-500",
+                  };
+                  return (
+                    <div key={d.id} className="flex items-center gap-3 px-4 py-3">
+                      <FileText className="w-4 h-4 text-violet-400 shrink-0" />
+                      <span className="flex-1 text-[13px] text-white truncate">
+                        {d.document_type}
+                      </span>
+                      <span
+                        className={`text-[11px] font-medium flex items-center gap-1 ${docStatus.className}`}
+                      >
+                        {d.status === "valide" ? (
+                          <CheckCircle2 className="w-3 h-3" />
+                        ) : (
+                          <Clock className="w-3 h-3" />
+                        )}
+                        {docStatus.label}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           )}
+
+          {/* Ajout d'un document hors-liste (ex : justificatif particulier) */}
+          <div className="mt-2">
+            <button
+              onClick={() => setShowUploadForm((v) => !v)}
+              className="text-[11px] font-semibold text-violet-400 flex items-center gap-1"
+            >
+              <Plus className="w-3.5 h-3.5" /> Ajouter un autre document
+            </button>
+            {showUploadForm && (
+              <div className="bg-[#15151F] rounded-2xl shadow-none p-3.5 mt-2 flex flex-col gap-2">
+                <input
+                  value={docLabel}
+                  onChange={(e) => setDocLabel(e.target.value)}
+                  placeholder="Type de document (ex : Assurance voyage...)"
+                  className="border border-[#2E2E3D] rounded-xl px-3 py-2 text-[12.5px] bg-[#15151F] text-white placeholder:text-slate-500"
+                />
+                <button
+                  onClick={() => {
+                    if (!docLabel.trim()) {
+                      setError("Précise le type de document avant d'envoyer.");
+                      return;
+                    }
+                    triggerUploadFor(docLabel.trim());
+                  }}
+                  disabled={uploading}
+                  className="w-full border border-dashed border-blue-300 text-violet-400 text-[12.5px] font-semibold rounded-xl py-2.5 flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {uploading && uploadingType === docLabel.trim() ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <UploadCloud className="w-4 h-4" />
+                  )}
+                  Choisir un fichier
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Payment */}
