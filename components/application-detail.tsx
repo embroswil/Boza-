@@ -199,6 +199,15 @@ export function ApplicationDetail({
     setSubmitting(true);
     setError(null);
 
+    // Si un paiement "en_attente" existe déjà pour cette demande, on le
+    // réutilise au lieu d'en recréer un (évite les doublons observés quand
+    // ce bouton était cliqué plusieurs fois, ou après un échec précédent).
+    if (pendingPayment) {
+      setSubmitting(false);
+      router.push(`/demandes/${application.id}/payer`);
+      return;
+    }
+
     const amount =
       application.visas != null
         ? (application.visas.official_fee ?? 0) + (application.visas.service_fee ?? 0)
@@ -614,8 +623,18 @@ export function ApplicationDetail({
           )}
         </div>
 
-        {/* Payer */}
-        {pendingPayment && (
+        {/* Compléter la demande AVANT de proposer le paiement — le paiement ne
+            doit apparaître qu'une fois toutes les informations renseignées,
+            même si un paiement "en_attente" a déjà été créé par ailleurs. */}
+        {missingFields.length > 0 ? (
+          <div className="px-5 mb-3">
+            <CompleteApplicationForm
+              applicationId={application.id}
+              missingFields={missingFields}
+              onDone={handleContinue}
+            />
+          </div>
+        ) : pendingPayment ? (
           <div className="px-5 mb-3">
             <Link
               href={`/demandes/${application.id}/payer`}
@@ -625,33 +644,22 @@ export function ApplicationDetail({
               Payer {formatXAF(pendingPayment.amount, pendingPayment.currency)}
             </Link>
           </div>
-        )}
-
-        {/* Continuer une demande sans paiement (quel que soit le statut) */}
-        {application.payments.length === 0 && (
+        ) : application.payments.length === 0 ? (
           <div className="px-5">
-            {missingFields.length > 0 ? (
-              <CompleteApplicationForm
-                applicationId={application.id}
-                missingFields={missingFields}
-                onDone={handleContinue}
-              />
-            ) : (
-              <button
-                onClick={handleContinue}
-                disabled={submitting}
-                className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
-              >
-                {submitting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-                Continuer la demande
-              </button>
-            )}
+            <button
+              onClick={handleContinue}
+              disabled={submitting}
+              className="w-full bg-violet-600 text-white text-sm font-semibold rounded-2xl py-3.5 flex items-center justify-center gap-2 disabled:opacity-60"
+            >
+              {submitting ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+              Continuer la demande
+            </button>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

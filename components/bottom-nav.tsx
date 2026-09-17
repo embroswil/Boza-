@@ -35,13 +35,13 @@ export function BottomNav() {
   if (!isLoggedIn) return null;
 
   const navItems = [
-    { icon: HomeIcon, label: "Accueil", href: "/", match: "__home__" },
     {
       icon: ClipboardList,
       label: "Mes demandes",
       href: isLoggedIn ? "/demandes" : "/auth/login",
       match: "/demandes",
     },
+    { icon: HomeIcon, label: "Accueil", href: "/", match: "__home__" },
     {
       icon: User,
       label: "Profil",
