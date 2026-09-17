@@ -19,7 +19,7 @@ export default async function DemandeDetailPage({
     redirect("/auth/login");
   }
 
-  const { data: application } = await supabase
+  const { data: application, error } = await supabase
     .from("applications")
     .select(
       `id, status, submitted_at, created_at, application_kind, contact_email, confirmation_code,
@@ -30,7 +30,7 @@ export default async function DemandeDetailPage({
        passport_issue_date, passport_expiry_date, passport_issuing_country,
        travel_date, travel_duration, travel_cities, travel_motive, has_sufficient_funds, daily_budget,
        visas ( name, type, official_fee, service_fee, currency, processing_days, countries ( name, flag_url ) ),
-       programs ( name, universities ( name, application_fee, countries ( name, flag_url ) ) ),
+       programs:study_program_id ( name, universities ( name, application_fee, countries ( name, flag_url ) ) ),
        application_documents ( id, document_type, status, uploaded_at ),
        payments ( id, amount, currency, status, paid_at ),
        appointments ( id, appointment_date, status, embassies ( name, city ) )`
@@ -38,6 +38,12 @@ export default async function DemandeDetailPage({
     .eq("id", id)
     .eq("user_id", user.id)
     .single();
+
+  if (error) {
+    // On logge la vraie erreur Supabase (visible dans les logs Vercel) au lieu
+    // de la masquer en 404 muet — ça a fait perdre du temps de debug par le passé.
+    console.error("[demandes/[id]] Erreur Supabase:", error.message, error.details);
+  }
 
   if (!application) {
     notFound();
