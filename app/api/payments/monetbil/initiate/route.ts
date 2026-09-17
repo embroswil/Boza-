@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { toXAF, getRateToXAF } from "@/lib/currency";
 
 // Construit l'URL du widget Monetbil et la renvoie au client, qui redirige
 // le navigateur dessus. Le SERVICE_KEY reste côté serveur (variable d'env),
@@ -44,20 +45,28 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // ⚠️ Monetbil règle en devises locales africaines (XAF, XOF, CDF, GNF...).
-  // Si ce paiement n'est pas en XAF, il ne peut pas être envoyé tel quel.
-  if (payment.currency !== "XAF") {
+  // Monetbil règle en devises locales africaines (XAF, XOF, CDF, GNF...).
+  // Si ce paiement n'est pas déjà en XAF, on le convertit avant envoi et on
+  // trace le taux appliqué (utile en cas de litige, les taux étant révisés
+  // périodiquement dans lib/currency.ts).
+  const rate = getRateToXAF(payment.currency);
+  const amountXAF = toXAF(Number(payment.amount), payment.currency);
+
+  const { error: updateError } = await supabase
+    .from("payments")
+    .update({ converted_amount_xaf: amountXAF, exchange_rate_used: rate })
+    .eq("id", payment.id);
+
+  if (updateError) {
     return NextResponse.json(
-      {
-        error: `Ce paiement est en ${payment.currency}, mais Monetbil ne traite que les devises africaines (XAF, XOF...). Une conversion est nécessaire avant de pouvoir payer via Mobile Money.`,
-      },
-      { status: 422 }
+      { error: "Impossible d'enregistrer la conversion du paiement." },
+      { status: 500 }
     );
   }
 
   const params = new URLSearchParams({
-    amount: String(Math.round(Number(payment.amount))),
-    currency: payment.currency,
+    amount: String(amountXAF),
+    currency: "XAF",
     item_ref: payment.id,
     payment_ref: payment.id,
     user: user.id,

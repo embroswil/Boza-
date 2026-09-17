@@ -6,7 +6,6 @@ import Link from "next/link";
 import {
   Home as HomeIcon,
   ClipboardList,
-  Plus,
   User,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
@@ -44,12 +43,6 @@ export function BottomNav() {
       match: "/demandes",
     },
     {
-      icon: Plus,
-      label: "Démarrer",
-      isCenter: true,
-      href: isLoggedIn ? "/demandes/nouvelle" : "/auth/login",
-    },
-    {
       icon: User,
       label: "Profil",
       href: isLoggedIn ? "/profile" : "/auth/login",
@@ -58,7 +51,7 @@ export function BottomNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-[#15151F]/95 backdrop-blur-md border-t border-[#26263380] px-6 py-3 flex items-center justify-between z-50">
+    <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm bg-[#15151F]/95 backdrop-blur-md border-t border-[#26263380] px-6 py-3 flex items-center justify-evenly z-50">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = item.match
@@ -67,15 +60,6 @@ export function BottomNav() {
             : pathname?.startsWith(item.match)
           : false;
 
-        if (item.isCenter) {
-          return (
-            <Link href={item.href} key={item.label} className="flex flex-col items-center">
-              <button className="w-14 h-14 rounded-full bg-violet-600 flex items-center justify-center -mt-8 shadow-lg shadow-violet-600/40 border-4 border-[#0A0A12] active:scale-95 transition-transform">
-                <Icon className="w-6 h-6 text-white" strokeWidth={2.5} />
-              </button>
-            </Link>
-          );
-        }
         return (
           <Link
             href={item.href}

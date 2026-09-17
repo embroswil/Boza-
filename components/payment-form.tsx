@@ -99,6 +99,12 @@ export function PaymentForm({
               {formatXAF(amount, currency)}
             </div>
           </div>
+          {currency?.toUpperCase() !== "XAF" && (
+            <p className="text-[11px] text-slate-500 mt-2 px-1">
+              Montant d&apos;origine : {amount.toLocaleString("fr-FR")} {currency} — converti en XAF
+              au taux indicatif du jour (Mobile Money ne traite qu&apos;en devises africaines).
+            </p>
+          )}
         </div>
 
         {error && (

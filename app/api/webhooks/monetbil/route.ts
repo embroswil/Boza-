@@ -53,15 +53,46 @@ export async function POST(req: NextRequest) {
 
   const supabase = getAdminClient();
 
+  const { data: payment } = await supabase
+    .from("payments")
+    .select("application_id, converted_amount_xaf")
+    .eq("id", paymentRef)
+    .single();
+
+  if (!payment) {
+    return NextResponse.json({ error: "Paiement introuvable" }, { status: 404 });
+  }
+
   let isSuccess = reportedStatus === "1" || reportedStatus === "7";
 
   // Double-vérification serveur-à-serveur si le secret est configuré.
+  // (checkPayment de Monetbil ne renvoie que le statut, pas le montant —
+  // voir la vérification du montant plus bas, séparément.)
   if (process.env.MONETBIL_SERVICE_SECRET) {
     const verification = await verifyWithMonetbil(transactionId);
     if (verification && Array.isArray(verification)) {
       const status = verification[0];
       isSuccess = status === 1 || status === 7;
     }
+  }
+
+  // Le montant notifié par Monetbil doit correspondre au montant XAF converti
+  // qu'on a enregistré à l'initiation. Un écart peut indiquer une notification
+  // rejouée/falsifiée ou un problème de conversion — dans ce cas on ne valide
+  // pas automatiquement, on marque le paiement pour vérification manuelle.
+  const reportedAmount = Number(fields["amount"]);
+  const expectedAmount = payment.converted_amount_xaf;
+  const amountMismatch =
+    expectedAmount != null &&
+    !Number.isNaN(reportedAmount) &&
+    Math.abs(reportedAmount - Number(expectedAmount)) > 1; // tolérance d'arrondi
+
+  if (isSuccess && amountMismatch) {
+    await supabase
+      .from("payments")
+      .update({ status: "a_verifier" })
+      .eq("id", paymentRef);
+    return NextResponse.json({ received: true, flagged: "amount_mismatch" });
   }
 
   if (isSuccess) {
@@ -74,13 +105,7 @@ export async function POST(req: NextRequest) {
       })
       .eq("id", paymentRef);
 
-    const { data: payment } = await supabase
-      .from("payments")
-      .select("application_id")
-      .eq("id", paymentRef)
-      .single();
-
-    if (payment?.application_id) {
+    if (payment.application_id) {
       await supabase
         .from("applications")
         .update({ status: "soumise", submitted_at: new Date().toISOString() })

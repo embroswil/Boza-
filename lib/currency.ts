@@ -20,9 +20,13 @@ const RATES_TO_XAF: Record<string, number> = {
   SAR: 162,
 };
 
+/** Renvoie le taux (1 unité de `currency` = X XAF) utilisé pour la conversion. */
+export function getRateToXAF(currency: string | null | undefined): number {
+  return RATES_TO_XAF[(currency ?? "XAF").toUpperCase()] ?? 1;
+}
+
 export function toXAF(amount: number, currency: string | null | undefined): number {
-  const rate = RATES_TO_XAF[(currency ?? "XAF").toUpperCase()] ?? 1;
-  return Math.round(amount * rate);
+  return Math.round(amount * getRateToXAF(currency));
 }
 
 /** Formate un montant (dans sa devise d'origine) en Francs CFA affichables. */
