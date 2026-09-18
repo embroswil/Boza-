@@ -343,8 +343,9 @@ export function ApplicationDetail({
           </div>
         )}
 
-        {/* Informations du dossier */}
-        {(application.passport_number || application.education_level) && (
+        {/* Informations du dossier — uniquement pour les dossiers d'admission
+            (diplôme, établissement...) ; sans objet pour une demande de visa. */}
+        {applicationKind === "admission" && (application.passport_number || application.education_level) && (
           <div className="px-5 mb-5">
             <h2 className="text-[13px] font-bold text-white mb-2">
               Informations du dossier

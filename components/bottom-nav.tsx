@@ -54,13 +54,13 @@ export function BottomNav() {
   if (!isLoggedIn) return null;
 
   const navItems = [
+    { icon: HomeIcon, label: "Accueil", href: "/", match: "__home__" },
     {
       icon: ClipboardList,
       label: "Mes demandes",
       href: "/demandes",
       match: "/demandes",
     },
-    { icon: HomeIcon, label: "Accueil", href: "/", match: "__home__" },
     {
       icon: MessageCircle,
       label: "Messages",
