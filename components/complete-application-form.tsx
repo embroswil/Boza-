@@ -109,44 +109,26 @@ export function getRequiredFieldKeys(kind: "tourisme" | "etudes" | "admission"):
       "date_of_birth",
       "nationality",
       "residence_country",
-      "residence_city",
-      "full_address",
       "contact_phone",
-      "profession",
-      "employment_status",
       "passport_number",
-      "passport_issue_date",
       "passport_expiry_date",
-      "passport_issuing_country",
       "travel_date",
-      "travel_duration",
-      "travel_cities",
-      "travel_motive",
-      "has_sufficient_funds",
-      "daily_budget",
     ];
   }
   if (kind === "admission") {
     return [
       "contact_email",
       "date_of_birth",
-      "gender",
       "nationality",
       "residence_country",
-      "residence_city",
-      "full_address",
       "contact_phone",
       "passport_number",
-      "passport_issue_date",
       "passport_expiry_date",
-      "passport_issuing_country",
       "education_level",
       "motivation_letter",
     ];
   }
-  // etudes (visa) — alignés sur le tourisme : un dossier de visa a besoin
-  // des mêmes informations de base (identité, passeport, résidence), moins
-  // les champs propres au séjour touristique (durée, villes, budget/jour).
+  // etudes (visa)
   return [
     "contact_email",
     "last_name",
@@ -154,13 +136,9 @@ export function getRequiredFieldKeys(kind: "tourisme" | "etudes" | "admission"):
     "date_of_birth",
     "nationality",
     "residence_country",
-    "residence_city",
-    "full_address",
     "contact_phone",
     "passport_number",
-    "passport_issue_date",
     "passport_expiry_date",
-    "passport_issuing_country",
     "education_level",
   ];
 }

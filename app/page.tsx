@@ -114,7 +114,7 @@ export default async function Home() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Link href="/profile" className="relative">
+              <Link href="/messages" className="relative">
                 <div className="w-11 h-11 rounded-full border-2 border-violet-600 flex items-center justify-center">
                   <Bell className="w-5 h-5 text-slate-200" />
                 </div>

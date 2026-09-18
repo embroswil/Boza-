@@ -126,12 +126,38 @@ function Field({ label, value }: { label: string; value: string | null | undefin
   );
 }
 
+const STATUS_MESSAGES: Record<string, (title: string) => { title: string; message: string } | null> = {
+  en_cours: (title) => ({
+    title: "Demande en cours de traitement",
+    message: `Ta demande "${title}" est en cours de traitement. On te tient au courant.`,
+  }),
+  documents_manquants: (title) => ({
+    title: "Document supplémentaire nécessaire",
+    message: `Il manque au moins un document pour continuer ta demande "${title}". Va voir la section Documents de ta demande pour savoir lequel.`,
+  }),
+  approuvee: (title) => ({
+    title: "Demande approuvée 🎉",
+    message: `Bonne nouvelle : ta demande "${title}" a été approuvée !`,
+  }),
+  refusee: (title) => ({
+    title: "Demande refusée",
+    message: `Ta demande "${title}" a été refusée. Contacte le support pour en savoir plus.`,
+  }),
+  annulee: () => null,
+  soumise: () => null,
+  brouillon: () => null,
+};
+
 function StatusSwitcher({
   applicationId,
+  userId,
+  applicationTitle,
   currentStatus,
   onChanged,
 }: {
   applicationId: string;
+  userId: string;
+  applicationTitle: string;
   currentStatus: string;
   onChanged: (status: string) => void;
 }) {
@@ -144,6 +170,20 @@ function StatusSwitcher({
       .from("applications")
       .update({ status: next })
       .eq("id", applicationId);
+
+    if (!error) {
+      const notif = STATUS_MESSAGES[next]?.(applicationTitle);
+      if (notif) {
+        await supabase.from("notifications").insert({
+          user_id: userId,
+          application_id: applicationId,
+          title: notif.title,
+          message: notif.message,
+          is_read: false,
+        });
+      }
+    }
+
     setUpdating(null);
     if (!error) onChanged(next);
   }
@@ -173,7 +213,17 @@ function StatusSwitcher({
   );
 }
 
-function DocumentRow({ doc }: { doc: Application["application_documents"][number] }) {
+function DocumentRow({
+  doc,
+  userId,
+  applicationId,
+  applicationTitle,
+}: {
+  doc: Application["application_documents"][number];
+  userId: string;
+  applicationId: string;
+  applicationTitle: string;
+}) {
   const [status, setStatus] = useState(doc.status);
   const [busy, setBusy] = useState<"view" | "valide" | "rejete" | null>(null);
   const supabase = createClient();
@@ -195,6 +245,17 @@ function DocumentRow({ doc }: { doc: Application["application_documents"][number
       .from("application_documents")
       .update({ status: next })
       .eq("id", doc.id);
+
+    if (!error && next === "rejete") {
+      await supabase.from("notifications").insert({
+        user_id: userId,
+        application_id: applicationId,
+        title: "Document à renvoyer",
+        message: `Le document "${doc.document_type}" de ta demande "${applicationTitle}" a été rejeté. Renvoie une nouvelle version depuis la section Documents.`,
+        is_read: false,
+      });
+    }
+
     setBusy(null);
     if (!error) setStatus(next);
   }
@@ -269,6 +330,8 @@ export function AdminApplicationDetail({
         <div className="mb-5">
           <StatusSwitcher
             applicationId={application.id}
+            userId={application.user_id}
+            applicationTitle={title}
             currentStatus={status}
             onChanged={(next) => {
               setStatus(next);
@@ -370,7 +433,13 @@ export function AdminApplicationDetail({
           ) : (
             <div className="bg-[#15151F] rounded-2xl shadow-none">
               {application.application_documents.map((d) => (
-                <DocumentRow key={d.id} doc={d} />
+                <DocumentRow
+                  key={d.id}
+                  doc={d}
+                  userId={application.user_id}
+                  applicationId={application.id}
+                  applicationTitle={title}
+                />
               ))}
             </div>
           )}
